@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aligning &mdash; graspologic 3.0.0dev3875998805 documentation</title>
+  <title>Aligning &mdash; graspologic 3.0.0dev4418611879 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                3.0.0dev3875998805
+                3.0.0dev4418611879
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -273,7 +274,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Aligning</li>
@@ -286,31 +287,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="aligning">
+  <section id="aligning">
 <h1>Aligning<a class="headerlink" href="#aligning" title="Permalink to this heading">¶</a></h1>
 <section id="sign-flips">
 <h2>Sign flips<a class="headerlink" href="#sign-flips" title="Permalink to this heading">¶</a></h2>
@@ -326,7 +303,7 @@ median and the maximum (in magnitude) value along each dimension.</p>
 (i.e. with all criteras being positive) by providing the identity matrix as
 the second dataset.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>criterion</strong><span class="classifier">string, {'median' (default), 'max'}, optional</span></dt><dd><p>String describing the criterion used to choose whether to flip signs.
 Two options are currently supported:</p>
@@ -345,7 +322,7 @@ Two options are currently supported:</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>Q_</strong><span class="classifier">array, size (d, d)</span></dt><dd><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
 </dd>
@@ -356,7 +333,7 @@ Two options are currently supported:</p>
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'median'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>criterion</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p>
 </dd>
 </dl>
@@ -366,7 +343,7 @@ Two options are currently supported:</p>
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.set_criterion_function">
 <span class="sig-name descname"><span class="pre">set_criterion_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.set_criterion_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.set_criterion_function" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -382,7 +359,7 @@ matrix with 1 or -1 in each entry on diagonal and 0 everywhere else)
 picked such that all dimensions of <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>
 and <code class="docutils literal notranslate"><span class="pre">Y</span></code> are in the same orthant using some critera (median or max magnitude).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
@@ -391,18 +368,18 @@ and <code class="docutils literal notranslate"><span class="pre">Y</span></code>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#graspologic.align.SignFlips" title="graspologic.align.sign_flips.SignFlips"><em>SignFlips</em></a></p>
 </dd>
 </dl>
@@ -415,7 +392,7 @@ and <code class="docutils literal notranslate"><span class="pre">Y</span></code>
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
@@ -424,20 +401,20 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -448,14 +425,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
 </dd>
@@ -473,13 +450,13 @@ contained subobjects that are estimators.</p>
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
 </dd>
@@ -495,24 +472,24 @@ possible to update each component of a nested object.</p>
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape(m, d)</span></dt><dd><p>Dataset to be transformed, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -538,7 +515,7 @@ correspondence between the entries. In graph embeddings, this usually
 corresponds to the assumption that the vertex <span class="math notranslate nohighlight">\(i\)</span> in graph <code class="docutils literal notranslate"><span class="pre">X</span></code> has the same
 latent position as the vertex <span class="math notranslate nohighlight">\(i\)</span> in graph <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Attributes</dt>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>Q_</strong><span class="classifier">array, size (d, d)</span></dt><dd><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
 </dd>
@@ -554,23 +531,26 @@ solution, whenever <span class="math notranslate nohighlight">\(Q\)</span> is co
 that is a matrix that satisfies <span class="math notranslate nohighlight">\(Q^T Q = Q Q^T = I\)</span>. For the more
 details, including the proof of the closed-form solution see <a class="reference internal" href="#r70b5933f300f-1" id="id2">[1]</a>.</p>
 <p>Implementation-wise, this class is a wrapper of the
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.orthogonal_procrustes.html#scipy.linalg.orthogonal_procrustes" title="(in SciPy v1.10.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.orthogonal_procrustes()</span></code></a>, which itself uses an algorithm
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.orthogonal_procrustes.html#scipy.linalg.orthogonal_procrustes" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.orthogonal_procrustes()</span></code></a>, which itself uses an algorithm
 described in find the optimal solution algorithm <a class="reference internal" href="#r70b5933f300f-2" id="id3">[2]</a>.</p>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r70b5933f300f-1"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
-<dd><p><a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem">https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem</a></p>
-</dd>
-<dt class="label" id="r70b5933f300f-2"><span class="brackets"><a class="fn-backref" href="#id3">2</a></span></dt>
-<dd><p>Peter H. Schonemann, &quot;A generalized solution of the orthogonal
+<div role="list" class="citation-list">
+<div class="citation" id="r70b5933f300f-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem">https://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem</a></p>
+</div>
+<div class="citation" id="r70b5933f300f-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p>Peter H. Schonemann, &quot;A generalized solution of the orthogonal
 Procrustes problem&quot;, Psychometrica -- Vol. 31, No. 1, March, 1996.</p>
-</dd>
-</dl>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -582,7 +562,7 @@ Procrustes problem&quot;, Psychometrica -- Vol. 31, No. 1, March, 1996.</p>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have the same shape as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
 </dd>
@@ -590,18 +570,18 @@ first dataset with the second.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#graspologic.align.OrthogonalProcrustes" title="graspologic.align.orthogonal_procrustes.OrthogonalProcrustes"><em>OrthogonalProcrustes</em></a></p>
 </dd>
 </dl>
@@ -614,7 +594,7 @@ first dataset with the second.</p>
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have the same shape as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
 </dd>
@@ -622,20 +602,20 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -646,14 +626,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
 </dd>
@@ -671,13 +651,13 @@ contained subobjects that are estimators.</p>
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
 </dd>
@@ -693,24 +673,24 @@ possible to update each component of a nested object.</p>
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape(m, d)</span></dt><dd><p>Dataset to be transformed, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -734,7 +714,7 @@ matching between the vertices of the two graphs can be established, for
 example, inside of the test for the equivalence of the latent distributions
 (see: <code class="xref py py-class docutils literal notranslate"><span class="pre">LatentDistributionTest</span></code>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>optimal_transport_lambda</strong><span class="classifier">float (default=0.1), optional</span></dt><dd><p>Regularization term of the Sinkhorn optimal transport algorithm.</p>
 </dd>
@@ -795,7 +775,7 @@ sum up to 1/m.)</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes</dt>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>Q_</strong><span class="classifier">array, size (d, d)</span></dt><dd><p>Final orthogonal matrix, used to modify <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
 </dd>
@@ -848,31 +828,33 @@ is done via regular orthogonal procurstes. These alternating steps are
 performed until <code class="docutils literal notranslate"><span class="pre">iterative_num_reps</span></code> is reached.</p>
 <p>For more on how the initial guess can be performed, see <code class="docutils literal notranslate"><span class="pre">init</span></code>.</p>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r60780f5e411a-1"><span class="brackets">1</span></dt>
-<dd><p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
+<div role="list" class="citation-list">
+<div class="citation" id="r60780f5e411a-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
 &quot;Nonparametric Two-Sample Hypothesis Testing for Random Graphs with Negative and Repeated Eigenvalues&quot;
 arXiv:2012.09828</p>
-</dd>
-<dt class="label" id="r60780f5e411a-2"><span class="brackets"><a class="fn-backref" href="#id6">2</a></span></dt>
-<dd><p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
+</div>
+<div class="citation" id="r60780f5e411a-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">2</a><span class="fn-bracket">]</span></span>
+<p>Agterberg, J., Tang, M., Priebe., C. E. (2020).
 &quot;On Two Distinct Sources of Nonidentifiability in Latent Position Random Graph Models&quot;
 arXiv:2003.14250</p>
-</dd>
-</dl>
+</div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimal_transport_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>optimal_transport_lambda</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>optimal_transport_eps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>optimal_transport_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>iterative_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>initial_Q</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
-<li><p><strong>initial_P</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
+<li><p><strong>initial_Q</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>initial_P</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
 </dl>
@@ -884,7 +866,7 @@ arXiv:2003.14250</p>
 <dd><p>Uses the two datasets to learn the matrix <cite>self.Q_</cite> that aligns the
 first dataset with the second.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
@@ -893,18 +875,18 @@ first dataset with the second.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">returns an instance of self</span></dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#graspologic.align.SeedlessProcrustes" title="graspologic.align.seedless_procrustes.SeedlessProcrustes"><em>SeedlessProcrustes</em></a></p>
 </dd>
 </dl>
@@ -917,7 +899,7 @@ first dataset with the second.</p>
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>Dataset to be mapped to <code class="docutils literal notranslate"><span class="pre">Y</span></code>, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">Y</span></code>.</p>
@@ -926,20 +908,20 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -950,14 +932,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 <span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
 contained subobjects that are estimators.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
 </dd>
@@ -975,13 +957,13 @@ contained subobjects that are estimators.</p>
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
 </dd>
@@ -997,24 +979,24 @@ possible to update each component of a nested object.</p>
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray, shape(m, d)</span></dt><dd><p>Dataset to be transformed, must have same number of dimensions
 (axis 1) as <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> that were passed to fit.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_prime</strong><span class="classifier">np.ndarray, shape (n, d)</span></dt><dd><p>First dataset of vectors, aligned to second. Equal to
 <code class="docutils literal notranslate"><span class="pre">X</span></code> &#64; <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plotting &mdash; graspologic 3.0.0dev3875998805 documentation</title>
+  <title>Plotting &mdash; graspologic 3.0.0dev4418611879 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                3.0.0dev3875998805
+                3.0.0dev4418611879
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -273,7 +274,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Plotting</li>
@@ -286,31 +287,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="plotting">
+  <section id="plotting">
 <h1>Plotting<a class="headerlink" href="#plotting" title="Permalink to this heading">¶</a></h1>
 <section id="heatmap">
 <h2>Heatmap<a class="headerlink" href="#heatmap" title="Permalink to this heading">¶</a></h2>
@@ -325,7 +302,7 @@ The nodes will be sorted within each group if labels are also
 provided.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">nx.Graph or np.ndarray object</span></dt><dd><p>Graph or numpy matrix to plot</p>
 </dd>
@@ -410,32 +387,32 @@ if <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>xticklabels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>yticklabels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>vmin</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
-<li><p><strong>vmax</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>vmin</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>vmax</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>cbar</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>inner_hier_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>outer_hier_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>inner_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>outer_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>hier_label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>ax</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a><em>]</em>) -- </p></li>
-<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>sort_nodes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -452,7 +429,7 @@ The size of the dots correspond to the edge weights of the graphs, and
 colors represent input graphs.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">list of nx.Graph or np.ndarray object</span></dt><dd><p>List of nx.Graph or numpy arrays to plot</p>
 </dd>
@@ -509,7 +486,7 @@ elements.</p>
 <dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
 be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
 For acceptable string arguments, see the palette options at
-<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.6.2)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a></p>
+<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.7.1)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a></p>
 </dd>
 <dt><strong>alpha</strong><span class="classifier">float [0, 1], default</span><span class="classifier">0.7</span></dt><dd><p>Alpha value of plotted gridplot points</p>
 </dd>
@@ -536,28 +513,28 @@ if <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>X</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>inner_hier_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>outer_hier_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>inner_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>outer_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>hier_label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>sort_nodes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a></p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -577,7 +554,7 @@ The diagonal axes show the univariate distribution of the data for that
 dimension displayed as either a histogram or kernel density estimates (KDEs).</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
 </dd>
@@ -603,25 +580,25 @@ elements.</p>
 <dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
 be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
 For acceptable string arguments, see the palette options at
-<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.6.2)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.7.1)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
 </dd>
 <dt><strong>alpha</strong><span class="classifier">float, optional, default: 0.7</span></dt><dd><p>Opacity value of plotter markers between 0 and 1</p>
 </dd>
 <dt><strong>size</strong><span class="classifier">float or int, optional, default: 50</span></dt><dd><p>Size of plotted markers.</p>
 </dd>
 <dt><strong>marker</strong><span class="classifier">string, optional, default: '.'</span></dt><dd><p>Matplotlib marker specifier, see the marker options at
-<a class="reference external" href="https://matplotlib.org/stable/api/markers_api.html" title="(in Matplotlib v3.6.2)"><span class="xref std std-doc">Matplotlib style marker specification</span></a></p>
+<a class="reference external" href="https://matplotlib.org/stable/api/markers_api.html" title="(in Matplotlib v3.7.1)"><span class="xref std std-doc">Matplotlib style marker specification</span></a></p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>col_names</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
-<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
-<li><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>col_names</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -632,7 +609,7 @@ For acceptable string arguments, see the palette options at
 <li><p><strong>diag_kind</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.PairGrid.html#seaborn.PairGrid" title="(in seaborn v0.12.2)"><em>PairGrid</em></a></p>
 </dd>
 </dl>
@@ -652,7 +629,7 @@ dimension displayed as either a histogram or kernel density estimates (KDEs).</p
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and
 Clustering Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
 </dd>
@@ -687,31 +664,31 @@ elements.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>fig</strong><span class="classifier">matplotlib Figure</span></dt><dd></dd>
 <dt><strong>axes</strong><span class="classifier">np.ndarray</span></dt><dd><p>Array of matplotlib Axes</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>gmm</strong> (<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.3)"><em>GaussianMixture</em></a>) -- </p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>cluster_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>]</em>) -- </p></li>
-<li><p><strong>label_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>]</em>) -- </p></li>
-<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
-<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>cluster_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>) -- </p></li>
+<li><p><strong>label_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>) -- </p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
-<li><p><strong>histplot_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>histplot_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.6.2)"><em>Figure</em></a>, <a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.1)"><em>Figure</em></a>, <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a>]</p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -734,7 +711,7 @@ elements.</p>
 Allows for sets of node labels, will plot a distribution for each
 node category.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>input graph</p>
 </dd>
@@ -752,22 +729,22 @@ elements.</p>
 <dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
 be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
 For acceptable string arguments, see the palette options at
-<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.6.2)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.7.1)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
 </dd>
 <dt><strong>figsize</strong><span class="classifier">tuple of length 2, default (10, 5)</span></dt><dd><p>Size of the figure (width, height)</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
@@ -776,8 +753,8 @@ For acceptable string arguments, see the palette options at
 <li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a></p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -792,7 +769,7 @@ For acceptable string arguments, see the palette options at
 Allows for sets of node labels, will plot edge weight distribution
 for each node category.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>Input graph</p>
 </dd>
@@ -810,22 +787,22 @@ elements.</p>
 <dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
 be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
 For acceptable string arguments, see the palette options at
-<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.6.2)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+<a class="reference external" href="https://matplotlib.org/stable/tutorials/colors/colormaps.html" title="(in Matplotlib v3.7.1)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
 </dd>
 <dt><strong>figsize</strong><span class="classifier">tuple of length 2, default (10, 5)</span></dt><dd><p>Size of the figure (width, height)</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>nonzero</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
@@ -834,8 +811,8 @@ For acceptable string arguments, see the palette options at
 <li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a></p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -849,7 +826,7 @@ For acceptable string arguments, see the palette options at
 <dd><p>Plots the distribution of singular values for a matrix, either showing the
 raw distribution or an empirical CDF (depending on <code class="docutils literal notranslate"><span class="pre">cumulative</span></code>)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>Input matrix</p>
 </dd>
@@ -872,13 +849,13 @@ elbows to return. Must be <code class="docutils literal notranslate"><span class
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
@@ -886,23 +863,24 @@ elbows to return. Must be <code class="docutils literal notranslate"><span class
 <li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>cumulative</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>show_first</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
-<li><p><strong>show_elbow</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>show_first</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>show_elbow</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><em>Axes</em></a></p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.1)"><em>Axes</em></a></p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r74cabad275f4-1"><span class="brackets">1</span></dt>
-<dd><p>Zhu, M. and Ghodsi, A. (2006).
+<div role="list" class="citation-list">
+<div class="citation" id="r74cabad275f4-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006).
 Automatic dimensionality selection from the scree plot via the use of
 profile likelihood. Computational Statistics &amp; Data Analysis, 51(2),
 pp.918-930.</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 </section>
@@ -918,7 +896,7 @@ matrix is square, and that the rows and columns represent the same items and hav
 the same metadata (e.g. the adjacency matrix of a graph).</p>
 <p>Read more in the <cite>Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">np.ndarray or scipy.sparse.csr_matrix with ndim=2</span></dt><dd><p>Matrix to plot, must be square.
 Sparse matrix input is only accepted if <code class="docutils literal notranslate"><span class="pre">plot_type</span> <span class="pre">==</span> <span class="pre">'scattermap'</span></code>.</p>
@@ -948,7 +926,7 @@ corresponding axis of <code class="docutils literal notranslate"><span class="pr
 <dt><strong>group</strong><span class="classifier">str, list of str, or array-like, (default=None)</span></dt><dd><p>Attribute(s) by which to group rows/columns of <code class="docutils literal notranslate"><span class="pre">data</span></code>. If multiple groups are
 specified, rows/columns will be sorted hierarchically (first by the first group),
 then within that group by a possible second group, etc.). Behaves similarly to
-<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v1.5.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v1.5.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
 </dd>
 <dt><strong>group_order</strong><span class="classifier">str, list of str, or array-like, (default=&quot;size&quot;)</span></dt><dd><p>Attribute(s) by which to sort the groups if provided by <code class="docutils literal notranslate"><span class="pre">group</span></code>.
 Groups are sorted by the mean of this attribute in ascending order. &quot;size&quot; is a
@@ -992,7 +970,7 @@ draw the matrix <code class="docutils literal notranslate"><span class="pre">dat
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib axes object</span></dt><dd><p>Axes in which to draw the plot, by default None</p>
 </dd>
@@ -1013,7 +991,7 @@ draw the matrix <code class="docutils literal notranslate"><span class="pre">dat
 margin of the matrix plot.</p>
 <p>Read more in the <cite>Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html</cite></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">np.ndarray or scipy.sparse.csr_matrix with ndim=2</span></dt><dd><p>Matrix to plot. Sparse matrix input is only accepted if <code class="docutils literal notranslate"><span class="pre">plot_type</span> <span class="pre">==</span> <span class="pre">'scattermap'</span></code>.</p>
 </dd>
@@ -1042,7 +1020,7 @@ corresponding axis of <code class="docutils literal notranslate"><span class="pr
 <dt><strong>{row,col}_group</strong><span class="classifier">str, list of str, or array-like, (default=None)</span></dt><dd><p>Attribute(s) by which to group rows/columns of <code class="docutils literal notranslate"><span class="pre">data</span></code>. If multiple groups are
 specified, rows/columns will be sorted hierarchically (first by the first group),
 then within that group by a possible second group, etc.). Behaves similarly to
-<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v1.5.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v1.5.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
 </dd>
 <dt><strong>{row,col}_group_order</strong><span class="classifier">str, list of str, or array-like, (default=&quot;size&quot;)</span></dt><dd><p>Attribute(s) by which to sort the groups if provided by <code class="docutils literal notranslate"><span class="pre">{row,col}_group</span></code>.
 Groups are sorted by the mean of this attribute in ascending order. &quot;size&quot; is a
@@ -1086,7 +1064,7 @@ draw the matrix <code class="docutils literal notranslate"><span class="pre">dat
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>ax</strong><span class="classifier">matplotlib axes object</span></dt><dd><p>Axes in which to draw the plot, by default None</p>
 </dd>

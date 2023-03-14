@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Utility &mdash; graspologic 3.0.0dev3875998805 documentation</title>
+  <title>Utility &mdash; graspologic 3.0.0dev4418611879 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                3.0.0dev3875998805
+                3.0.0dev4418611879
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -273,7 +274,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Utility</li>
@@ -286,31 +287,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="utility">
+  <section id="utility">
 <h1>Utility<a class="headerlink" href="#utility" title="Permalink to this heading">¶</a></h1>
 <section id="transformations">
 <h2>Transformations<a class="headerlink" href="#transformations" title="Permalink to this heading">¶</a></h2>
@@ -320,7 +297,7 @@
 <dd><p>Rescales edge weights of an adjacency matrix based on their relative rank in
 the graph.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: array_like or networkx.Graph</strong></dt><dd><p>Adjacency matrix</p>
 </dd>
@@ -354,26 +331,26 @@ by the type of graph (loopless or looped, directed or undirected).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>graph: numpy.ndarray, shape(n_vertices, n_vertices)</dt><dd><p>Adjacency matrix of graph after being passed to ranks</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rankdata.html#scipy.stats.rankdata" title="(in SciPy v1.10.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.stats.rankdata</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rankdata.html#scipy.stats.rankdata" title="(in SciPy v1.10.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.stats.rankdata</span></code></a></dt><dd></dd>
 </dl>
 </div>
 </dd></dl>
@@ -386,7 +363,7 @@ by the type of graph (loopless or looped, directed or undirected).</p>
 of degrees of each node, I is the identity matrix, and A is the adjacency matrix.</p>
 <p>R-DAD is regularized Laplacian: where <span class="math notranslate nohighlight">\(D_t = D + regularizer \times I\)</span>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: object</strong></dt><dd><p>Either array-like, (n_vertices, n_vertices) numpy array,
 scipy.sparse.csr_matrix, or an object of type networkx.Graph.</p>
@@ -415,37 +392,39 @@ If int or float, must be &gt;= 0. Only used when <code class="docutils literal n
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>L</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>2D (n_vertices, n_vertices) array representing graph
 Laplacian of specified form</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>form</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'I-DAD'</em><em>, </em><em>'DAD'</em><em>, </em><em>'R-DAD'</em><em>]</em>) -- </p></li>
-<li><p><strong>regularizer</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>regularizer</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r0dc9785db7da-1"><span class="brackets">1</span></dt>
-<dd><p>Qin, Tai, and Karl Rohe. &quot;Regularized spectral clustering
+<div role="list" class="citation-list">
+<div class="citation" id="r0dc9785db7da-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Qin, Tai, and Karl Rohe. &quot;Regularized spectral clustering
 under the degree-corrected stochastic blockmodel.&quot; In Advances
 in Neural Information Processing Systems, pp. 3120-3128. 2013</p>
-</dd>
-<dt class="label" id="r0dc9785db7da-2"><span class="brackets">2</span></dt>
-<dd><p>Rohe, Karl, Tai Qin, and Bin Yu. &quot;Co-clustering directed graphs to discover
+</div>
+<div class="citation" id="r0dc9785db7da-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Rohe, Karl, Tai Qin, and Bin Yu. &quot;Co-clustering directed graphs to discover
 asymmetries and directional communities.&quot; Proceedings of the National Academy
 of Sciences 113.45 (2016): 12679-12684.</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
 <span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
@@ -467,7 +446,7 @@ of Sciences 113.45 (2016): 12679-12684.</p>
 edge weights for each node for a weighted graph. For a directed graph the in/out
 <span class="math notranslate nohighlight">\(d\)</span> is averaged.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray,</strong></dt><dd><p>scipy.scr_matrix.
 Input graph in any of the above specified formats. If np.ndarray,
@@ -477,20 +456,20 @@ interpreted as an <span class="math notranslate nohighlight">\(n \times n\)</spa
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>graph</strong><span class="classifier">np.array or csr_matrix</span></dt><dd><p>Adjacency matrix with average degrees added to the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -511,7 +490,7 @@ interpreted as an <span class="math notranslate nohighlight">\(n \times n\)</spa
 <span class="sig-prename descclassname"><span class="pre">graspologic.utils.</span></span><span class="sig-name descname"><span class="pre">symmetrize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'avg'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/utils/utils.html#symmetrize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.utils.symmetrize" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function for forcing symmetry upon a graph.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>graph: object</strong></dt><dd><p>Either array-like, (n_vertices, n_vertices) numpy matrix or csr_matrix</p>
 </dd>
@@ -540,20 +519,20 @@ right triangle, of the adjacency matrix.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>graph: array-like, shape (n_vertices, n_vertices)</dt><dd><p>Graph with asymmetries removed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a>) -- </p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'avg'</em><em>, </em><em>'triu'</em><em>, </em><em>'tril'</em><em>]</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a></p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -574,24 +553,24 @@ right triangle, of the adjacency matrix.</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.utils.</span></span><span class="sig-name descname"><span class="pre">remove_loops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/utils/utils.html#remove_loops"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.utils.remove_loops" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to remove loops from a graph.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: object</strong></dt><dd><p>Either array-like, (n_vertices, n_vertices) numpy matrix,
 or an object of type networkx.Graph.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>graph: array-like, shape(n_vertices, n_vertices)</dt><dd><p>the graph with self-loops (edges between the same node) removed.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -609,7 +588,7 @@ the graph. For a directed graph, weakly connected means that the graph
 is connected after it is converted to an unweighted graph (ignore the
 direction of each edge)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,</strong></dt><dd><p>scipy.sparse.csr_matrix, np.ndarray
 Input graph in any of the above specified formats. If np.ndarray,
@@ -617,15 +596,15 @@ interpreted as an <span class="math notranslate nohighlight">\(n \times n\)</spa
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>boolean: True if the entire input graph is connected</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
 </dd>
 </dl>
@@ -650,7 +629,7 @@ interpreted as an <span class="math notranslate nohighlight">\(n \times n\)</spa
 <p>The largest connected component is the fully connected subgraph
 which has the most nodes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix</strong></dt><dd><p>Input graph in any of the above specified formats. If np.ndarray or
 scipy.sparse.csr_matrix interpreted as an <span class="math notranslate nohighlight">\(n \times n\)</span> adjacency matrix.</p>
@@ -660,7 +639,7 @@ adjacency matrix that were kept and are now in the returned graph.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix</dt><dd><p>New graph of the largest connected component, returned in the input format.</p>
 </dd>
@@ -669,21 +648,21 @@ the largest connected component.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multigraph.html#networkx.MultiGraph" title="(in NetworkX v3.0)"><em>MultiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multidigraph.html#networkx.MultiDiGraph" title="(in NetworkX v3.0)"><em>MultiDiGraph</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multigraph.html#networkx.MultiGraph" title="(in NetworkX v3.0)"><em>MultiGraph</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multidigraph.html#networkx.MultiDiGraph" title="(in NetworkX v3.0)"><em>MultiDiGraph</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a>) -- </p></li>
 <li><p><strong>return_inds</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multigraph.html#networkx.MultiGraph" title="(in NetworkX v3.0)"><em>MultiGraph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multidigraph.html#networkx.MultiDiGraph" title="(in NetworkX v3.0)"><em>MultiDiGraph</em></a>, <em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multigraph.html#networkx.MultiGraph" title="(in NetworkX v3.0)"><em>MultiGraph</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/multidigraph.html#networkx.MultiDiGraph" title="(in NetworkX v3.0)"><em>MultiDiGraph</em></a> | <em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
 <p>For networks input in <code class="docutils literal notranslate"><span class="pre">scipy.sparse.csr_matrix</span></code> format, explicit zeros are removed
 prior to finding the largest connected component, thus they are not treated as
 edges. This differs from the convention in
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.connected_components.html#scipy.sparse.csgraph.connected_components" title="(in SciPy v1.10.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.csgraph.connected_components()</span></code></a>.</p>
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csgraph.connected_components.html#scipy.sparse.csgraph.connected_components" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.csgraph.connected_components()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -692,7 +671,7 @@ edges. This differs from the convention in
 <dd><p>Finds the union of all multiple graphs, then compute the largest connected
 component.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graphs: list or np.ndarray</strong></dt><dd><p>List of array-like, (n_vertices, n_vertices), or list of np.ndarray
 nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph.</p>
@@ -703,20 +682,20 @@ Ignored when input is networkx object</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">list or np.ndarray</span></dt><dd><p>If input was a list</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>return_inds</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>]], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>]]], <em>ndarray</em>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>] | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>], <em>ndarray</em>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -730,7 +709,7 @@ takes the intersection over all of these resulting graphs. Note that this
 does not guarantee finding the largest graph where every node is shared among
 all of the input graphs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graphs: list or np.ndarray</strong></dt><dd><p>if list, each element must be an <span class="math notranslate nohighlight">\(n \times n\)</span> np.ndarray adjacency matrix</p>
 </dd>
@@ -740,7 +719,7 @@ Ignored when input is networkx object</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>graph: list of(nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph) or np.ndarray</dt><dd><p>New graph of the largest connected component of the input parameter.</p>
 </dd>
@@ -749,14 +728,14 @@ the largest connected component</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
 <li><p><strong>return_inds</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>]], <em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>]]], <em>ndarray</em>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>] | <em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>], <em>ndarray</em>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -769,7 +748,7 @@ the largest connected component</p>
 <span class="sig-prename descclassname"><span class="pre">graspologic.utils.</span></span><span class="sig-name descname"><span class="pre">import_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/utils/utils.html#import_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.utils.import_graph" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function for reading a graph and returning a shared data type.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>graph: GraphRepresentation</strong></dt><dd><p>Either array-like, shape (n_vertices, n_vertices) numpy array,
 a scipy.sparse.csr_matrix, or an object of type networkx.Graph.</p>
@@ -779,20 +758,20 @@ the output returns the original input.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>out: array-like, shape (n_vertices, n_vertices)</dt><dd><p>A graph.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>copy</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a>]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a></p>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -810,7 +789,7 @@ the output returns the original input.</p>
 edgelists, the union of vertices from all graphs is computed so that each output
 graph have matched vertex set. The order of nodes are sorted by node values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>path</strong><span class="classifier">str, Path object, or iterable</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a directory, then the importing order will be sorted in
 alphabetical order.</p>
@@ -826,7 +805,7 @@ with matching extension.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">list of array-like, or array-like, shape (n_vertices, n_vertices)</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a directory, a list of arrays is returned. If <code class="docutils literal notranslate"><span class="pre">path</span></code> is a file,
 an array is returned.</p>
@@ -836,17 +815,17 @@ included in the output graphs.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><em>Path</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Iterable" title="(in Python v3.9)"><em>Iterable</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><em>Path</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><em>Path</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Iterable" title="(in Python v3.9)"><em>Iterable</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><em>Path</em></a><em>]</em>) -- </p></li>
 <li><p><strong>extension</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>nodetype</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>return_vertices</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em>]], <em>ndarray</em>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em>] | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<em>ndarray</em>], <em>ndarray</em>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -863,7 +842,7 @@ match the labels used by another similar labeling.</p>
 samples, this method reorders the labels of the second vector (<cite>y_pred</cite>) so that as
 many samples as possible from the two label vectors are in the same category.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>y_true</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Ground truth labels, or, labels to map to.</p>
 </dd>
@@ -878,7 +857,7 @@ to.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>remapped_y_pred</strong><span class="classifier">np.ndarray of shape (n_samples,)</span></dt><dd><p>Same categorical labeling as that of <cite>y_pred</cite>, but with the category labels
 permuted to best match those of <cite>y_true</cite>.</p>
@@ -888,15 +867,15 @@ resemble those of <cite>y_true</cite>. Only returned if <cite>return_map</cite> 
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y_true</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.5.2)"><em>Series</em></a><em>]</em>) -- </p></li>
-<li><p><strong>y_pred</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.5.2)"><em>Series</em></a><em>]</em>) -- </p></li>
+<li><p><strong>y_true</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.5.3)"><em>Series</em></a>) -- </p></li>
+<li><p><strong>y_pred</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.5.3)"><em>Series</em></a>) -- </p></li>
 <li><p><strong>return_map</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>]</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>

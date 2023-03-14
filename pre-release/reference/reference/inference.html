@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 3.0.0dev3875998805 documentation</title>
+  <title>Inference &mdash; graspologic 3.0.0dev4418611879 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                3.0.0dev3875998805
+                3.0.0dev4418611879
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -273,7 +274,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Inference</li>
@@ -286,31 +287,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="inference">
+  <section id="inference">
 <h1>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h1>
 <section id="two-graph-hypothesis-testing">
 <h2>Two-graph hypothesis testing<a class="headerlink" href="#two-graph-hypothesis-testing" title="Permalink to this heading">¶</a></h2>
@@ -325,7 +302,7 @@ have their vertices sorted in the same order. Currently, the function only
 supports undirected graphs.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing Tutorial</a></p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>A1, A2</strong><span class="classifier">nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray</span></dt><dd><p>The two graphs to run a hypothesis test on.
 If np.ndarray, shape must be <code class="docutils literal notranslate"><span class="pre">(n_vertices,</span> <span class="pre">n_vertices)</span></code> for both graphs,
@@ -383,7 +360,7 @@ Supply -1 to use all cores available.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>stat</strong><span class="classifier">float</span></dt><dd><p>The observed difference between the embedded positions of the two input graphs
 after an alignment (the type of alignment depends on <code class="docutils literal notranslate"><span class="pre">test_case</span></code>)</p>
@@ -409,18 +386,18 @@ distributions are generated</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>) -- </p></li>
-<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>) -- </p></li>
 <li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>lpt_result</em></p>
 </dd>
 </dl>
@@ -433,13 +410,14 @@ distributions are generated</p>
 </dl>
 </div>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="rf66448b8fe27-1"><span class="brackets">1</span></dt>
-<dd><p>Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
+<div role="list" class="citation-list">
+<div class="citation" id="rf66448b8fe27-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Tang, M., A. Athreya, D. Sussman, V. Lyzinski, Y. Park, Priebe, C.E.
 &quot;A Semiparametric Two-Sample Hypothesis Testing Problem for Random Graphs&quot;
 Journal of Computational and Graphical Statistics, Vol. 26(2), 2017</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -452,7 +430,7 @@ between the vertices of the two graphs, or even when the number of vertices
 is different. Currently, testing is only supported for undirected graphs.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing Tutorial</a></p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>A1, A2</strong><span class="classifier">variable (see description of 'input_graph')</span></dt><dd><p>The two graphs, or their embeddings to run a hypothesis test on.
 Expected variable type and shape depends on input_graph attribute</p>
@@ -460,7 +438,7 @@ Expected variable type and shape depends on input_graph attribute</p>
 <dt><strong>test</strong><span class="classifier">str (default=&quot;dcorr&quot;)</span></dt><dd><p>Backend hypothesis test to use, one of [&quot;cca&quot;, &quot;dcorr&quot;, &quot;hhg&quot;, &quot;rv&quot;, &quot;hsic&quot;, &quot;mgc&quot;].
 These tests are typically used for independence testing, but here they
 are used for a two-sample hypothesis test on the latent positions of
-two graphs. See <code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code> for more information.</p>
+two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>metric</strong><span class="classifier">str or function (default=&quot;euclidean&quot;)</span></dt><dd><p>Distance or a kernel metric to use, either a callable or a valid string.
 Kernel metrics (e.g. &quot;gaussian&quot;) must be used with kernel-based HSIC test
@@ -479,7 +457,7 @@ then it should behave similarly to either
 <code class="docutils literal notranslate"><span class="pre">&quot;jaccard&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kulsinski&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mahalanobis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;rogerstanimoto&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;russellrao&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seuclidean&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;sokalmichener&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sokalsneath&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sqeuclidean&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.10.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
+<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.10.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
 details on these metrics.</p></li>
 </ul>
 </div></blockquote>
@@ -499,7 +477,7 @@ See <a class="reference internal" href="embed.html#graspologic.embed.select_svd"
 This argument is ignored if <code class="docutils literal notranslate"><span class="pre">input_graph</span></code> is False.</p>
 </dd>
 <dt><strong>n_bootstraps</strong><span class="classifier">int (default=200)</span></dt><dd><p>Number of bootstrap iterations for the backend hypothesis test.
-See <code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code> for more information.</p>
+See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>random_state</strong><span class="classifier">{None, int, <cite>~np.random.RandomState</cite>, <cite>~np.random.Generator</cite>}</span></dt><dd><p>This parameter defines the object to use for drawing random
 variates.
@@ -608,7 +586,7 @@ d must be same. n_components attribute is ignored in this case.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>stat</strong><span class="classifier">float</span></dt><dd><p>The observed difference between the embedded latent positions of the
 two input graphs.</p>
@@ -636,45 +614,48 @@ two input graphs.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
-<li><p><strong>A2</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.0)"><em>csr_matrix</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>) -- </p></li>
-<li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>]</em>) -- </p></li>
-<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>RandomState</em><em>, </em><em>Generator</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>RandomState</em><em> | </em><em>Generator</em><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>size_correction</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>pooled</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>align_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'sign_flips'</em><em>, </em><em>'seedless_procrustes'</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>align_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'sign_flips'</em><em>, </em><em>'seedless_procrustes'</em><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>align_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>input_graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ldt_result</em></p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r9288b6047396-1"><span class="brackets">1</span></dt>
-<dd><p>Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., &amp; Priebe, C. E. (2017).
+<div role="list" class="citation-list">
+<div class="citation" id="r9288b6047396-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Tang, M., Athreya, A., Sussman, D. L., Lyzinski, V., &amp; Priebe, C. E. (2017).
 &quot;A nonparametric two-sample hypothesis testing problem for random graphs.&quot;
 Bernoulli, 23(3), 1599-1630.</p>
-</dd>
-<dt class="label" id="r9288b6047396-2"><span class="brackets">2</span></dt>
-<dd><p>Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R., Shen, C., &amp; Vogelstein, J. (2019).
+</div>
+<div class="citation" id="r9288b6047396-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Panda, S., Palaniappan, S., Xiong, J., Bridgeford, E., Mehta, R., Shen, C., &amp; Vogelstein, J. (2019).
 &quot;hyppo: A Comprehensive Multivariate Hypothesis Testing Python Package.&quot;
 arXiv:1907.02088.</p>
-</dd>
-<dt class="label" id="r9288b6047396-3"><span class="brackets">3</span></dt>
-<dd><p>Alyakin, A. A., Agterberg, J., Helm, H. S., Priebe, C. E. (2020).
+</div>
+<div class="citation" id="r9288b6047396-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Alyakin, A. A., Agterberg, J., Helm, H. S., Priebe, C. E. (2020).
 &quot;Correcting a Nonparametric Two-sample Graph Hypothesis Test for Graphs with Different Numbers of Vertices&quot;
 arXiv:2008.09434</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 </section>
