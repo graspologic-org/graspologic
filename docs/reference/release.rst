@@ -3,6 +3,17 @@
 Release Log
 ===========
 
+graspologic 3.0.0
+-----------------
+- Corrected contributing guidelines
+  `#1014 <https://github.com/microsoft/graspologic/pull/1014>`
+- Corrected deprecation warnings
+  `#1019 <https://github.com/microsoft/graspologic/pull/1019>`
+- Limited NetworkX version due to incompatibility
+  `#1016 <https://github.com/microsoft/graspologic/pull/1016>`
+- Added Python 3.10 and removed Python 3.7 support
+  `#1010 <https://github.com/microsoft/graspologic/pull/1010>`
+
 graspologic 2.0.1
 -----------------
 - Fixed bug with a matplotlib version incompatibility
