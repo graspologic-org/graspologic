@@ -188,7 +188,7 @@ class TestLeiden(unittest.TestCase):
 
         cleared_partitions = good_args.copy()
         del cleared_partitions["starting_communities"]
-        as_csr = nx.to_scipy_sparse_matrix(graph)
+        as_csr = nx.to_scipy_sparse_array(graph)
         partitions = leiden(graph=as_csr, **cleared_partitions)
         node_ids = partitions.keys()
         for node_id in node_ids:
@@ -309,7 +309,7 @@ class TestLeidenIsolates(unittest.TestCase):
         self.assert_isolate_not_in_hierarchical_result(hierarchical_partitions)
 
     def test_isolate_nodes_in_csr_matrix_are_not_returned(self):
-        sparse_adj_matrix = nx.to_scipy_sparse_matrix(self.graph)
+        sparse_adj_matrix = nx.to_scipy_sparse_array(self.graph)
 
         self.assertEqual(
             10,
@@ -474,8 +474,8 @@ class TestValidEdgeList(unittest.TestCase):
         dense_undirected = nx.to_numpy_array(graph)
         dense_directed = nx.to_numpy_array(di_graph)
 
-        sparse_undirected = nx.to_scipy_sparse_matrix(graph)
-        sparse_directed = nx.to_scipy_sparse_matrix(di_graph)
+        sparse_undirected = nx.to_scipy_sparse_array(graph)
+        sparse_directed = nx.to_scipy_sparse_array(di_graph)
 
         expected = [("0", "1", 2.2), ("1", "2", 0.001)]
         _, edges = _adjacency_matrix_to_edge_list(

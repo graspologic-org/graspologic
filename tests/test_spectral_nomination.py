@@ -14,7 +14,7 @@ from graspologic.simulations.simulations import sbm
 n_verts = 50
 p = np.array([[0.7, 0.25, 0.2], [0.25, 0.8, 0.3], [0.2, 0.3, 0.85]])
 labels = np.array([0] * n_verts + [1] * n_verts + [2] * n_verts)
-adj = np.array(sbm(3 * [n_verts], p), dtype=np.int)
+adj = np.array(sbm(3 * [n_verts], p), dtype=int)
 embeder = AdjacencySpectralEmbed()
 pre_embeded = embeder.fit_transform(adj)
 
@@ -32,34 +32,34 @@ class TestSpectralVertexNominatorOutputs(unittest.TestCase):
 
     def test_seed_inputs(self):
         with self.assertRaises(IndexError):
-            self._nominate(adj, np.zeros((1, 50), dtype=np.int))
+            self._nominate(adj, np.zeros((1, 50), dtype=int))
         with self.assertRaises(TypeError):
             self._nominate(adj, np.random.random((10, 2)))
 
     def test_X_inputs(self):
         with self.assertRaises(IndexError):
-            self._nominate(np.zeros((5, 5, 5), dtype=np.int), np.zeros(3, dtype=np.int))
+            self._nominate(np.zeros((5, 5, 5), dtype=int), np.zeros(3, dtype=int))
         with self.assertRaises(TypeError):
-            self._nominate([[0] * 10] * 10, np.zeros(3, dtype=np.int))
+            self._nominate([[0] * 10] * 10, np.zeros(3, dtype=int))
         # embedding should have fewer cols than rows.
         svn = SpectralVertexNomination(input_graph=False)
         with self.assertRaises(IndexError):
             self._nominate(
-                np.zeros((10, 20), dtype=np.int),
-                np.zeros(3, dtype=np.int),
+                np.zeros((10, 20), dtype=int),
+                np.zeros(3, dtype=int),
                 nominator=svn,
             )
         # adj matrix should be square
         with self.assertRaises(IndexError):
-            self._nominate(np.zeros((3, 4), dtype=np.int), np.zeros(3, dtype=np.int))
+            self._nominate(np.zeros((3, 4), dtype=int), np.zeros(3, dtype=int))
 
     def _test_k(self):
         # k should be > 0
         with self.assertRaises(ValueError):
-            self._nominate(adj, np.zeros(3, dtype=np.int), k=0)
+            self._nominate(adj, np.zeros(3, dtype=int), k=0)
         # k of wrong type
         with self.assertRaises(TypeError):
-            self._nominate(adj, np.zeros(3, dtype=np.int), k="hello world")
+            self._nominate(adj, np.zeros(3, dtype=int), k="hello world")
 
     def test_constructor_inputs(self):
         with self.assertRaises(ValueError):
@@ -90,7 +90,7 @@ class TestSpectralVertexNominatorOutputs(unittest.TestCase):
         seeds = [
             np.array([8]),
             np.array([2, 6, 9, 15, 25]),
-            np.arange(n_verts - 1, dtype=np.int),
+            np.arange(n_verts - 1, dtype=int),
         ]
         for nominator, seed in itertools.product(nominators, seeds):
             self._nominate(adj, seed, nominator)
@@ -99,7 +99,7 @@ class TestSpectralVertexNominatorOutputs(unittest.TestCase):
         seeds = [
             np.array([8]),
             np.array([2, 6, 9, 15, 25]),
-            np.arange(n_verts - 1, dtype=np.int),
+            np.arange(n_verts - 1, dtype=int),
         ]
         for seed in seeds:
             svn = SpectralVertexNomination(input_graph=False)

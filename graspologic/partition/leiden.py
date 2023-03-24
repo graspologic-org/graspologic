@@ -419,7 +419,7 @@ def hierarchical_leiden(
         List[Tuple[Any, Any, Union[int, float]]],
         nx.Graph,
         np.ndarray,
-        scipy.sparse.csr.csr_matrix,
+        scipy.sparse.csr_matrix,
     ],
     max_cluster_size: int = 1000,
     starting_communities: Optional[Dict[str, int]] = None,

@@ -108,7 +108,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
 
     def test_dimensions(self):
         graph = self.graph.copy()
-        sparse = nx.to_scipy_sparse_matrix(graph)
+        sparse = nx.to_scipy_sparse_array(graph)
         ranked = graspologic.utils.pass_to_ranks(sparse)
         ase = AdjacencySpectralEmbed(n_components=100, n_elbows=None, svd_seed=1234)
         core_response = ase.fit_transform(ranked)

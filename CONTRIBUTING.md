@@ -103,7 +103,7 @@ branch using a virtual environment. Steps:
    ```
    **CMD (Windows)**
     ```cmd
-   rem Create virtual environment.  Depending on your installation you might need "py -3.8 -m venv venv" instead
+   rem Create virtual environment.  Depending on your installation you might need "py -3 -m venv venv" instead
    python3.8 -m venv venv
    
    rem Activate the virtual environment
