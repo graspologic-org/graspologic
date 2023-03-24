@@ -286,7 +286,8 @@ def is_almost_symmetric(
 
 
 def symmetrize(
-    graph: Union[np.ndarray, csr_matrix], method: Literal["avg", "triu", "tril"] = "avg"
+    graph: Union[np.ndarray, csr_matrix],
+    method: Literal["w_avg", "avg", "triu", "tril"] = "avg",
 ) -> Union[np.ndarray, csr_matrix]:
     """
     A function for forcing symmetry upon a graph.
@@ -296,13 +297,15 @@ def symmetrize(
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy matrix or csr_matrix
 
-    method: {'avg' (default), 'triu', 'tril',}, optional
+    method: {'w_avg' (default), 'triu', 'tril',}, optional
         An option indicating which half of the edges to
         retain when symmetrizing.
 
-            - 'avg'
+            - 'w_avg'
                 Retain the average weight between the upper and lower
                 right triangle, of the adjacency matrix.
+            - "avg"
+                Performs the same function as "w_avg" but outputs a binearized matrix.
             - 'triu'
                 Retain the upper right triangle.
             - 'tril'
@@ -332,8 +335,10 @@ def symmetrize(
         graph = pac.triu(graph)
     elif method == "tril":
         graph = pac.tril(graph)
-    elif method == "avg":
+    elif method == "w_avg":
         graph = (pac.triu(graph) + pac.tril(graph)) / 2
+    elif method == "avg":
+        graph = binarize((pac.triu(graph) + pac.tril(graph)) / 2)
     else:
         msg = "You have not passed a valid parameter for the method."
         raise ValueError(msg)
