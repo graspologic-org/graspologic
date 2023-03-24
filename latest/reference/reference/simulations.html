@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulations &mdash; graspologic 2.0.1 documentation</title>
+  <title>Simulations &mdash; graspologic 3.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                2.0.1
+                3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -65,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
@@ -273,7 +275,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Simulations</li>
@@ -286,31 +288,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="simulations">
+  <section id="simulations">
 <h1>Simulations<a class="headerlink" href="#simulations" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="graspologic.simulations.er_np">
@@ -320,7 +298,7 @@
 p of edges being connected.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
 </dd>
@@ -366,25 +344,25 @@ parameters.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>A</strong><span class="classifier">ndarray, shape (n, n)</span></dt><dd><p>Sampled adjacency matrix</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>dc</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>, </em><em>ndarray</em><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>dc</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em> | </em><em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>dc_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -422,7 +400,7 @@ parameters.</p>
 number of total edges.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
 </dd>
@@ -443,23 +421,23 @@ to weight function <code class="docutils literal notranslate"><span class="pre">
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>A: ndarray, shape (n, n)</dt><dd><p>Sampled adjacency matrix</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>m</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -497,7 +475,7 @@ to weight function <code class="docutils literal notranslate"><span class="pre">
 have different sizes and edge probabilities.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: list of int, shape (n_communities)</strong></dt><dd><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
 </dd>
@@ -563,7 +541,7 @@ entry in the array labels which block a vertex in the graph is in.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>A: ndarray, shape (sum(n), sum(n))</dt><dd><p>Sampled adjacency matrix</p>
 </dd>
@@ -571,31 +549,32 @@ entry in the array labels which block a vertex in the graph is in.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>n</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>p</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>dc</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>, </em><em>ndarray</em><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>dc_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em><em>, </em><em>ndarray</em><em>]</em>) -- </p></li>
+<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>wtargs</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>dc</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em> | </em><em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>dc_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>] </em><em>| </em><em>ndarray</em>) -- </p></li>
 <li><p><strong>return_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r29e90f99c057-1"><span class="brackets">1</span></dt>
-<dd><p>Tai Qin and Karl Rohe. &quot;Regularized spectral clustering under the
+<div role="list" class="citation-list">
+<div class="citation" id="r29e90f99c057-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Tai Qin and Karl Rohe. &quot;Regularized spectral clustering under the
 Degree-Corrected Stochastic Blockmodel,&quot; Advances in Neural Information
 Processing Systems 26, 2013</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
@@ -642,7 +621,7 @@ A binary random graph is then sampled from the P matrix described
 by X (and possibly Y).</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></dt><dd><p>latent position from which to generate a P matrix
 if Y is given, interpreted as the left latent position</p>
@@ -670,36 +649,37 @@ to weight function <code class="docutils literal notranslate"><span class="pre">
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>A: ndarray (n_vertices, n_vertices)</dt><dd><p>A matrix representing the probabilities of connections between
 vertices in a random graph based on their latent positions</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>rescale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em>]</em><em>]</em>) -- </p></li>
-<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>wt</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>wtargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="rba9680491c2c-1"><span class="brackets">1</span></dt>
-<dd><p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
+<div role="list" class="citation-list">
+<div class="citation" id="rba9680491c2c-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
 Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,&quot;
 Journal of the American Statistical Association, Vol. 107(499), 2012</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
@@ -736,7 +716,7 @@ Journal of the American Statistical Association, Vol. 107(499), 2012</p>
 <dd><p>Generate a pair of correlated graphs with specified edge probability
 Both G1 and G2 are binary matrices.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: int</strong></dt><dd><p>Number of vertices</p>
 </dd>
@@ -752,7 +732,7 @@ are sampled in the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
 </dd>
@@ -760,7 +740,7 @@ are sampled in the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
@@ -769,7 +749,7 @@ are sampled in the diagonal.</p>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]</p>
 </dd>
 </dl>
@@ -801,7 +781,7 @@ are sampled in the diagonal.</p>
 <dd><p>Generate a pair of correlated graphs with specified edge probability
 Both G1 and G2 are binary matrices.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: list of int, shape (n_communities)</strong></dt><dd><p>Number of vertices in each community. Communities are assigned n[0], n[1], ...</p>
 </dd>
@@ -819,7 +799,7 @@ are sampled in the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>Adjacency matrix the same size as P representing a random graph.</p>
 </dd>
@@ -827,16 +807,16 @@ are sampled in the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><em>ndarray</em><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>n</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
 <li><p><strong>p</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]</p>
 </dd>
 </dl>
@@ -880,7 +860,7 @@ A binary random graph is then sampled from the P matrix described
 by X (and possibly Y).</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X: np.ndarray, shape (n_vertices, n_dimensions)</strong></dt><dd><p>latent position from which to generate a P matrix
 if Y is given, interpreted as the left latent position</p>
@@ -903,7 +883,7 @@ Otherwise, edges are sampled in the diagonal.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>G1: ndarray (n_vertices, n_vertices)</dt><dd><p>A matrix representing the probabilities of connections between
 vertices in a random graph based on their latent positions</p>
@@ -913,7 +893,7 @@ vertices in a random graph based on their latent positions</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
@@ -923,18 +903,19 @@ vertices in a random graph based on their latent positions</p>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r5be86c1efd72-1"><span class="brackets">1</span></dt>
-<dd><p>Vince Lyzinski, Donniell E Fishkind profile imageDonniell E. Fishkind, Carey E Priebe.
+<div role="list" class="citation-list">
+<div class="citation" id="r5be86c1efd72-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Vince Lyzinski, Donniell E Fishkind profile imageDonniell E. Fishkind, Carey E Priebe.
 &quot;Seeded graph matching for correlated Erdös-Rényi graphs&quot;.
 The Journal of Machine Learning Research, January 2014</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -971,7 +952,7 @@ another node. Each node's membership is determined according to those probabilit
 Finally, interactions are sampled according to the assigned memberships.</p>
 <p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM) Tutorial</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n: int</strong></dt><dd><p>Number of vertices of the graph.</p>
 </dd>
@@ -1003,7 +984,7 @@ Community 1 is labeled with a 0, community 2 with 1, etc.
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>A: ndarray, shape (n, n)</dt><dd><p>Sampled adjacency matrix</p>
 </dd>
@@ -1012,28 +993,29 @@ another node.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>p</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>ndarray</em><em>]</em>) -- </p></li>
-<li><p><strong>rng</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><em>Generator</em><em>]</em>) -- </p></li>
+<li><p><strong>alpha</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>rng</strong> (<em>Generator</em><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>return_labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<em>ndarray</em>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em> | <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em>, <em>ndarray</em>]</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r42d925fbfeb3-1"><span class="brackets">1</span></dt>
-<dd><p>Airoldi, Edoardo, et al. “Mixed Membership Stochastic Blockmodels.”
+<div role="list" class="citation-list">
+<div class="citation" id="r42d925fbfeb3-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Airoldi, Edoardo, et al. “Mixed Membership Stochastic Blockmodels.”
 Journal of Machine Learning Research, vol. 9, 2008, pp. 1981–2014.</p>
-</dd>
-</dl>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pipeline &mdash; graspologic 2.0.1 documentation</title>
+  <title>Pipeline &mdash; graspologic 3.0.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,9 +12,6 @@
   <![endif]-->
   
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -32,14 +29,18 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> graspologic
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
           </a>
               <div class="version">
-                2.0.1
+                3.0.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -65,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
@@ -273,7 +275,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
           <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
       <li class="breadcrumb-item active">Pipeline</li>
@@ -286,31 +288,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<section id="module-graspologic.pipeline">
+  <section id="module-graspologic.pipeline">
 <span id="pipeline"></span><h1>Pipeline<a class="headerlink" href="#module-graspologic.pipeline" title="Permalink to this heading">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">pipeline</span></code> module includes a collection of higher level API abstractions from
 the functionality exposed elsewhere in <code class="docutils literal notranslate"><span class="pre">graspologic</span></code>. The classes, functions, and
@@ -335,10 +313,10 @@ it automatically maps all node ids of any hashable type to <code class="docutils
 <p>By default, the main method it provides, <code class="docutils literal notranslate"><span class="pre">add_edge</span></code>, will sum edge weights
 if the edge already exists.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>directed</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Used to create either a <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a> or
-<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code></a> object.</p>
+<dt><strong>directed</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Used to create either a <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a> or
+<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code></a> object.</p>
 </dd>
 </dl>
 </dd>
@@ -347,7 +325,7 @@ if the edge already exists.</p>
 <dt class="sig sig-object py" id="graspologic.pipeline.GraphBuilder.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/graph_builder.html#GraphBuilder.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.GraphBuilder.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p>
 </dd>
 </dl>
@@ -364,7 +342,7 @@ and target id are converted to a unique <code class="docutils literal notranslat
 <p>Otherwise, the last weight provided will be used as the edge's weight.</p>
 <p>Any other attributes specified will be added to the edge's data dictionary.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>source</strong><span class="classifier">Any</span></dt><dd><p>source node id</p>
 </dd>
@@ -381,16 +359,16 @@ to the edge dictionary for <code class="docutils literal notranslate"><span clas
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 <li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
-<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>sum_weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>attributes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
 </dd>
 </dl>
@@ -400,7 +378,7 @@ to the edge dictionary for <code class="docutils literal notranslate"><span clas
 <dt class="sig sig-object py" id="graspologic.pipeline.GraphBuilder.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/graph_builder.html#GraphBuilder.build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.GraphBuilder.build" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>Tuple[Union[nx.Graph, nx.DiGraph], Dict[Any, int], List[Any]]</dt><dd><p>The returned tuple is either an undirected or directed graph, depending on
 the constructor argument <code class="docutils literal notranslate"><span class="pre">directed</span></code>. The second value in the tuple is a
@@ -411,8 +389,8 @@ original ID.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a>, <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>]]</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a> | <a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)">int</a>], <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -447,7 +425,7 @@ that are generated by our embedding functions.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>The node labels that are positionally correlated with the embeddings.
 The dtype of labels is any object stored in a networkx Graph object,
@@ -457,7 +435,7 @@ though type uniformity will be required</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>beartype.roar.BeartypeCallHintParamViolation if the types are invalid</dt><dd></dd>
 <dt>ValueError if the row count of labels does not equal the row count of embeddings</dt><dd></dd>
@@ -485,7 +463,7 @@ that are generated by our embedding functions.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>labels</strong><span class="classifier">np.ndarray</span></dt><dd><p>The node labels that are positionally correlated with the embeddings.
 The dtype of labels is any object stored in a networkx Graph object,
@@ -495,13 +473,13 @@ though type uniformity will be required</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>beartype.roar.BeartypeCallHintParamViolation if the types are invalid</dt><dd></dd>
 <dt>ValueError if the row count of labels does not equal the row count of embeddings</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>labels</strong> (<em>ndarray</em>) -- </p></li>
 <li><p><strong>embeddings</strong> (<em>ndarray</em>) -- </p></li>
@@ -514,7 +492,7 @@ though type uniformity will be required</p>
 <dt class="sig sig-object py" id="graspologic.pipeline.embed.embeddings.Embeddings.labels">
 <span class="sig-name descname"><span class="pre">labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/embed/embeddings.html#Embeddings.labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.embed.embeddings.Embeddings.labels" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -524,7 +502,7 @@ though type uniformity will be required</p>
 <dt class="sig sig-object py" id="graspologic.pipeline.embed.embeddings.Embeddings.embeddings">
 <span class="sig-name descname"><span class="pre">embeddings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/embed/embeddings.html#Embeddings.embeddings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.embed.embeddings.Embeddings.embeddings" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>ndarray</em></p>
 </dd>
 </dl>
@@ -534,7 +512,7 @@ though type uniformity will be required</p>
 <dt class="sig sig-object py" id="graspologic.pipeline.embed.embeddings.Embeddings.as_dict">
 <span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/pipeline/embed/embeddings.html#Embeddings.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.pipeline.embed.embeddings.Embeddings.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>EmbeddingsView</em></p>
 </dd>
 </dl>
@@ -558,7 +536,7 @@ will be created for each node with a weight corresponding to the weighted degree
 which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</span></dt><dd><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
 <ul class="simple">
@@ -596,13 +574,13 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
@@ -619,29 +597,29 @@ to handle sparse matrices that may have large slowly decaying spectrum.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>Embeddings</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>beartype.roar.BeartypeCallHintParamViolation if parameters do not match type hints</dt><dd></dd>
 <dt>ValueError if values are not within appropriate ranges or allowed values</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.8)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.8)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a><em> | </em><em>OrderedGraph</em><em> | </em><em>OrderedDiGraph</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>svd_solver_algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>
 <li><p><strong>svd_solver_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#graspologic.pipeline.embed.embeddings.Embeddings" title="graspologic.pipeline.embed.embeddings.Embeddings"><em>Embeddings</em></a></p>
 </dd>
 </dl>
@@ -663,23 +641,26 @@ ordered according to the amount of variance they explain in the original matrix.
 By selecting a subset of these basis vectors (through our choice of dimensionality
 reduction) we can find a lower dimensional space in which to represent the graph.</p>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r2d6b1df3d8d1-1"><span class="brackets">1</span></dt>
-<dd><p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
+<div role="list" class="citation-list">
+<div class="citation" id="r2d6b1df3d8d1-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
 Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,&quot;
 Journal of the American Statistical Association, Vol. 107(499), 2012</p>
-</dd>
-<dt class="label" id="r2d6b1df3d8d1-2"><span class="brackets">2</span></dt>
-<dd><p>Levin, K., Roosta-Khorasani, F., Mahoney, M. W., &amp; Priebe, C. E. (2018).
+</div>
+<div class="citation" id="r2d6b1df3d8d1-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Levin, K., Roosta-Khorasani, F., Mahoney, M. W., &amp; Priebe, C. E. (2018).
 Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
 of Machine Learning Research, 80, 2975-2984.</p>
-</dd>
-<dt class="label" id="r2d6b1df3d8d1-3"><span class="brackets">3</span></dt>
-<dd><p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+</div>
+<div class="citation" id="r2d6b1df3d8d1-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
 scree plot via the use of profile likelihood. Computational Statistics &amp; Data
 Analysis, 51(2), pp.918-930.</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -695,7 +676,7 @@ is egocentric and focused on immediate differentiators in a node's periphery.</p
 which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>graph</strong><span class="classifier">Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]</span></dt><dd><p>An undirected or directed graph. The graph <strong>must</strong>:</p>
 <ul class="simple">
@@ -737,13 +718,13 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
@@ -764,31 +745,31 @@ node degree is added. If int or float, must be &gt;= 0.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>Embeddings</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>beartype.roar.BeartypeCallHintParamViolation if parameters do not match type hints</dt><dd></dd>
 <dt>ValueError if values are not within appropriate ranges or allowed values</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.8)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.8)"><em>OrderedDiGraph</em></a><em>]</em>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em> | </em><em>OrderedGraph</em><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a><em> | </em><em>OrderedDiGraph</em>) -- </p></li>
 <li><p><strong>form</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'I-DAD'</em><em>, </em><em>'DAD'</em><em>, </em><em>'R-DAD'</em><em>]</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>svd_solver_algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>
 <li><p><strong>svd_solver_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>regularizer</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/numbers.html#numbers.Real" title="(in Python v3.9)"><em>Real</em></a><em>]</em>) -- </p></li>
+<li><p><strong>regularizer</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/numbers.html#numbers.Real" title="(in Python v3.9)"><em>Real</em></a><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#graspologic.pipeline.embed.embeddings.Embeddings" title="graspologic.pipeline.embed.embeddings.Embeddings"><em>Embeddings</em></a></p>
 </dd>
 </dl>
@@ -811,27 +792,31 @@ ordered according to the amount of variance they explain in the original matrix.
 By selecting a subset of these basis vectors (through our choice of dimensionality
 reduction) we can find a lower dimensional space in which to represent the graph.</p>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r71e652ce8a0d-1"><span class="brackets">1</span></dt>
-<dd><p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
+<div role="list" class="citation-list">
+<div class="citation" id="r71e652ce8a0d-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
 Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,&quot;
 Journal of the American Statistical Association, Vol. 107(499), 2012.</p>
-</dd>
-<dt class="label" id="r71e652ce8a0d-2"><span class="brackets">2</span></dt>
-<dd><p>Von Luxburg, Ulrike. &quot;A tutorial on spectral clustering,&quot; Statistics
+</div>
+<div class="citation" id="r71e652ce8a0d-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Von Luxburg, Ulrike. &quot;A tutorial on spectral clustering,&quot; Statistics
 and computing, Vol. 17(4), pp. 395-416, 2007.</p>
-</dd>
-<dt class="label" id="r71e652ce8a0d-3"><span class="brackets">3</span></dt>
-<dd><p>Rohe, Karl, Sourav Chatterjee, and Bin Yu. &quot;Spectral clustering and
+</div>
+<div class="citation" id="r71e652ce8a0d-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Rohe, Karl, Sourav Chatterjee, and Bin Yu. &quot;Spectral clustering and
 the high-dimensional stochastic blockmodel,&quot; The Annals of Statistics,
 Vol. 39(4), pp. 1878-1915, 2011.</p>
-</dd>
-<dt class="label" id="r71e652ce8a0d-4"><span class="brackets">4</span></dt>
-<dd><p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+</div>
+<div class="citation" id="r71e652ce8a0d-4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
 scree plot via the use of profile likelihood. Computational Statistics &amp; Data
 Analysis, 51(2), pp.918-930.</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -847,7 +832,7 @@ will be created for each node with a weight corresponding to the weighted degree
 which is beneficial in minimizing anomalous results if some edge weights are
 extremely atypical of the rest of the graph.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>graphs</strong><span class="classifier">List[Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph]]</span></dt><dd><p>A list of undirected or directed graphs. The graphs <strong>must</strong>:</p>
 <ul class="simple">
@@ -885,13 +870,13 @@ of the returned tensors.</p>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
+<dt>'full'</dt><dd><p>Computes full svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html#scipy.linalg.svd" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.svd()</span></code></a>
 Does not support <code class="docutils literal notranslate"><span class="pre">graph</span></code> input of type scipy.sparse.csr_matrix</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.9.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
+<dt>'truncated'</dt><dd><p>Computes truncated svd using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html#scipy.sparse.linalg.svds" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.sparse.linalg.svds()</span></code></a></p>
 </dd>
 </dl>
 </li>
@@ -912,30 +897,30 @@ technique.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>List[Tuple[Embeddings, Embeddings]]</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>beartype.roar.BeartypeCallHintParamViolation if parameters do not match type hints</dt><dd></dd>
 <dt>ValueError if values are not within appropriate ranges or allowed values</dt><dd></dd>
 </dl>
 </dd>
-<dt class="field-even">Parameters</dt>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
-<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Union" title="(in Python v3.9)"><em>Union</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v2.8.8)"><em>Graph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedGraph" title="(in NetworkX v2.8.8)"><em>OrderedGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v2.8.8)"><em>DiGraph</em></a><em>, </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/ordered.html#networkx.OrderedDiGraph" title="(in NetworkX v2.8.8)"><em>OrderedDiGraph</em></a><em>]</em><em>]</em>) -- </p></li>
+<li><p><strong>graphs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a><em> | </em><em>OrderedGraph</em><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html#networkx.DiGraph" title="(in NetworkX v3.0)"><em>DiGraph</em></a><em> | </em><em>OrderedDiGraph</em><em>]</em>) -- </p></li>
 <li><p><strong>dimensions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>elbow_cut</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>svd_solver_algorithm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'full'</em><em>, </em><em>'truncated'</em><em>, </em><em>'randomized'</em><em>, </em><em>'eigsh'</em><em>]</em>) -- </p></li>
 <li><p><strong>svd_solver_iterations</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Optional" title="(in Python v3.9)"><em>Optional</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>svd_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
 <li><p><strong>use_laplacian</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference internal" href="#graspologic.pipeline.embed.embeddings.Embeddings" title="graspologic.pipeline.embed.embeddings.Embeddings"><em>Embeddings</em></a>, <a class="reference internal" href="#graspologic.pipeline.embed.embeddings.Embeddings" title="graspologic.pipeline.embed.embeddings.Embeddings"><em>Embeddings</em></a>]]</p>
 </dd>
 </dl>
@@ -949,29 +934,33 @@ technique.</p>
 </dl>
 </div>
 <p class="rubric">References</p>
-<dl class="citation">
-<dt class="label" id="r628841b339f0-1"><span class="brackets">1</span></dt>
-<dd><p>Levin, K., Athreya, A., Tang, M., Lyzinski, V., &amp; Priebe, C. E. (2017,
+<div role="list" class="citation-list">
+<div class="citation" id="r628841b339f0-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Levin, K., Athreya, A., Tang, M., Lyzinski, V., &amp; Priebe, C. E. (2017,
 November). A central limit theorem for an omnibus embedding of multiple random
 dot product graphs. In Data Mining Workshops (ICDMW), 2017 IEEE International
 Conference on (pp. 964-967). IEEE.</p>
-</dd>
-<dt class="label" id="r628841b339f0-2"><span class="brackets">2</span></dt>
-<dd><p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
+</div>
+<div class="citation" id="r628841b339f0-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Sussman, D.L., Tang, M., Fishkind, D.E., Priebe, C.E.  &quot;A
 Consistent Adjacency Spectral Embedding for Stochastic Blockmodel Graphs,&quot;
 Journal of the American Statistical Association, Vol. 107(499), 2012</p>
-</dd>
-<dt class="label" id="r628841b339f0-3"><span class="brackets">3</span></dt>
-<dd><p>Levin, K., Roosta-Khorasani, F., Mahoney, M. W., &amp; Priebe, C. E. (2018).
+</div>
+<div class="citation" id="r628841b339f0-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Levin, K., Roosta-Khorasani, F., Mahoney, M. W., &amp; Priebe, C. E. (2018).
 Out-of-sample extension of graph adjacency spectral embedding. PMLR: Proceedings
 of Machine Learning Research, 80, 2975-2984.</p>
-</dd>
-<dt class="label" id="r628841b339f0-4"><span class="brackets">4</span></dt>
-<dd><p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
+</div>
+<div class="citation" id="r628841b339f0-4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006). Automatic dimensionality selection from the
 scree plot via the use of profile likelihood. Computational Statistics &amp; Data
 Analysis, 51(2), pp.918-930.</p>
-</dd>
-</dl>
+</div>
+</div>
 </dd></dl>
 
 </section>
