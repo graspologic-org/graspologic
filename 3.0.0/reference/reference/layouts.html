@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layouts &mdash; graspologic 3.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Matching" href="match.html" />
+    <link rel="prev" title="Inference" href="inference.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Layouts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/layouts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="layouts">
+<h1>Layouts<a class="headerlink" href="#layouts" title="Permalink to this heading">¶</a></h1>
+<section id="nodeposition">
+<h2>NodePosition<a class="headerlink" href="#nodeposition" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">NodePosition</span></span><a class="reference internal" href="../../_modules/graspologic/layouts/classes.html#NodePosition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.NodePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contains the node id, 2d coordinates, size, and community id for a node.</p>
+<p>Create new instance of NodePosition(node_id, x, y, size, community)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.node_id">
+<span class="sig-name descname"><span class="pre">node_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></em><a class="headerlink" href="#graspologic.layouts.NodePosition.node_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></em><a class="headerlink" href="#graspologic.layouts.NodePosition.x" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.y">
+<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></em><a class="headerlink" href="#graspologic.layouts.NodePosition.y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><span class="pre">float</span></a></em><a class="headerlink" href="#graspologic.layouts.NodePosition.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.community">
+<span class="sig-name descname"><span class="pre">community</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><span class="pre">int</span></a></em><a class="headerlink" href="#graspologic.layouts.NodePosition.community" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.__new__">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">community</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.layouts.NodePosition.__new__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create new instance of NodePosition(node_id, x, y, size, community)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_id</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>community</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.layouts.NodePosition.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of occurrences of value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.layouts.NodePosition.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.maxsize</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">/</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.layouts.NodePosition.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return first index of value.</p>
+<p>Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="automatic-graph-layout">
+<h2>Automatic Graph Layout<a class="headerlink" href="#automatic-graph-layout" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.layout_tsne">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">layout_tsne</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_overlaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/auto.html#layout_tsne"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.layout_tsne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatic graph layout generation by creating a generalized node2vec embedding,
+then using t-SNE for dimensionality reduction to 2d space.</p>
+<p>By default, this function automatically attempts to prune each graph to a maximum
+of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
+and will leave your graph with at most <code class="docutils literal notranslate"><span class="pre">max_edges</span></code>, but is not guaranteed to be
+precisely <code class="docutils literal notranslate"><span class="pre">max_edges</span></code>.</p>
+<p>In addition to pruning edges by weight, this function also only operates over the
+largest connected component in the graph.</p>
+<p>After dimensionality reduction, sizes are generated for each node based upon
+their degree centrality, and these sizes and positions are further refined by an
+overlap removal phase. Lastly, a global partitioning algorithm
+(<a class="reference internal" href="partition.html#graspologic.partition.leiden" title="graspologic.partition.leiden"><code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.partition.leiden()</span></code></a>) is executed for the largest connected
+component and the partition ID is included with each node position.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></span></dt><dd><p>The graph to generate a layout for. This graph may have edges pruned if the
+count is too high and only the largest connected component will be used to
+automatically generate a layout.</p>
+</dd>
+<dt><strong>perplexity</strong><span class="classifier">int</span></dt><dd><p>The perplexity is related to the number of nearest neighbors that is used in
+other manifold learning algorithms. Larger datasets usually require a larger
+perplexity. Consider selecting a value between 4 and 100. Different values can
+result in significantly different results.</p>
+</dd>
+<dt><strong>n_iter</strong><span class="classifier">int</span></dt><dd><p>Maximum number of iterations for the optimization. We have found in practice
+that larger graphs require more iterations. We hope to eventually have more
+guidance on the number of iterations based on the size of the graph and the
+density of the edge connections.</p>
+</dd>
+<dt><strong>max_edges</strong><span class="classifier">int</span></dt><dd><p>The maximum number of edges to use when generating the embedding.  Default is
+<code class="docutils literal notranslate"><span class="pre">10000000</span></code>. The edges with the lowest weights will be pruned until at most
+<code class="docutils literal notranslate"><span class="pre">max_edges</span></code> exist. Warning: this pruning is approximate and more edges than
+are necessary may be pruned. Running in 32 bit environment you will most
+likely need to reduce this number or you will out of memory.</p>
+</dd>
+<dt><strong>weight_attribute: str</strong></dt><dd><p>The edge dictionary data attribute that holds the weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>.
+Note that the graph must be fully weighted or unweighted.</p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">int</span></dt><dd><p>Seed to be used for reproducible results. Default is None and will produce
+a new random state. Specifying a random state will provide consistent results
+between runs. In addition the environment variable <code class="docutils literal notranslate"><span class="pre">PYTHONHASHSEED</span></code> must be
+set to control hash randomization.</p>
+</dd>
+<dt><strong>adjust_overlaps</strong><span class="classifier">bool</span></dt><dd><p>Make room for overlapping nodes while maintaining some semblance of the
+2d spatial characteristics of each node. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Tuple[nx.Graph, List[NodePosition]]</dt><dd><p>The largest connected component and a list of NodePositions for each node in
+the largest connected component. The NodePosition object contains:
+- node_id
+- x coordinate
+- y coordinate
+- size
+- community</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>perplexity</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>n_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>max_edges</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>random_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>adjust_overlaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a>]]</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rdc0cd807e82c-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>van der Maaten, L.J.P.; Hinton, G.E. Visualizing High-Dimensional Data Using
+t-SNE. Journal of Machine Learning Research 9:2579-2605, 2008.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.layout_umap">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">layout_umap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_edges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust_overlaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/auto.html#layout_umap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.layout_umap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatic graph layout generation by creating a generalized node2vec embedding,
+then using UMAP for dimensionality reduction to 2d space.</p>
+<p>By default, this function automatically attempts to prune each graph to a maximum
+of 10,000,000 edges by removing the lowest weight edges. This pruning is approximate
+and will leave your graph with at most <code class="docutils literal notranslate"><span class="pre">max_edges</span></code>, but is not guaranteed to be
+precisely <code class="docutils literal notranslate"><span class="pre">max_edges</span></code>.</p>
+<p>In addition to pruning edges by weight, this function also only operates over the
+largest connected component in the graph.</p>
+<p>After dimensionality reduction, sizes are generated for each node based upon
+their degree centrality, and these sizes and positions are further refined by an
+overlap removal phase. Lastly, a global partitioning algorithm
+(<a class="reference internal" href="partition.html#graspologic.partition.leiden" title="graspologic.partition.leiden"><code class="xref py py-func docutils literal notranslate"><span class="pre">graspologic.partition.leiden()</span></code></a>) is executed for the largest connected
+component and the partition ID is included with each node position.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier"><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.Graph</span></code></a></span></dt><dd><p>The graph to generate a layout for. This graph may have edges pruned if the
+count is too high and only the largest connected component will be used to
+automatically generate a layout.</p>
+</dd>
+<dt><strong>min_dist</strong><span class="classifier">float</span></dt><dd><p>The effective minimum distance between embedded points. Default is <code class="docutils literal notranslate"><span class="pre">0.75</span></code>.
+Smaller values will result in a more clustered/clumped embedding where nearby
+points on the manifold are drawn closer together, while larger values will
+result on a more even dispersal of points. The value should be set relative to
+the <code class="docutils literal notranslate"><span class="pre">spread</span></code> value, which determines the scale at which embedded points will
+be spread out.</p>
+</dd>
+<dt><strong>n_neighbors</strong><span class="classifier">int</span></dt><dd><p>The size of local neighborhood (in terms of number of neighboring sample points)
+used for manifold approximation. Default is <code class="docutils literal notranslate"><span class="pre">25</span></code>. Larger values result in
+more global views of the manifold, while smaller values result in more local
+data being preserved.</p>
+</dd>
+<dt><strong>max_edges</strong><span class="classifier">int</span></dt><dd><p>The maximum number of edges to use when generating the embedding.  Default is
+<code class="docutils literal notranslate"><span class="pre">10000000</span></code>. The edges with the lowest weights will be pruned until at most
+<code class="docutils literal notranslate"><span class="pre">max_edges</span></code> exist. Warning: this pruning is approximate and more edges than
+are necessary may be pruned. Running in 32 bit environment you will most
+likely need to reduce this number or you will out of memory.</p>
+</dd>
+<dt><strong>weight_attribute: str</strong></dt><dd><p>The edge dictionary data attribute that holds the weight. Default is <code class="docutils literal notranslate"><span class="pre">weight</span></code>.
+Note that the graph must be fully weighted or unweighted.</p>
+</dd>
+<dt><strong>random_seed</strong><span class="classifier">int</span></dt><dd><p>Seed to be used for reproducible results. Default is None and will produce
+random results.</p>
+</dd>
+<dt><strong>adjust_overlaps</strong><span class="classifier">bool</span></dt><dd><p>Make room for overlapping nodes while maintaining some semblance of the
+2d spatial characteristics of each node. Default is <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Tuple[nx.Graph, List[NodePosition]]</dt><dd><p>The largest connected component and a list of NodePositions for each node in
+the largest connected component. The NodePosition object contains:
+- node_id
+- x coordinate
+- y coordinate
+- size
+- community</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>min_dist</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>n_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>max_edges</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>weight_attribute</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>random_seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>adjust_overlaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a>]]</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="rabac8a7107df-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>McInnes, L, Healy, J, UMAP: Uniform Manifold Approximation and Projection
+for Dimension Reduction, ArXiv e-prints 1802.03426, 2018</p>
+</div>
+<div class="citation" id="rabac8a7107df-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Böhm, Jan Niklas; Berens, Philipp; Kobak, Dmitry. A Unifying Perspective
+on Neighbor Embeddings along the Attraction-Repulsion Spectrum. ArXiv e-prints
+2007.08902v1, 17 Jul 2020.</p>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="colors">
+<h2>Colors<a class="headerlink" href="#colors" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.categorical_colors">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">categorical_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partitions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/colors.html#categorical_colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.categorical_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a node -&gt; color mapping based on the partitions provided.</p>
+<p>The partitions are ordered by population descending, and a series of perceptually
+balanced, complementary colors are chosen in sequence.</p>
+<p>If a theme_path is provided, it must contain a path to a json file generated by
+<a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a>, otherwise it will use the theme
+packaged with this library.</p>
+<p>Colors will be different when selecting for a light background vs. a dark
+background, using the principles defined by
+<a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a>.</p>
+<p>If more partitions than colors available (100) are selected, the colors will be
+cycled through again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>partitions</strong><span class="classifier">Dict[Any, int]</span></dt><dd><p>A dictionary of node ids to partition ids.</p>
+</dd>
+<dt><strong>light_background</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. Colors selected for a light background will be slightly
+different in hue and saturation to complement a light or dark background.</p>
+</dd>
+<dt><strong>theme_path</strong><span class="classifier">Optional[str]</span></dt><dd><p>A color scheme is provided with <code class="docutils literal notranslate"><span class="pre">graspologic</span></code>, but if you wish to use your own
+you can generate one with <a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a> and
+provide the path to it to override the bundled theme.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Dict[Any, str]</dt><dd><p>Returns a dictionary of node id -&gt; color based on the partitions provided.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>partitions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>) -- </p></li>
+<li><p><strong>light_background</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>theme_path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.sequential_colors">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">sequential_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node_and_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_log_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theme_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/colors.html#sequential_colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.sequential_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a node -&gt; color mapping where a color is chosen for the value as it
+maps the value range into the sequential color space.</p>
+<p>If a theme_path is provided, it must contain a path to a json file generated by
+<a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a>, otherwise it will use the theme
+packaged with this library.</p>
+<p>Colors will be different when selecting for a light background vs. a dark
+background, using the principles defined by
+<a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a>.</p>
+<p>If more partitions than colors available (100) are selected, the colors will be
+cycled through again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>node_and_value</strong><span class="classifier">Dict[Any, float]</span></dt><dd><p>A node to value mapping. The value is a single entry in a continuous range,
+which is then mapped into a sequential color space.</p>
+</dd>
+<dt><strong>light_background</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">True</span></code>. Colors selected for a light background will be slightly
+different in hue and saturation to complement a light or dark background.</p>
+</dd>
+<dt><strong>use_log_scale</strong><span class="classifier">bool</span></dt><dd><p>Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+<dt><strong>theme_path</strong><span class="classifier">Optional[str]</span></dt><dd><p>A color scheme is provided with <code class="docutils literal notranslate"><span class="pre">graspologic</span></code>, but if you wish to use your own
+you can generate one with <a class="reference external" href="https://microsoft.github.io/thematic">Thematic</a> and
+provide the path to it to override the bundled theme.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Dict[Any, str]</dt><dd><p>Returns a dictionary of node id -&gt; color based on the original value
+provided for the node as it relates to the total range of all values.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node_and_value</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>]</em>) -- </p></li>
+<li><p><strong>light_background</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>use_log_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>theme_path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a>[<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>, <a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="rendering">
+<h2>Rendering<a class="headerlink" href="#rendering" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.save_graph">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">save_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.55</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/render.html#save_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.save_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a graph to file.</p>
+<p>Edges will be displayed with the same color as the source node.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>output_path</strong><span class="classifier">str</span></dt><dd><p>The output path to write the rendered graph to. Suggested file extension is
+<code class="docutils literal notranslate"><span class="pre">.png</span></code>.</p>
+</dd>
+<dt><strong>graph</strong><span class="classifier">nx.Graph</span></dt><dd><p>The graph to be displayed. If the networkx Graph contains only nodes, no
+edges will be displayed.</p>
+</dd>
+<dt><strong>positions</strong><span class="classifier">List[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.NodePosition"><code class="xref py py-class docutils literal notranslate"><span class="pre">graspologic.layouts.NodePosition</span></code></a>]</span></dt><dd><p>The positionsfor every node in the graph.</p>
+</dd>
+<dt><strong>node_colors</strong><span class="classifier">Dict[Any, str]</span></dt><dd><p>A mapping of node id to colors. Must contain an entry for every node in the
+graph.</p>
+</dd>
+<dt><strong>vertex_line_width</strong><span class="classifier">float</span></dt><dd><p>Line width of vertex outline. Default is``0.01``.</p>
+</dd>
+<dt><strong>vertex_alpha</strong><span class="classifier">float</span></dt><dd><p>Alpha (transparency) of vertices in visualization. Default is``0.55``.</p>
+</dd>
+<dt><strong>edge_line_width</strong><span class="classifier">float</span></dt><dd><p>Line width of edge. Default is``0.5``.</p>
+</dd>
+<dt><strong>edge_alpha</strong><span class="classifier">float</span></dt><dd><p>Alpha (transparency) of edges in visualization. Default is``0.02``.</p>
+</dd>
+<dt><strong>figure_width</strong><span class="classifier">float</span></dt><dd><p>Width of figure. Default is <code class="docutils literal notranslate"><span class="pre">15.0</span></code>.</p>
+</dd>
+<dt><strong>figure_height</strong><span class="classifier">float</span></dt><dd><p>eight of figure. Default is``15.0``.</p>
+</dd>
+<dt><strong>light_background</strong><span class="classifier">bool</span></dt><dd><p>Light background or dark background. Default is``True``.</p>
+</dd>
+<dt><strong>vertex_shape</strong><span class="classifier">str</span></dt><dd><p>Matplotlib Marker for the vertex shape.  See
+<a class="reference external" href="https://matplotlib.org/api/markers_api.html">https://matplotlib.org/api/markers_api.html</a>
+for a list of allowed values . Default is <code class="docutils literal notranslate"><span class="pre">o</span></code> (i.e: a circle)</p>
+</dd>
+<dt><strong>arrows</strong><span class="classifier">bool</span></dt><dd><p>For directed graphs, if <code class="docutils literal notranslate"><span class="pre">True</span></code>, draw arrow heads. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><strong>dpi</strong><span class="classifier">float</span></dt><dd><p>Dots per inch of the figure.  Default is <code class="docutils literal notranslate"><span class="pre">100</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"></dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a><em>]</em>) -- </p></li>
+<li><p><strong>node_colors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>vertex_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>vertex_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>edge_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>figure_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>figure_height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>light_background</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>vertex_shape</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>arrows</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>dpi</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.layouts.show_graph">
+<span class="sig-prename descclassname"><span class="pre">graspologic.layouts.</span></span><span class="sig-name descname"><span class="pre">show_graph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.55</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_line_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figure_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">light_background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertex_shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/layouts/render.html#show_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.layouts.show_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders and displays a graph.</p>
+<p>Attempts to display it via the platform-specific display library such as TkInter</p>
+<p>Edges will be displayed with the same color as the source node.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>graph</strong><span class="classifier">nx.Graph</span></dt><dd><p>The graph to be displayed. If the networkx Graph contains only nodes, no
+edges will be displayed.</p>
+</dd>
+<dt><strong>positions</strong><span class="classifier">List[<a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.NodePosition"><code class="xref py py-class docutils literal notranslate"><span class="pre">graspologic.layouts.NodePosition</span></code></a>]</span></dt><dd><p>The positionsfor every node in the graph.</p>
+</dd>
+<dt><strong>node_colors</strong><span class="classifier">Dict[Any, str]</span></dt><dd><p>A mapping of node id to colors. Must contain an entry for every node in the
+graph.</p>
+</dd>
+<dt><strong>vertex_line_width</strong><span class="classifier">float</span></dt><dd><p>Line width of vertex outline. Default is``0.01``.</p>
+</dd>
+<dt><strong>vertex_alpha</strong><span class="classifier">float</span></dt><dd><p>Alpha (transparency) of vertices in visualization. Default is``0.55``.</p>
+</dd>
+<dt><strong>edge_line_width</strong><span class="classifier">float</span></dt><dd><p>Line width of edge. Default is``0.5``.</p>
+</dd>
+<dt><strong>edge_alpha</strong><span class="classifier">float</span></dt><dd><p>Alpha (transparency) of edges in visualization. Default is``0.02``.</p>
+</dd>
+<dt><strong>figure_width</strong><span class="classifier">float</span></dt><dd><p>Width of figure. Default is <code class="docutils literal notranslate"><span class="pre">15.0</span></code>.</p>
+</dd>
+<dt><strong>figure_height</strong><span class="classifier">float</span></dt><dd><p>eight of figure. Default is``15.0``.</p>
+</dd>
+<dt><strong>light_background</strong><span class="classifier">bool</span></dt><dd><p>Light background or dark background. Default is``True``.</p>
+</dd>
+<dt><strong>vertex_shape</strong><span class="classifier">str</span></dt><dd><p>Matplotlib Marker for the vertex shape.  See
+<a class="reference external" href="https://matplotlib.org/api/markers_api.html">https://matplotlib.org/api/markers_api.html</a>
+for a list of allowed values . Default is <code class="docutils literal notranslate"><span class="pre">o</span></code> (i.e: a circle)</p>
+</dd>
+<dt><strong>arrows</strong><span class="classifier">bool</span></dt><dd><p>For directed graphs, if <code class="docutils literal notranslate"><span class="pre">True</span></code>, draw arrow heads. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><strong>dpi</strong><span class="classifier">float</span></dt><dd><p>Dots per inch of the figure.  Default is <code class="docutils literal notranslate"><span class="pre">500</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>positions</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><a class="reference internal" href="#graspologic.layouts.NodePosition" title="graspologic.layouts.classes.NodePosition"><em>NodePosition</em></a><em>]</em>) -- </p></li>
+<li><p><strong>node_colors</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) -- </p></li>
+<li><p><strong>vertex_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>vertex_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>edge_line_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>edge_alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>figure_width</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>figure_height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>light_background</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>vertex_shape</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>arrows</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>dpi</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="inference.html" class="btn btn-neutral float-left" title="Inference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="match.html" class="btn btn-neutral float-right" title="Matching" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

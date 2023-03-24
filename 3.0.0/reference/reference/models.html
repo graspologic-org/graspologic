@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Models &mdash; graspologic 3.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Nomination" href="nominate.html" />
+    <link rel="prev" title="Matching" href="match.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Models</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="models">
+<h1>Models<a class="headerlink" href="#models" title="Permalink to this heading">¶</a></h1>
+<section id="erdos-reyni-models">
+<h2>Erdos-Reyni models<a class="headerlink" href="#erdos-reyni-models" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">EREstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/er.html#EREstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EREstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Erdos-Reyni Model</p>
+<p>The Erdos-Reyni (ER) model is a simple random graph model in which the probability
+of any potential edge in the graph existing is the same for any two nodes <span class="math notranslate nohighlight">\(i\)</span>
+and <span class="math notranslate nohighlight">\(j\)</span>.</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = p\)</span> for all i, j</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+this determines whether to force symmetry upon the block probability matrix fit
+for the SBM. It will also determine whether graphs sampled from the model are
+directed.</p>
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+the graph where a node connects to itself.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>p_</strong><span class="classifier">float</span></dt><dd><p>Value between 0 and 1 (inclusive) representing the probability of any edge in
+the ER graph model</p>
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+sampled.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.models.DCEREstimator" title="graspologic.models.DCEREstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.DCEREstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="#graspologic.models.SBMEstimator" title="graspologic.models.SBMEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.SBMEstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="simulations.html#graspologic.simulations.er_np" title="graspologic.simulations.er_np"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.simulations.er_np</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r33780cd41ecf-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model</a></p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/er.html#EREstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EREstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/er.html#EREstimator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EREstimator.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the SBM to a graph, optionally with known block labels</p>
+<p>If y is <cite>None</cite>, the block assignments for each vertex will first be
+estimated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.EREstimator" title="graspologic.models.er.EREstimator"><em>EREstimator</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian information criterion for the current model on the input graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.mse">
+<span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean square error for the current model on the input graph</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample graphs (realizations) from the fitted model</p>
+<p>Can only be called after the the model has been fit</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
+indexes each sample, and the other dimensions represent
+(n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
+<p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
+array will still be returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average log-likelihood over each potential edge of the
+given graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the weighted log probabilities for each potential edge.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
+than 1 - c are set to c or 1 - c, respectively.
+If None, values will not be clipped in the likelihood calculation, which may
+result in poorly behaved likelihoods depending on the model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.EREstimator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.block_p_">
+<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.EREstimator.block_p_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.models.EREstimator.vertex_assignments_">
+<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.EREstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">DCEREstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/er.html#DCEREstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCEREstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Degree-corrected Erdos-Reyni Model</p>
+<p>The Degree-corrected Erdos-Reyni (DCER) model is an extension of the ER model in
+which each node has an additional &quot;promiscuity&quot; parameter <span class="math notranslate nohighlight">\(\theta_i\)</span> that
+determines its expected degree in the graph.</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = \theta_i \theta_j p\)</span></p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+this determines whether to force symmetry upon the block probability matrix fit
+for the SBM. It will also determine whether graphs sampled from the model are
+directed.</p>
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+the graph where a node connects to itself.</p>
+</dd>
+<dt><strong>degree_directed</strong><span class="classifier">boolean</span></dt><dd><p>Whether to allow seperate degree correction parameters for the in and out degree
+of each node. Ignored if <code class="docutils literal notranslate"><span class="pre">directed</span></code> is False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>p_</strong><span class="classifier">float</span></dt><dd><p>The <span class="math notranslate nohighlight">\(p\)</span> parameter as described in the above model, which weights the
+overall probability of connections between any two nodes.</p>
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+sampled.</p>
+</dd>
+<dt><strong>degree_corrections_</strong><span class="classifier">np.ndarray, shape (n_verts, 1) or (n_verts, 2)</span></dt><dd><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
+False, then will be of shape (n_verts, 1) and element <cite>i</cite> represents the degree
+correction for node <span class="math notranslate nohighlight">\(i\)</span>. Otherwise, the first column contains out degree
+corrections and the second column contains in degree corrections.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.models.DCSBMEstimator" title="graspologic.models.DCSBMEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.DCSBMEstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="#graspologic.models.EREstimator" title="graspologic.models.EREstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.EREstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="simulations.html#graspologic.simulations.er_np" title="graspologic.simulations.er_np"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.simulations.er_np</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The DCER model is rarely mentioned in literature, though it is simply a special case
+of the DCSBM where there is only one community.</p>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r558cf8a090dc-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model">https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model</a></p>
+</div>
+<div class="citation" id="r558cf8a090dc-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Karrer, B., &amp; Newman, M. E. (2011). Stochastic blockmodels and community
+structure in networks. Physical review E, 83(1), 016107.</p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree_directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/er.html#DCEREstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCEREstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>degree_directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/er.html#DCEREstimator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCEREstimator.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the DCSBM to a graph, optionally with known block labels</p>
+<p>If y is <cite>None</cite>, the block assignments for each vertex will first be
+estimated.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</span></dt><dd><p>Fitted instance of self</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCEREstimator" title="graspologic.models.er.DCEREstimator"><em>DCEREstimator</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian information criterion for the current model on the input graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.mse">
+<span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean square error for the current model on the input graph</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample graphs (realizations) from the fitted model</p>
+<p>Can only be called after the the model has been fit</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
+indexes each sample, and the other dimensions represent
+(n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
+<p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
+array will still be returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average log-likelihood over each potential edge of the
+given graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the weighted log probabilities for each potential edge.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
+than 1 - c are set to c or 1 - c, respectively.
+If None, values will not be clipped in the likelihood calculation, which may
+result in poorly behaved likelihoods depending on the model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCEREstimator.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCEREstimator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="stochastic-block-models">
+<h2>Stochastic block models<a class="headerlink" href="#stochastic-block-models" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">SBMEstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#SBMEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.SBMEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stochastic Block Model</p>
+<p>The stochastic block model (SBM) represents each node as belonging to a block
+(or community). For a given potential edge between node <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>,
+the probability of an edge existing is specified by the block that nodes <span class="math notranslate nohighlight">\(i\)</span>
+and <span class="math notranslate nohighlight">\(j\)</span> belong to:</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = B_{\tau_i \tau_j}\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(B \in \mathbb{[0, 1]}^{K x K}\)</span> and <span class="math notranslate nohighlight">\(\tau\)</span> is an <cite>n_nodes</cite>
+length vector specifying which block each node belongs to.</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+this determines whether to force symmetry upon the block probability matrix fit
+for the SBM. It will also determine whether graphs sampled from the model are
+directed.</p>
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+the graph where a node connects to itself.</p>
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>Desired dimensionality of embedding for clustering to find communities.
+<code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions
+will be chosen by <a class="reference internal" href="embed.html#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>.</p>
+</dd>
+<dt><strong>min_comm</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The minimum number of communities (blocks) to consider.</p>
+</dd>
+<dt><strong>max_comm</strong><span class="classifier">int, optional (default=10)</span></dt><dd><p>The maximum number of communities (blocks) to consider (inclusive).</p>
+</dd>
+<dt><strong>cluster_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
+</dd>
+<dt><strong>embed_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>block_p_</strong><span class="classifier">np.ndarray, shape (n_blocks, n_blocks)</span></dt><dd><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
+represents the probability of an edge between block <span class="math notranslate nohighlight">\(i\)</span> and block
+<span class="math notranslate nohighlight">\(j\)</span>.</p>
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+sampled.</p>
+</dd>
+<dt><strong>vertex_assignments_</strong><span class="classifier">np.ndarray, shape (n_verts)</span></dt><dd><p>A vector of integer labels corresponding to the predicted block that each node
+belongs to if <code class="docutils literal notranslate"><span class="pre">y</span></code> was not passed during the call to <a class="reference internal" href="#graspologic.models.SBMEstimator.fit" title="graspologic.models.SBMEstimator.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
+</dd>
+<dt><strong>block_weights_</strong><span class="classifier">np.ndarray, shape (n_blocks)</span></dt><dd><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.models.DCSBMEstimator" title="graspologic.models.DCSBMEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.DCSBMEstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="simulations.html#graspologic.simulations.sbm" title="graspologic.simulations.sbm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.simulations.sbm</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r10af41aa3377-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Holland, P. W., Laskey, K. B., &amp; Leinhardt, S. (1983). Stochastic
+blockmodels: First steps. Social networks, 5(2), 109-137.</p>
+</div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.block_p_">
+<span class="sig-name descname"><span class="pre">block_p_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.SBMEstimator.block_p_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.vertex_assignments_">
+<span class="sig-name descname"><span class="pre">vertex_assignments_</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><a class="headerlink" href="#graspologic.models.SBMEstimator.vertex_assignments_" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#SBMEstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.SBMEstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>min_comm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>max_comm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>cluster_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+<li><p><strong>embed_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#SBMEstimator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.SBMEstimator.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the SBM to a graph, optionally with known block labels</p>
+<p>If y is <cite>None</cite>, the block assignments for each vertex will first be
+estimated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#graspologic.models.SBMEstimator" title="graspologic.models.sbm_estimators.SBMEstimator"><em>SBMEstimator</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian information criterion for the current model on the input graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.mse">
+<span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean square error for the current model on the input graph</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample graphs (realizations) from the fitted model</p>
+<p>Can only be called after the the model has been fit</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
+indexes each sample, and the other dimensions represent
+(n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
+<p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
+array will still be returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average log-likelihood over each potential edge of the
+given graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the weighted log probabilities for each potential edge.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
+than 1 - c are set to c or 1 - c, respectively.
+If None, values will not be clipped in the likelihood calculation, which may
+result in poorly behaved likelihoods depending on the model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.SBMEstimator.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.SBMEstimator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">DCSBMEstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#DCSBMEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCSBMEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Degree-corrected Stochastic Block Model</p>
+<p>The degree-corrected stochastic block model (DCSBM) represents each node as
+belonging to a block (or community). For a given potential edge between node
+<span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>, the probability of an edge existing is specified by
+the block that nodes <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> belong to as in the SBM. However,
+an additional &quot;promiscuity&quot; parameter <span class="math notranslate nohighlight">\(\theta\)</span> is added for each node,
+allowing the vertices within a block to have heterogeneous expected degree
+distributions:</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = \theta_i \theta_j B_{\tau_i \tau_j}\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(B \in \mathbb{[0, 1]}^{K x K}\)</span> <span class="math notranslate nohighlight">\(\tau\)</span> is an <cite>n_nodes</cite>
+length vector specifying which block each node belongs to, and <span class="math notranslate nohighlight">\(\theta\)</span>
+is an <cite>n_nodes</cite> length vector specifiying the degree correction for each
+node.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter of this model allows the degree correction
+parameter to be different for the in and out degree of each node:</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = \theta_i \eta_j B_{\tau_i \tau_j}\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(\eta\)</span> need not be the same.</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/sbm.html">Stochastic Block Model (SBM) Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>directed</strong><span class="classifier">boolean, optional (default=True)</span></dt><dd><p>Whether to treat the input graph as directed. Even if a directed graph is input,
+this determines whether to force symmetry upon the block probability matrix fit
+for the SBM. It will also determine whether graphs sampled from the model are
+directed.</p>
+</dd>
+<dt><strong>degree_directed</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to fit an &quot;in&quot; and &quot;out&quot; degree correction for each node. In the
+degree_directed case, the fit model can have a different expected in and out
+degree for each node.</p>
+</dd>
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+the graph where a node connects to itself.</p>
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>Desired dimensionality of embedding for clustering to find communities.
+<code class="docutils literal notranslate"><span class="pre">n_components</span></code> must be <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">min(X.shape)</span></code>. If None, then optimal dimensions
+will be chosen by <a class="reference internal" href="embed.html#graspologic.embed.select_dimension" title="graspologic.embed.select_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">select_dimension()</span></code></a>.</p>
+</dd>
+<dt><strong>min_comm</strong><span class="classifier">int, optional (default=1)</span></dt><dd><p>The minimum number of communities (blocks) to consider.</p>
+</dd>
+<dt><strong>max_comm</strong><span class="classifier">int, optional (default=10)</span></dt><dd><p>The maximum number of communities (blocks) to consider (inclusive).</p>
+</dd>
+<dt><strong>cluster_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="cluster.html#graspologic.cluster.GaussianCluster" title="graspologic.cluster.GaussianCluster"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianCluster</span></code></a></p>
+</dd>
+<dt><strong>embed_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Additional kwargs passed down to <a class="reference internal" href="embed.html#graspologic.embed.LaplacianSpectralEmbed" title="graspologic.embed.LaplacianSpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaplacianSpectralEmbed</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>block_p_</strong><span class="classifier">np.ndarray, shape (n_blocks, n_blocks)</span></dt><dd><p>The block probability matrix <span class="math notranslate nohighlight">\(B\)</span>, where the element <span class="math notranslate nohighlight">\(B_{i, j}\)</span>
+represents the expected number of edges between block <span class="math notranslate nohighlight">\(i\)</span> and block
+<span class="math notranslate nohighlight">\(j\)</span>.</p>
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+sampled.</p>
+</dd>
+<dt><strong>degree_corrections_</strong><span class="classifier">np.ndarray, shape (n_verts, 1) or (n_verts, 2)</span></dt><dd><p>Degree correction vector(s) <span class="math notranslate nohighlight">\(\theta\)</span>. If <code class="docutils literal notranslate"><span class="pre">degree_directed</span></code> parameter was
+False, then will be of shape (n_verts, 1) and element <span class="math notranslate nohighlight">\(i\)</span> represents the
+degree correction for node <span class="math notranslate nohighlight">\(i\)</span>. Otherwise, the first column contains out
+degree corrections and the second column contains in degree corrections.</p>
+</dd>
+<dt><strong>vertex_assignments_</strong><span class="classifier">np.ndarray, shape (n_verts)</span></dt><dd><p>A vector of integer labels corresponding to the predicted block that each node
+belongs to if <code class="docutils literal notranslate"><span class="pre">y</span></code> was not passed during the call to <a class="reference internal" href="#graspologic.models.DCSBMEstimator.fit" title="graspologic.models.DCSBMEstimator.fit"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code></a>.</p>
+</dd>
+<dt><strong>block_weights_</strong><span class="classifier">np.ndarray, shape (n_blocks)</span></dt><dd><p>Contains the proportion of nodes that belong to each block in the fit model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.models.SBMEstimator" title="graspologic.models.SBMEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.models.SBMEstimator</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="simulations.html#graspologic.simulations.sbm" title="graspologic.simulations.sbm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.simulations.sbm</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>Note that many examples in the literature describe the DCSBM as being sampled with a
+Poisson distribution. Here, we implement this model with a Bernoulli. When
+individual edge probabilities are relatively low these two distributions will yield
+similar results.</p>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r2f46ea77a45e-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Karrer, B., &amp; Newman, M. E. (2011). Stochastic blockmodels and community
+structure in networks. Physical review E, 83(1), 016107.</p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree_directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">directed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_comm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embed_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#DCSBMEstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCSBMEstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>degree_directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>directed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>min_comm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>max_comm</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
+<li><p><strong>cluster_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+<li><p><strong>embed_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/sbm_estimators.html#DCSBMEstimator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.DCSBMEstimator.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the DCSBM to a graph, optionally with known block labels</p>
+<p>If y is <cite>None</cite>, the block assignments for each vertex will first be
+estimated.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">array_like or networkx.Graph</span></dt><dd><p>Input graph to fit</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array_like, length graph.shape[0], optional</span></dt><dd><p>Categorical labels for the block assignments of the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>self</strong><span class="classifier"><code class="docutils literal notranslate"><span class="pre">DCSBMEstimator</span></code> object</span></dt><dd><p>Fitted instance of self</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.DCSBMEstimator" title="graspologic.models.sbm_estimators.DCSBMEstimator"><em>DCSBMEstimator</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian information criterion for the current model on the input graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.mse">
+<span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean square error for the current model on the input graph</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample graphs (realizations) from the fitted model</p>
+<p>Can only be called after the the model has been fit</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
+indexes each sample, and the other dimensions represent
+(n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
+<p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
+array will still be returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average log-likelihood over each potential edge of the
+given graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the weighted log probabilities for each potential edge.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
+than 1 - c are set to c or 1 - c, respectively.
+If None, values will not be clipped in the likelihood calculation, which may
+result in poorly behaved likelihoods depending on the model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.DCSBMEstimator.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.DCSBMEstimator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="latent-position-models">
+<h2>Latent position models<a class="headerlink" href="#latent-position-models" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">RDPGEstimator</span></span><a class="reference internal" href="../../_modules/graspologic/models/rdpg.html#RDPGEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.RDPGEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Random Dot Product Graph</p>
+<p>Under the random dot product graph model, each node is assumed to have a
+&quot;latent position&quot; in some <span class="math notranslate nohighlight">\(d\)</span>-dimensional Euclidian space. This vector
+dictates that node's probability of connection to other nodes. For a given pair
+of nodes <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span>, the probability of connection is the dot
+product between their latent positions:</p>
+<p><span class="math notranslate nohighlight">\(P_{ij} = \langle x_i, y_j \rangle\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(x_i\)</span> is the left latent position of node <span class="math notranslate nohighlight">\(i\)</span>, and <span class="math notranslate nohighlight">\(y_j\)</span> is
+the right latent position of node <span class="math notranslate nohighlight">\(j\)</span>. If the graph being modeled is
+is undirected, then <span class="math notranslate nohighlight">\(x_i = y_i\)</span>. Latent positions can be estimated via
+<a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a>.</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>loops</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether to allow entries on the diagonal of the adjacency matrix, i.e. loops in
+the graph where a node connects to itself.</p>
+</dd>
+<dt><strong>n_components</strong><span class="classifier">int, optional (default=None)</span></dt><dd><p>The dimensionality of the latent space used to model the graph. If None, the
+method of Zhu and Godsie will be used to select an embedding dimension.</p>
+</dd>
+<dt><strong>ase_kws</strong><span class="classifier">dict, optional (default={})</span></dt><dd><p>Dictionary of keyword arguments passed down to
+<a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdjacencySpectralEmbed</span></code></a>, which is used to fit the model.</p>
+</dd>
+<dt><strong>diag_aug_weight</strong><span class="classifier">int or float, optional (default=1)</span></dt><dd><p>Weighting used for diagonal augmentation, which is a form of regularization for
+fitting the RDPG model.</p>
+</dd>
+<dt><strong>plus_c_weight</strong><span class="classifier">int or float, optional (default=1)</span></dt><dd><p>Weighting used for a constant scalar added to the adjacency matrix before
+embedding as a form of regularization.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>latent_</strong><span class="classifier">tuple, length 2, or np.ndarray, shape (n_verts, n_components)</span></dt><dd><p>The fit latent positions for the RDPG model. If a tuple, then the graph that was
+input to fit was directed, and the first and second elements of the tuple are
+the left and right latent positions, respectively. The left and right latent
+positions will both be of shape (n_verts, n_components). If <code class="xref py py-attr docutils literal notranslate"><span class="pre">latent_</span></code> is an
+array, then the graph that was input to fit was undirected and the left and
+right latent positions are the same.</p>
+</dd>
+<dt><strong>p_mat_</strong><span class="classifier">np.ndarray, shape (n_verts, n_verts)</span></dt><dd><p>Probability matrix <span class="math notranslate nohighlight">\(P\)</span> for the fit model, from which graphs could be
+sampled.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg" title="graspologic.simulations.rdpg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.simulations.rdpg</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="embed.html#graspologic.embed.AdjacencySpectralEmbed" title="graspologic.embed.AdjacencySpectralEmbed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.embed.AdjacencySpectralEmbed</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="utils.html#graspologic.utils.augment_diagonal" title="graspologic.utils.augment_diagonal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.utils.augment_diagonal</span></code></a></dt><dd></dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r3dc1106fa4f0-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Athreya, A., Fishkind, D. E., Tang, M., Priebe, C. E., Park, Y.,
+Vogelstein, J. T., ... &amp; Sussman, D. L. (2018). Statistical inference
+on random dot product graphs: a survey. Journal of Machine Learning
+Research, 18(226), 1-92.</p>
+</div>
+<div class="citation" id="r3dc1106fa4f0-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006).
+Automatic dimensionality selection from the scree plot via the use of
+profile likelihood. Computational Statistics &amp; Data Analysis, 51(2),
+pp.918-930.</p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loops</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ase_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diag_aug_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plus_c_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/rdpg.html#RDPGEstimator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.RDPGEstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loops</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
+<li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>ase_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
+<li><p><strong>diag_aug_weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>plus_c_weight</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/rdpg.html#RDPGEstimator.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.RDPGEstimator.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the parameters for the given graph model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#graspologic.models.RDPGEstimator" title="graspologic.models.rdpg.RDPGEstimator"><em>RDPGEstimator</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.bic">
+<span class="sig-name descname"><span class="pre">bic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian information criterion for the current model on the input graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>bic</strong><span class="classifier">float</span></dt><dd><p>The lower the better</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.mse">
+<span class="sig-name descname"><span class="pre">mse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.mse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute mean square error for the current model on the input graph</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>mse</strong><span class="classifier">float</span></dt><dd><p>Mean square error for the model's fit P matrix</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sample graphs (realizations) from the fitted model</p>
+<p>Can only be called after the the model has been fit</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_samples</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of graphs to sample</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>graphs</strong><span class="classifier">np.array (n_samples, n_verts, n_verts)</span></dt><dd><p>Array of sampled graphs, where the first dimension
+indexes each sample, and the other dimensions represent
+(n_verts x n_verts) adjacency matrices for the sampled graphs.</p>
+<p>Note that if only one sample is drawn, a (1, n_verts, n_verts)
+array will still be returned.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_samples</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the average log-likelihood over each potential edge of the
+given graph.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>sum of log-loglikelihoods for each potential edge in input graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>graph</strong> (<em>ndarray</em>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.score_samples">
+<span class="sig-name descname"><span class="pre">score_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.score_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the weighted log probabilities for each potential edge.</p>
+<p>Note that this implicitly assumes the input graph is indexed like the
+fit model.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>graph</strong><span class="classifier">np.ndarray</span></dt><dd><p>Input graph. Must be same shape as model's <code class="xref py py-attr docutils literal notranslate"><span class="pre">p_mat_</span></code> attribute</p>
+</dd>
+<dt><strong>clip</strong><span class="classifier">scalar or None, optional (default=None)</span></dt><dd><p>Values for which to clip probability matrix, entries less than c or more
+than 1 - c are set to c or 1 - c, respectively.
+If None, values will not be clipped in the likelihood calculation, which may
+result in poorly behaved likelihoods depending on the model.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>sample_scores</strong><span class="classifier">np.ndarray (size of <code class="docutils literal notranslate"><span class="pre">graph</span></code>)</span></dt><dd><p>log-likelihood per potential edge in the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>clip</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ndarray</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.RDPGEstimator.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.models.RDPGEstimator.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="edge-swapping-configuration-models">
+<h2>Edge swapping (configuration models)<a class="headerlink" href="#edge-swapping-configuration-models" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.models.</span></span><span class="sig-name descname"><span class="pre">EdgeSwapper</span></span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Degree Preserving Edge Swaps</p>
+<p>This class allows for performing degree preserving edge swaps to
+generate new networks with the same degree sequence as the input network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>adjacency</strong><span class="classifier">np.ndarray OR csr_matrix, shape (n_verts, n_verts)</span></dt><dd><p>The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.</p>
+</dd>
+<dt><strong>edge_list</strong><span class="classifier">np.ndarray, shape (n_verts, 2)</span></dt><dd><p>The corresponding edgelist for the input network</p>
+</dd>
+<dt><strong>seed: int, optional</strong></dt><dd><p>Random seed to make outputs reproducible, must be positive</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r638fba4089a1-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Fosdick, B. K., Larremore, D. B., Nishimura, J., &amp; Ugander, J. (2018).
+Configuring random graph models with fixed degree sequences.
+Siam Review, 60(2), 315-355.</p>
+</div>
+<div class="citation" id="r638fba4089a1-2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Carstens, C. J., &amp; Horadam, K. J. (2017).
+Switching edges to randomize networks: what goes wrong and how to fix it.
+Journal of Complex Networks, 5(3), 337-351.</p>
+</div>
+<div class="citation" id="r638fba4089a1-3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py">https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py</a></p>
+</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adjacency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adjacency</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a>) -- </p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="graspologic.models.EdgeSwapper.swap_edges">
+<span class="sig-name descname"><span class="pre">swap_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_swaps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/models/edge_swaps.html#EdgeSwapper.swap_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.models.EdgeSwapper.swap_edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs a number of edge swaps on the graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_swaps</strong><span class="classifier">int (default 1), optional</span></dt><dd><p>The number of edge swaps to be performed</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>adjacency</strong><span class="classifier">np.ndarray OR csr.matrix, shape (n_verts, n_verts)</span></dt><dd><p>The adjancency matrix after a number of edge swaps are performed on the graph</p>
+</dd>
+<dt><strong>edge_list</strong><span class="classifier">np.ndarray (n_verts, 2)</span></dt><dd><p>The edge_list after a number of edge swaps are perfomed on the graph</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n_swaps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a>[<em>ndarray</em> | <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a>, <em>ndarray</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="match.html" class="btn btn-neutral float-left" title="Matching" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nominate.html" class="btn btn-neutral float-right" title="Nomination" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
