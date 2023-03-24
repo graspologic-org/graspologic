@@ -52,7 +52,7 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_array]) -> csr_array:
         # row
         rows.append(hstack(current_row))
 
-    return vstack(rows, format="csr")
+    return csr_array(vstack(rows, format="csr"))
 
 
 def _get_laplacian_matrices(
@@ -97,7 +97,7 @@ def _get_omni_matrix(
     out : 2d-array
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
-    if isspmatrix_csr(graphs[0]):
+    if isinstance(graphs[0], csr_array):
         return _get_omnibus_matrix_sparse(graphs)  # type: ignore
 
     shape = graphs[0].shape
