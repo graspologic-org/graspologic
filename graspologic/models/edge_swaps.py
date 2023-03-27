@@ -3,7 +3,7 @@ from typing import Optional
 import numba as nb
 import numpy as np
 from beartype import beartype
-from scipy.sparse import csr_matrix, lil_matrix
+from scipy.sparse import csr_array, lil_matrix
 from sklearn.utils import check_scalar
 
 from graspologic.preconditions import check_argument
@@ -21,7 +21,7 @@ class EdgeSwapper:
 
     Attributes
     ----------
-    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
+    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)
         The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.
 
     edge_list : np.ndarray, shape (n_verts, 2)
@@ -65,7 +65,7 @@ class EdgeSwapper:
 
         adjacency = import_graph(adjacency, copy=True)
 
-        if isinstance(adjacency, csr_matrix):
+        if isinstance(adjacency, csr_array):
             # more efficient for manipulations which change sparsity structure
             adjacency = lil_matrix(adjacency)
             self._edge_swap_function = _edge_swap
@@ -128,7 +128,7 @@ class EdgeSwapper:
 
         adjacency = self.adjacency
         if isinstance(adjacency, lil_matrix):
-            adjacency = csr_matrix(adjacency)
+            adjacency = csr_array(adjacency)
         else:
             adjacency = adjacency.copy()
 
@@ -141,11 +141,11 @@ def _edge_swap(
     """
     Performs the edge swap on the adjacency matrix. If adjacency is
     np.ndarray, then nopython=True is used in numba, but if adjacency
-    is csr_matrix, then forceobj=True is used in numba
+    is csr_array, then forceobj=True is used in numba
 
     Parameters
     ----------
-    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
+    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)
         The initial adjacency matrix in which edge swaps are performed on it
 
     edge_list : np.ndarray, shape (n_verts, 2)
@@ -156,7 +156,7 @@ def _edge_swap(
 
     Returns
     -------
-    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)
+    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)
         The adjancency matrix after an edge swap is performed on the graph
 
     edge_list : np.ndarray (n_verts, 2)

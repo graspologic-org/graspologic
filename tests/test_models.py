@@ -6,7 +6,7 @@ import unittest
 import networkx as nx
 import numpy as np
 from numpy.testing import assert_allclose
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
@@ -563,7 +563,7 @@ class TestEdgeSwaps(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.A = er_np(20, 0.5)
-        cls.B = csr_matrix(cls.A)
+        cls.B = csr_array(cls.A)
         cls.C = nx.from_numpy_array(cls.A)
         cls.D = nx.from_scipy_sparse_array(cls.B)
 

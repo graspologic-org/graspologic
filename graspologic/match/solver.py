@@ -10,7 +10,7 @@ import numpy as np
 from beartype import beartype
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.utils import check_scalar
 
 from graspologic.types import List, RngType, Tuple
@@ -492,7 +492,7 @@ def _check_input_matrix(
 ) -> MultilayerAdjacency:
     if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
         A = [A]
-    elif isinstance(A, (csr_matrix, csr_array)):
+    elif isinstance(A, (csr_array, csr_array)):
         A = [A]
     elif isinstance(A, list):
         # iterate over to make sure they're all same shape
@@ -507,7 +507,7 @@ def _check_input_matrix(
                 )
         if isinstance(A[0], np.ndarray):
             A = np.array(A, dtype=float)
-        elif isinstance(A[0], csr_matrix):
+        elif isinstance(A[0], csr_array):
             pass
     if (n_layers is not None) and (len(A) != n_layers):
         msg = (
@@ -649,7 +649,7 @@ def _multilayer_adj_pad(
 
 
 def _adj_pad(matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType) -> np.ndarray:
-    if isinstance(matrix, (csr_matrix, csr_array)) and (method == "adopted"):
+    if isinstance(matrix, (csr_array, csr_array)) and (method == "adopted"):
         msg = (
             "Using adopted padding method with a sparse adjacency representation; this "
             "will convert the matrix to a dense representation and likely remove any "
@@ -661,7 +661,7 @@ def _adj_pad(matrix: AdjacencyMatrix, n_padded: Int, method: PaddingType) -> np.
     if method == "adopted":
         matrix = 2 * matrix - np.ones(matrix.shape)
 
-    if (method == "naive") and isinstance(matrix, (csr_matrix, csr_array)):
+    if (method == "naive") and isinstance(matrix, (csr_array, csr_array)):
         matrix_padded = csr_array((n_padded, n_padded))
     else:
         matrix_padded = np.zeros((n_padded, n_padded))

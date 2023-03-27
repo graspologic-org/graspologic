@@ -34,9 +34,9 @@ if sys.version_info >= (3, 9):
 else:
     from typing import Dict, List, Set, Tuple
 
-AdjacencyMatrix = Union[np.ndarray, sp.csr_matrix]
+AdjacencyMatrix = Union[np.ndarray, sp.csr_array]
 
-GraphRepresentation = Union[np.ndarray, sp.csr_matrix, nx.Graph]
+GraphRepresentation = Union[np.ndarray, sp.csr_array, nx.Graph]
 
 RngType = Optional[Union[int, np.integer, np.random.Generator]]
 

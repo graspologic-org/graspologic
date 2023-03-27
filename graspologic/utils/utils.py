@@ -12,7 +12,7 @@ import pandas as pd
 import scipy.sparse
 from beartype import beartype
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csgraph, csr_matrix, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_array, diags, isspmatrix_csr
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
@@ -26,32 +26,32 @@ from ..types import GraphRepresentation
 
 @beartype
 def average_matrices(
-    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
-) -> Union[np.ndarray, csr_matrix]:
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_array]]]
+) -> Union[np.ndarray, csr_array]:
     """
     Helper method to encapsulate calculating the average of matrices represented either as a
-    list of numpy.ndarray or a list of scipy.sparse.csr_matrix.
+    list of numpy.ndarray or a list of scipy.sparse.csr_array.
 
     Parameters
     ----------
-    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_array]]]
         The list of matrices to be averaged
 
     Returns
     -------
-    Union[np.ndarray, csr_matrix]
+    Union[np.ndarray, csr_array]
     """
     if isinstance(matrices[0], np.ndarray):
         return np.mean(matrices, axis=0)  # type: ignore
     elif isspmatrix_csr(matrices[0]):
-        return sum(matrices) / len(matrices)
+        return np.sum(matrices) / len(matrices)
 
     raise TypeError(f"Unexpected type {matrices}")
 
 
 def import_graph(
     graph: GraphRepresentation, copy: bool = True
-) -> Union[np.ndarray, scipy.sparse.csr_matrix]:
+) -> Union[np.ndarray, scipy.sparse.csr_array]:
     """
     A function for reading a graph and returning a shared data type.
 
@@ -59,7 +59,7 @@ def import_graph(
     ----------
     graph: GraphRepresentation
         Either array-like, shape (n_vertices, n_vertices) numpy array,
-        a scipy.sparse.csr_matrix, or an object of type networkx.Graph.
+        a scipy.sparse.csr_array, or an object of type networkx.Graph.
 
     copy: bool, (default=True)
         Whether to return a copied version of array. If False and input is np.array,
@@ -76,7 +76,7 @@ def import_graph(
     """
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         out = nx.to_numpy_array(graph, nodelist=sorted(graph.nodes), dtype=np.float_)
-    elif isinstance(graph, (np.ndarray, np.memmap, csr_matrix)):
+    elif isinstance(graph, (np.ndarray, np.memmap, csr_array)):
         shape = graph.shape
         if len(shape) > 3:
             msg = "Input tensor must have at most 3 dimensions, not {}.".format(
@@ -103,7 +103,7 @@ def import_graph(
             copy=copy,
         )
     else:
-        msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_matrix,\
+        msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_array,\
         not {}.".format(
             type(graph)
         )
@@ -221,10 +221,10 @@ def is_unweighted(
 
     Parameters
     ----------
-    graph : Union[np.ndarray, scipy.sparse.csr_matrix, nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDigraph]
+    graph : Union[np.ndarray, scipy.sparse.csr_array, nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDigraph]
         The graph to test for weightedness. If a networkx graph, we can just ask it directly by querying the weight
         attribute specified on every edge. It's possible an individual edge can be weighted but the full graph is not.
-        If an adjacency matrix defined by a numpy.ndarray or scipy.sparse.csr_matrix, we check every value; if
+        If an adjacency matrix defined by a numpy.ndarray or scipy.sparse.csr_array, we check every value; if
         they are only 0 and 1, we claim the graph is unweighted.
     weight_attribute : Any
         Default is ``weight``. Only used for networkx, and used on the edge data dictionary as a key to look up the
@@ -238,17 +238,17 @@ def is_unweighted(
     Raises
     ------
     TypeError
-        If the provided graph is not a numpy.ndarray, scipy.sparse.csr_matrix, or nx.Graph
+        If the provided graph is not a numpy.ndarray, scipy.sparse.csr_array, or nx.Graph
     """
     if isinstance(graph, np.ndarray):
         return ((graph == 0) | (graph == 1)).all()
-    elif isinstance(graph, csr_matrix):
+    elif isinstance(graph, csr_array):
         return graph.count_nonzero() == (graph == 1).count_nonzero()
     elif isinstance(graph, nx.Graph):
         return nx.is_weighted(graph, weight=weight_attribute)
     else:
         raise TypeError(
-            "This function only works on numpy.ndarray or scipy.sparse.csr_matrix instances"
+            "This function only works on numpy.ndarray or scipy.sparse.csr_array instances"
         )
 
 
@@ -286,15 +286,15 @@ def is_almost_symmetric(
 
 
 def symmetrize(
-    graph: Union[np.ndarray, csr_matrix], method: Literal["avg", "triu", "tril"] = "avg"
-) -> Union[np.ndarray, csr_matrix]:
+    graph: Union[np.ndarray, csr_array], method: Literal["avg", "triu", "tril"] = "avg"
+) -> Union[np.ndarray, csr_array]:
     """
     A function for forcing symmetry upon a graph.
 
     Parameters
     ----------
     graph: object
-        Either array-like, (n_vertices, n_vertices) numpy matrix or csr_matrix
+        Either array-like, (n_vertices, n_vertices) numpy matrix or csr_array
 
     method: {'avg' (default), 'triu', 'tril',}, optional
         An option indicating which half of the edges to
@@ -325,7 +325,9 @@ def symmetrize(
            [1, 1, 1]])
     """
     # graph = import_graph(graph)
-    sparse = isspmatrix_csr(graph)
+
+    sparse = isinstance(graph, csr_array)
+
     pac = scipy.sparse if sparse else np
 
     if method == "triu":
@@ -340,10 +342,15 @@ def symmetrize(
 
     dia = diags(graph.diagonal()) if sparse else np.diag(np.diag(graph))
     graph = graph + graph.T - dia
+
+    if sparse:
+        # some scipy funcs still output a sparse matrix
+        graph = csr_array(graph)
+
     return graph
 
 
-def remove_loops(graph: GraphRepresentation) -> Union[np.ndarray, csr_matrix]:
+def remove_loops(graph: GraphRepresentation) -> Union[np.ndarray, csr_array]:
     """
     A function to remove loops from a graph.
 
@@ -360,7 +367,11 @@ def remove_loops(graph: GraphRepresentation) -> Union[np.ndarray, csr_matrix]:
     """
     graph = import_graph(graph)
 
-    dia = diags(graph.diagonal()) if isspmatrix_csr(graph) else np.diag(np.diag(graph))
+    dia = (
+        csr_array(diags(graph.diagonal()))
+        if isinstance(graph, csr_array)
+        else np.diag(np.diag(graph))
+    )
 
     graph = graph - dia
 
@@ -387,7 +398,7 @@ def to_laplacian(
     ----------
     graph: object
         Either array-like, (n_vertices, n_vertices) numpy array,
-        scipy.sparse.csr_matrix, or an object of type networkx.Graph.
+        scipy.sparse.csr_array, or an object of type networkx.Graph.
 
     form: {'I-DAD', 'DAD' (default), 'R-DAD'}, string, optional
 
@@ -460,7 +471,9 @@ def to_laplacian(
         in_root = 1 / np.sqrt(in_degree)  # this is 10x faster than ** -0.5
         out_root = 1 / np.sqrt(out_degree)
 
-    diag = diags if isspmatrix_csr(graph) else np.diag
+    sparse = isinstance(graph, csr_array)
+
+    diag = diags if sparse else np.diag
 
     in_root[np.isinf(in_root)] = 0
     out_root[np.isinf(out_root)] = 0
@@ -468,15 +481,18 @@ def to_laplacian(
     in_root = diag(in_root)  # just change to sparse diag for sparse support
     out_root = diag(out_root)
 
+    if sparse:
+        # for some reason scipy is still returning in csr_matrix form, not what we want
+        in_root = csr_array(in_root)
+        out_root = csr_array(out_root)
+
     if form == "I-DAD":
         L = diag(in_degree) - A
         L = in_root @ L @ in_root
     elif form == "DAD" or form == "R-DAD":
         L = out_root @ A @ in_root
     if is_symmetric(A):
-        return symmetrize(
-            L, method="avg"
-        )  # sometimes machine prec. makes this necessary
+        L = symmetrize(L, method="avg")  # sometimes machine prec. makes this necessary
     return L
 
 
@@ -493,7 +509,7 @@ def is_fully_connected(graph: GraphRepresentation) -> bool:
     Parameters
     ----------
     graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,
-        scipy.sparse.csr_matrix, np.ndarray
+        scipy.sparse.csr_array, np.ndarray
         Input graph in any of the above specified formats. If np.ndarray,
         interpreted as an :math:`n \times n` adjacency matrix
 
@@ -516,7 +532,7 @@ def is_fully_connected(graph: GraphRepresentation) -> bool:
     False
     """
 
-    if isinstance(graph, (np.ndarray, csr_matrix)):
+    if isinstance(graph, (np.ndarray, csr_array)):
         directed = not is_symmetric(graph)
 
         n_components = connected_components(
@@ -531,12 +547,10 @@ def is_fully_connected(graph: GraphRepresentation) -> bool:
 
 def largest_connected_component(
     graph: Union[
-        nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
+        nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_array
     ],
     return_inds: bool = False,
-) -> Union[
-    nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_matrix
-]:
+) -> Union[nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph, np.ndarray, csr_array]:
     r"""
     Finds the largest connected component for the input graph.
 
@@ -545,9 +559,9 @@ def largest_connected_component(
 
     Parameters
     ----------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_array
         Input graph in any of the above specified formats. If np.ndarray or
-        scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.
+        scipy.sparse.csr_array interpreted as an :math:`n \times n` adjacency matrix.
 
     return_inds: boolean, default: False
         Whether to return a np.ndarray containing the indices/nodes in the original
@@ -555,7 +569,7 @@ def largest_connected_component(
 
     Returns
     -------
-    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix
+    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_array
         New graph of the largest connected component, returned in the input format.
 
     inds: (optional)
@@ -564,7 +578,7 @@ def largest_connected_component(
 
     Notes
     -----
-    For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed
+    For networks input in ``scipy.sparse.csr_array`` format, explicit zeros are removed
     prior to finding the largest connected component, thus they are not treated as
     edges. This differs from the convention in
     :func:`scipy.sparse.csgraph.connected_components`.
@@ -572,12 +586,12 @@ def largest_connected_component(
 
     if isinstance(graph, (nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDiGraph)):
         return _largest_connected_component_networkx(graph, return_inds=return_inds)
-    elif isinstance(graph, (np.ndarray, csr_matrix)):
+    elif isinstance(graph, (np.ndarray, csr_array)):
         return _largest_connected_component_adjacency(graph, return_inds=return_inds)
     else:
         msg = (
             "`graph` must either be a networkx graph or an adjacency matrix in"
-            " numpy ndarray or scipy csr_matrix format."
+            " numpy ndarray or scipy csr_array format."
         )
         raise TypeError(msg)
 
@@ -601,12 +615,12 @@ def _largest_connected_component_networkx(
 
 
 def _largest_connected_component_adjacency(
-    adjacency: Union[np.ndarray, csr_matrix],
+    adjacency: Union[np.ndarray, csr_array],
     return_inds: bool = False,
 ) -> Union[
-    np.ndarray, csr_matrix, Tuple[np.ndarray, np.ndarray], Tuple[csr_matrix, csr_matrix]
+    np.ndarray, csr_array, Tuple[np.ndarray, np.ndarray], Tuple[csr_array, csr_array]
 ]:
-    if isinstance(adjacency, csr_matrix):
+    if isinstance(adjacency, csr_array):
         adjacency.eliminate_zeros()
 
     # If you treat an undirected graph as directed and take the largest weakly connected
@@ -778,7 +792,7 @@ def multigraph_lcc_intersection(
 
 def augment_diagonal(
     graph: GraphRepresentation, weight: float = 1
-) -> Union[np.ndarray, csr_matrix]:
+) -> Union[np.ndarray, csr_array]:
     r"""
     Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where
     :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of
@@ -796,7 +810,7 @@ def augment_diagonal(
 
     Returns
     -------
-    graph : np.array or csr_matrix
+    graph : np.array or csr_array
         Adjacency matrix with average degrees added to the diagonal.
 
     Examples
@@ -827,7 +841,7 @@ def augment_diagonal(
     return graph
 
 
-def binarize(graph: GraphRepresentation) -> Union[np.ndarray, csr_matrix]:
+def binarize(graph: GraphRepresentation) -> Union[np.ndarray, csr_array]:
     """
     Binarize the input adjacency matrix.
 
@@ -926,9 +940,9 @@ def remove_vertices(
     indices: Union[int, np.ndarray, Sequence[int]],
     return_removed: bool = False,
 ) -> Union[
-    Union[np.ndarray, csr_matrix],
-    Tuple[Union[np.ndarray, csr_matrix], np.ndarray],
-    Tuple[Union[np.ndarray, csr_matrix], Tuple[np.ndarray, np.ndarray]],
+    Union[np.ndarray, csr_array],
+    Tuple[Union[np.ndarray, csr_array], np.ndarray],
+    Tuple[Union[np.ndarray, csr_array], Tuple[np.ndarray, np.ndarray]],
 ]:
     """
     Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the
