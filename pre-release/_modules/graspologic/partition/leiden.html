@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.partition.leiden &mdash; graspologic 3.0.0dev4514269862 documentation</title>
+  <title>graspologic.partition.leiden &mdash; graspologic 3.0.0dev4534921903 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0dev4514269862
+                3.0.0dev4534921903
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -365,7 +365,7 @@
     <span class="n">shape</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;graphs of type np.ndarray or csr.sparse.csr.csr_matrix should be &quot;</span>
+            <span class="s2">&quot;graphs of type np.ndarray or csr.sparse.csr.csr_array should be &quot;</span>
             <span class="s2">&quot;adjacency matrices with n x n shape&quot;</span>
         <span class="p">)</span>
 
@@ -489,7 +489,7 @@
 <span class="sd">    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span>
 <span class="sd">        A graph representation, whether a weighted edge list referencing an undirected</span>
 <span class="sd">        graph, an undirected networkx graph, or an undirected adjacency matrix in either</span>
-<span class="sd">        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section</span>
+<span class="sd">        numpy.ndarray or scipy.sparse.csr_array form. Please see the Notes section</span>
 <span class="sd">        regarding node ids used.</span>
 <span class="sd">    starting_communities : Optional[Dict[Any, int]]</span>
 <span class="sd">        Default is ``None``. An optional community mapping dictionary that contains a node</span>
@@ -703,7 +703,7 @@
         <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
         <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">,</span>
+        <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_array</span><span class="p">,</span>
     <span class="p">],</span>
     <span class="n">max_cluster_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="n">starting_communities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -750,7 +750,7 @@
 <span class="sd">    graph : Union[List[Tuple[Any, Any, Union[int, float]]], GraphRepresentation]</span>
 <span class="sd">        A graph representation, whether a weighted edge list referencing an undirected</span>
 <span class="sd">        graph, an undirected networkx graph, or an undirected adjacency matrix in either</span>
-<span class="sd">        numpy.ndarray or scipy.sparse.csr.csr_matrix form. Please see the Notes section</span>
+<span class="sd">        numpy.ndarray or scipy.sparse.csr_array form. Please see the Notes section</span>
 <span class="sd">        regarding node ids used.</span>
 <span class="sd">    max_cluster_size : int</span>
 <span class="sd">        Default is ``1000``. Any partition or cluster with</span>

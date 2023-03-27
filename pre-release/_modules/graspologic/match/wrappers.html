@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.match.wrappers &mdash; graspologic 3.0.0dev4514269862 documentation</title>
+  <title>graspologic.match.wrappers &mdash; graspologic 3.0.0dev4534921903 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0dev4514269862
+                3.0.0dev4534921903
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -367,25 +367,25 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    A : {ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof</span>
+<span class="sd">    A : {ndarray, csr_array, csr_array} of shape (n, n), or a list thereof</span>
 <span class="sd">        The first (potentially multilayer) adjacency matrix to be matched. Multiplex</span>
 <span class="sd">        networks (e.g. a network with multiple edge types) can be used by inputting a</span>
 <span class="sd">        list of the adjacency matrices for each edge type.</span>
 
-<span class="sd">    B : {ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof</span>
+<span class="sd">    B : {ndarray, csr_array, csr_array} of shape (m, m), or a list thereof</span>
 <span class="sd">        The second (potentially multilayer) adjacency matrix to be matched. Must have</span>
 <span class="sd">        the same number of layers as ``A``, but need not have the same size</span>
 <span class="sd">        (see ``padding``).</span>
 
-<span class="sd">    AB : {ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None</span>
+<span class="sd">    AB : {ndarray, csr_array, csr_array} of shape (n, m), or a list thereof, default=None</span>
 <span class="sd">        A (potentially multilayer) matrix representing connections from the objects</span>
 <span class="sd">        indexed in ``A`` to those in ``B``, used for bisected graph matching (see [2]).</span>
 
-<span class="sd">    BA : {ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None</span>
+<span class="sd">    BA : {ndarray, csr_array, csr_array} of shape (m, n), or a list thereof, default=None</span>
 <span class="sd">        A (potentially multilayer) matrix representing connections from the objects</span>
 <span class="sd">        indexed in ``B`` to those in ``A``, used for bisected graph matching (see [2]).</span>
 
-<span class="sd">    S : {ndarray, csr_matrix, csr_array} of shape (n, m), default=None</span>
+<span class="sd">    S : {ndarray, csr_array, csr_array} of shape (n, m), default=None</span>
 <span class="sd">        A matrix representing the similarity of objects indexed in ``A`` to each object</span>
 <span class="sd">        indexed in ``B``. Note that the scale (i.e. the norm) of this matrix will affect</span>
 <span class="sd">        how strongly the similarity (linear) term is weighted relative to the adjacency</span>

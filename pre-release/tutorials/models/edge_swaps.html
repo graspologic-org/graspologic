@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Degree Preserving Edge Swaps &mdash; graspologic 3.0.0dev4514269862 documentation</title>
+  <title>Degree Preserving Edge Swaps &mdash; graspologic 3.0.0dev4534921903 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0dev4514269862
+                3.0.0dev4534921903
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -299,7 +299,7 @@
 <span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">binarize</span><span class="p">,</span> <span class="n">symmetrize</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_array</span>
 </pre></div>
 </div>
 </div>
@@ -312,7 +312,7 @@
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> is a class that performs degree preserving edge swaps on networks. The distributions of graphs with a fixed degree sequence are known as configuration models, and these have extensive application for analyzing network datasets. The current implementation works on simple graphs (unewighted, no loops) that are of type <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> or <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> is a class that performs degree preserving edge swaps on networks. The distributions of graphs with a fixed degree sequence are known as configuration models, and these have extensive application for analyzing network datasets. The current implementation works on simple graphs (unewighted, no loops) that are of type <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> or <code class="docutils literal notranslate"><span class="pre">csr_array</span></code>.</p>
 <p>Now let us run dpes on these graphs and ensure that they have the same degree sequence</p>
 <p>To begin, we’ll look at an example network, the <em>Drosophila melanogaster</em> larva right mushroom body connectome from <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28796202">Eichler et al. 2017</a>.</p>
 <p>Note: here we make the network undirected and unweighted for compatibility with the current implementation.</p>
@@ -383,12 +383,12 @@
 True
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> also works with <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code> adjacency representations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> also works with <code class="docutils literal notranslate"><span class="pre">csr_array</span></code> adjacency representations.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">adj</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_array</span><span class="p">(</span><span class="n">adj</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
 <span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
 <span class="n">swapped_g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">swapped_adj</span><span class="p">)</span>
