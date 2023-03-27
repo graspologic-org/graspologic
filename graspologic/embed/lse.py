@@ -159,7 +159,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
         Parameters
         ----------
-        graph : array-like, scipy.sparse.csr_matrix, or networkx.Graph
+        graph : array-like, scipy.sparse.csr_array, or networkx.Graph
             Input graph to embed. see graspologic.utils.import_graph
 
         Returns

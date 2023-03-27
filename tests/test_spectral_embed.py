@@ -9,7 +9,7 @@ import pandas as pd
 import pytest
 from numpy.random import normal, poisson
 from numpy.testing import assert_equal
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.base import clone
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
 from sklearn.mixture import GaussianMixture
@@ -38,7 +38,7 @@ def _test_output_dim(self, method, sparse=False, *args, **kwargs):
     M = 20
     A = er_nm(n, M) + 5
     if sparse:
-        A = csr_matrix(A)
+        A = csr_array(A)
     embed._reduce_dim(A)
     self.assertEqual(embed.latent_left_.shape, (n, 4))
     self.assertTrue(embed.latent_right_ is None)
@@ -55,7 +55,7 @@ def _test_sbm_er_binary(self, method, P, directed=False, sparse=False, *args, **
     )
 
     if sparse:
-        sbm_sample = csr_matrix(sbm_sample)
+        sbm_sample = csr_array(sbm_sample)
 
     embed_sbm = method(n_components=2, concat=directed, svd_seed=8888)
     X_sbm = embed_sbm.fit_transform(sbm_sample)
@@ -233,7 +233,7 @@ class TestAdjacencySpectralEmbedSparse(unittest.TestCase):
         _test_sbm_er_binary(self, AdjacencySpectralEmbed, P, directed=True, sparse=True)
 
     def test_unconnected_warning(self):
-        A = csr_matrix(er_nm(100, 10))
+        A = csr_array(er_nm(100, 10))
         with pytest.warns(UserWarning):
             ase = AdjacencySpectralEmbed()
             ase.fit(A)
@@ -328,13 +328,13 @@ class TestLaplacianSpectralEmbedSparse(unittest.TestCase):
         _test_sbm_er_binary(self, LaplacianSpectralEmbed, P, directed=True, sparse=True)
 
     def test_different_forms(self):
-        f = csr_matrix(np.array([[1, 2], [2, 1]]))
+        f = csr_array(np.array([[1, 2], [2, 1]]))
         lse = LaplacianSpectralEmbed(form="I-DAD")
 
     def test_unconnected_warning(self):
         n = [50, 50]
         p = [[1, 0], [0, 1]]
-        A = csr_matrix(sbm(n, p))
+        A = csr_array(sbm(n, p))
         with pytest.warns(UserWarning):
             lse = LaplacianSpectralEmbed()
             lse.fit(A)

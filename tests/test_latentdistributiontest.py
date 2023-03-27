@@ -98,8 +98,8 @@ class TestLatentDistributionTest(unittest.TestCase):
         np.random.seed(123)
         A1 = er_np(5, 0.8)
         A2 = er_np(5, 0.8)
-        A1_nx = nx.from_numpy_matrix(A1)
-        A2_nx = nx.from_numpy_matrix(A2)
+        A1_nx = nx.from_numpy_array(A1)
+        A2_nx = nx.from_numpy_array(A2)
         # check passing nx, when exepect embeddings
         with self.assertRaises(TypeError):
             latent_distribution_test(A1_nx, A1, input_graph=False)

@@ -7,7 +7,7 @@ import beartype.roar
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.mixture import GaussianMixture
 
 from graspologic.plot.plot import (
@@ -289,7 +289,7 @@ class TestPlot(unittest.TestCase):
 
             with self.assertRaises(TypeError):
                 networkplot(
-                    adjacency=csr_matrix(X), x="source", y="target", node_data="data"
+                    adjacency=csr_array(X), x="source", y="target", node_data="data"
                 )
 
             with self.assertRaises(TypeError):
@@ -314,7 +314,7 @@ class TestPlot(unittest.TestCase):
                 networkplot(adjacency=X, x=x, y=y, edge_hue=4)
 
             with self.assertRaises(TypeError):
-                networkplot(adjacency=csr_matrix(X), x=x, y=y, edge_alpha="test")
+                networkplot(adjacency=csr_array(X), x=x, y=y, edge_alpha="test")
 
             with self.assertRaises(TypeError):
                 networkplot(adjacency=X, x=x, y=y, edge_linewidth="test")
@@ -340,10 +340,10 @@ class TestPlot(unittest.TestCase):
         sizes = (10, 200)
 
         fig = networkplot(adjacency=X, x=xarray, y=yarray)
-        fig = networkplot(adjacency=csr_matrix(X), x=xarray, y=yarray)
+        fig = networkplot(adjacency=csr_array(X), x=xarray, y=yarray)
         fig = networkplot(adjacency=X, x=xstring, y=ystring, node_data=node_df)
         fig = networkplot(
-            adjacency=csr_matrix(X), x=xstring, y=ystring, node_data=node_df
+            adjacency=csr_array(X), x=xstring, y=ystring, node_data=node_df
         )
         fig = plt.figure()
         ax = fig.add_subplot(211)
