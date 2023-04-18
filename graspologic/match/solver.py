@@ -177,6 +177,8 @@ class _GraphMatchSolver:
             B = _multilayer_adj_pad(B, n_padded=self.n, method=self.padding)
             AB = _multilayer_adj_pad(AB, n_padded=self.n, method=self.padding)
             BA = _multilayer_adj_pad(BA, n_padded=self.n, method=self.padding)
+            if S is not None: 
+                S = _multilayer_adj_pad([S], n_padded=self.n, method=self.padding)[0]
             self.padded = True
             if self.n_A > self.n_B:
                 self._padded_B = True
@@ -682,8 +684,9 @@ def _compare_dimensions(
     dim_index_B = 0 if dimension_B == "row" else 1
     if not (matrix_A.shape[dim_index_A] == matrix_B.shape[dim_index_B]):
         msg = (
-            f"Input matrix/matrices `{name1}` number of {dimension_A}s must match "
-            f"`{name2}` number of {dimension_B}s."
+            f"Input matrix/matrices `{name1}` number of {dimension_A}s "
+            f"({matrix_A.shape[dim_index_A]}) must match "
+            f"`{name2}` number of {dimension_B}s ({matrix_B.shape[dim_index_B]})."
         )
         raise ValueError(msg)
 
