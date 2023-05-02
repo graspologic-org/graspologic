@@ -17,8 +17,10 @@ from typing_extensions import Literal
 
 from graspologic.types import List, Tuple
 
+import pandas as pd
+
 # redefining since I don't want to add csr_array for ALL code in graspologic yet
-AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array]
+AdjacencyMatrix = Union[np.ndarray, csr_matrix, csr_array, pd.DataFrame]
 
 MultilayerAdjacency = Union[List[AdjacencyMatrix], AdjacencyMatrix, np.ndarray]
 
@@ -29,3 +31,5 @@ Scalar = Union[int, float, np.integer]
 Int = Union[int, np.integer]
 
 PartialMatchType = Union[np.ndarray, Tuple]
+
+SolverType = Literal["emd", "sinkhorn", "lap"]

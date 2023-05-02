@@ -4,12 +4,15 @@
 from typing import Any, NamedTuple, Optional
 
 import numpy as np
+import pandas as pd
 from beartype import beartype
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
 from graspologic.match.solver import _GraphMatchSolver
 from graspologic.types import Dict, List, RngType
+
+from typing import Union, Literal
 
 from .types import (
     AdjacencyMatrix,
@@ -18,6 +21,7 @@ from .types import (
     PaddingType,
     PartialMatchType,
     Scalar,
+    SolverType,
 )
 
 
@@ -54,7 +58,7 @@ def graph_match(
     BA: Optional[MultilayerAdjacency] = None,
     S: Optional[AdjacencyMatrix] = None,
     partial_match: Optional[PartialMatchType] = None,
-    init: Optional[np.ndarray] = None,
+    init: Union[Optional[np.ndarray], Literal["similarity"]] = None,
     init_perturbation: Scalar = 0.0,
     n_init: Int = 1,
     shuffle_input: bool = True,
@@ -65,7 +69,7 @@ def graph_match(
     tol: Scalar = 0.01,
     verbose: Int = 0,
     rng: Optional[RngType] = None,
-    transport: bool = False,
+    solver: SolverType = "lap",
     transport_regularizer: Scalar = 100,
     transport_tol: Scalar = 5e-2,
     transport_max_iter: Int = 1000,
@@ -287,7 +291,7 @@ def graph_match(
         maximize=maximize,
         max_iter=max_iter,
         tol=tol,
-        transport=transport,
+        solver=solver,
         transport_regularizer=transport_regularizer,
         transport_tol=transport_tol,
         transport_max_iter=transport_max_iter,
@@ -304,6 +308,23 @@ def graph_match(
         misc["n_iter"] = solver.n_iter_
         misc["convex_solution"] = solver.convex_solution_
         misc["converged"] = solver.converged_
+        if solver.is_df:
+            misc["sorted_index_A"] = solver.index_A_[indices_A]
+            misc["sorted_index_B"] = solver.index_B_[indices_B]
+
+            index_A = solver.index_A_
+            index_B = solver.index_B_
+            if len(solver.index_A_) > len(solver.index_B_):
+                # pad the index of B with nans
+                index_B = list(index_B) + [np.nan] * (len(index_A) - len(index_B))
+            elif len(solver.index_A_) < len(solver.index_B_):
+                # pad the index of A with nans
+                index_A = list(index_A) + [np.nan] * (len(index_B) - len(index_A))
+            convex_solution = pd.DataFrame(
+                data=solver.convex_solution_, index=index_A, columns=index_B
+            )
+            misc["convex_solution"] = convex_solution
+
         return MatchResult(indices_A, indices_B, score, [misc])
 
     seeds = rng.integers(max_seed, size=n_init)
@@ -316,6 +337,14 @@ def graph_match(
 
     # also collate various extra info about all of the runs
     miscs = [x.misc[0] for x in results]
+
+    sol = miscs[0]["score"] * miscs[0]["convex_solution"]
+    total_score = miscs[0]["score"]
+    for misc in miscs[1:0]:
+        sol += misc["convex_solution"]
+        total_score += misc["score"]
+    sol = sol / total_score
+    miscs[0]["total_convex_solution"] = sol
 
     return MatchResult(
         best_result.indices_A, best_result.indices_B, best_result.score, miscs

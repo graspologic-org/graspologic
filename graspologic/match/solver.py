@@ -8,10 +8,12 @@ from typing import Callable, Optional, Union
 
 import numpy as np
 from beartype import beartype
-from ot import sinkhorn
+from ot import sinkhorn, emd
+import pandas as pd
 from scipy.optimize import linear_sum_assignment
 from scipy.sparse import csr_matrix
 from sklearn.utils import check_scalar
+from typing import Literal
 
 from graspologic.types import List, RngType, Tuple
 
@@ -23,6 +25,7 @@ from .types import (
     PartialMatchType,
     Scalar,
     csr_array,
+    SolverType,
 )
 
 
@@ -70,7 +73,7 @@ class _GraphMatchSolver:
         BA: Optional[MultilayerAdjacency] = None,
         S: Optional[AdjacencyMatrix] = None,
         partial_match: Optional[PartialMatchType] = None,
-        init: Optional[np.ndarray] = None,
+        init: Union[Optional[np.ndarray], Literal["similarity"]] = None,
         init_perturbation: Scalar = 0.0,
         verbose: Int = False,
         shuffle_input: bool = True,
@@ -78,9 +81,9 @@ class _GraphMatchSolver:
         maximize: bool = True,
         max_iter: Int = 30,
         tol: Scalar = 0.03,
-        transport: bool = False,
-        transport_regularizer: Scalar = 100,
-        transport_tol: Scalar = 5e-2,
+        solver: SolverType = "lap",
+        transport_regularizer: Scalar = 1e-2,
+        transport_tol: Scalar = 1e-2,
         transport_max_iter: Int = 1000,
     ):
         # TODO check if init is doubly stochastic
@@ -102,7 +105,7 @@ class _GraphMatchSolver:
         self.tol = tol
         self.padding = padding
 
-        self.transport = transport
+        self.solver = solver
         self.transport_regularizer = transport_regularizer
         check_scalar(
             transport_tol, name="transport_tol", target_type=(int, float), min_val=0
@@ -124,6 +127,15 @@ class _GraphMatchSolver:
         B = _check_input_matrix(B, n_layers=self.n_layers)
         if len(A) != len(B):
             raise ValueError("`A` and `B` must have same number of layers.")
+
+        if isinstance(A[0], pd.DataFrame) and isinstance(B[0], pd.DataFrame):
+            self.is_df = True
+            self.index_A_ = A[0].index
+            self.index_B_ = B[0].index
+            A = np.array([a.values for a in A])
+            B = np.array([b.values for b in B])
+        else:
+            self.is_df = False
 
         # get some useful sizes
         self.n_A = A[0].shape[0]
@@ -177,7 +189,7 @@ class _GraphMatchSolver:
             B = _multilayer_adj_pad(B, n_padded=self.n, method=self.padding)
             AB = _multilayer_adj_pad(AB, n_padded=self.n, method=self.padding)
             BA = _multilayer_adj_pad(BA, n_padded=self.n, method=self.padding)
-            if S is not None: 
+            if S is not None:
                 S = _multilayer_adj_pad([S], n_padded=self.n, method=self.padding)[0]
             self.padded = True
             if self.n_A > self.n_B:
@@ -273,14 +285,19 @@ class _GraphMatchSolver:
 
     @write_status("Initializing", 1)
     def initialize(self, rng: np.random.Generator) -> np.ndarray:
+        n_unseed = self.n_unseed
+
         # user custom initialization
         if isinstance(self.init, np.ndarray):
             _check_init_input(self.init, self.n_unseed)
             J = self.init
         # else, just a flat, uninformative initializaiton, also called the barycenter
         # (of the set of doubly stochastic matrices)
+        elif self.init == "similarity":
+            # TODO add a warning/error here if no similarity was input?
+            cost_matrix = self.S_nn
+            J = self.compute_step_direction(cost_matrix, rng)
         else:
-            n_unseed = self.n_unseed
             J = np.full((n_unseed, n_unseed), 1 / n_unseed)
 
         if self.init_perturbation > 0:
@@ -328,8 +345,8 @@ class _GraphMatchSolver:
         self, gradient: np.ndarray, rng: np.random.Generator
     ) -> np.ndarray:
         # [1] Algorithm 1 Line 4 - get direction Q by solving Eq. 8
-        if self.transport:
-            Q = self.linear_sum_transport(gradient)
+        if self.solver in ["sinkhorn", "emd"]:
+            Q = self.linear_sum_transport(gradient, rng, solver=self.solver)
         else:
             permutation = self.linear_sum_assignment(gradient, rng)
             Q = np.eye(self.n_unseed)[permutation]
@@ -354,35 +371,83 @@ class _GraphMatchSolver:
         _, permutation = linear_sum_assignment(P_perm, maximize=maximize)
         return permutation[undo_row_perm]
 
+    # def linear_sum_transport(
+    #     self,
+    #     P: np.ndarray,
+    # ) -> np.ndarray:
+    #     maximize = self.maximize
+    #     # reg = self.transport_regularizer
+
+    #     power = -1 if maximize else 1
+    #     # lamb = reg / np.max(np.abs(P))
+    #     ones = np.ones(P.shape[0])
+
+    #     P_eps = emd(ones, ones, power * P)
+
+    #     # P_eps, log = sinkhorn(
+    #     #     ones,
+    #     #     ones,
+    #     #     P,
+    #     #     stopThr=self.transport_tol,
+    #     #     numItermax=self.transport_max_iter,
+    #     #     log=True,
+    #     #     warn=False,
+    #     # )
+    #     # if log["niter"] == self.transport_max_iter - 1:
+    #     #     warnings.warn(
+    #     #         "Sinkhorn-Knopp algorithm for solving linear sum transport "
+    #     #         f"problem did not converge. The final error was {log['err'][-1]} "
+    #     #         f"and the `transport_tol` was {self.transport_tol}. "
+    #     #         "You may want to consider increasing "
+    #     #         "`transport_regularizer`, increasing `transport_max_iter`, or this "
+    #     #         "could be the result of `transport_tol` set too small."
+    #     #     )
+    #     return P_eps
+
     def linear_sum_transport(
         self,
         P: np.ndarray,
+        rng: np.random.Generator,
+        solver: str = "sinkhorn",
     ) -> np.ndarray:
         maximize = self.maximize
         reg = self.transport_regularizer
 
         power = -1 if maximize else 1
-        lamb = reg / np.max(np.abs(P))
+        # lamb = reg / np.max(np.abs(P))
         ones = np.ones(P.shape[0])
-        P_eps, log = sinkhorn(
-            ones,
-            ones,
-            P,
-            power / lamb,
-            stopThr=self.transport_tol,
-            numItermax=self.transport_max_iter,
-            log=True,
-            warn=False,
-        )
-        if log["niter"] == self.transport_max_iter - 1:
-            warnings.warn(
-                "Sinkhorn-Knopp algorithm for solving linear sum transport "
-                f"problem did not converge. The final error was {log['err'][-1]} "
-                f"and the `transport_tol` was {self.transport_tol}. "
-                "You may want to consider increasing "
-                "`transport_regularizer`, increasing `transport_max_iter`, or this "
-                "could be the result of `transport_tol` set too small."
+
+        if solver == "sinkhorn":
+            P_eps, log = sinkhorn(
+                ones,
+                ones,
+                power * P,
+                reg=reg,
+                stopThr=self.transport_tol,
+                numItermax=self.transport_max_iter,
+                log=True,
+                warn=False,
             )
+            if log["niter"] == self.transport_max_iter - 1:
+                warnings.warn(
+                    "Sinkhorn-Knopp algorithm for solving linear sum transport "
+                    f"problem did not converge. The final error was {log['err'][-1]} "
+                    f"and the `transport_tol` was {self.transport_tol}. "
+                    "You may want to consider increasing "
+                    "`transport_regularizer`, increasing `transport_max_iter`, or this "
+                    "could be the result of `transport_tol` set too small."
+                )
+        elif solver == "emd":
+            # TODO I think this should also be protected against order of inputs
+            # suspect it will matter here just like for LAP
+            if self.shuffle_input:
+                row_perm = rng.permutation(P.shape[0])
+            else:
+                row_perm = np.arange(P.shape[0])
+            undo_row_perm = np.argsort(row_perm)
+            P_perm = P[row_perm]
+            P_eps = emd(ones, ones, power * P_perm)
+            P_eps = P_eps[undo_row_perm]
         return P_eps
 
     @write_status("Computing step size", 2)
@@ -467,6 +532,7 @@ class _GraphMatchSolver:
             return "[Pre-loop]"
 
 
+# TODO write something which permutes sparse matrices efficiently
 def _permute_multilayer(
     adjacency: MultilayerAdjacency,
     permutation: np.ndarray,
@@ -487,7 +553,7 @@ def _permute_multilayer(
 def _check_input_matrix(
     A: MultilayerAdjacency, n_layers: Optional[int]
 ) -> MultilayerAdjacency:
-    if isinstance(A, np.ndarray) and (np.ndim(A) == 2):
+    if isinstance(A, (np.ndarray, pd.DataFrame)) and (np.ndim(A) == 2):
         A = [A]
     elif isinstance(A, (csr_matrix, csr_array)):
         A = [A]

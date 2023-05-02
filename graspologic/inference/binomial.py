@@ -3,6 +3,7 @@ from typing import Literal
 
 import numpy as np
 from scipy.stats import chi2_contingency, fisher_exact
+from statsmodels.stats.proportion import test_proportions_2indep
 
 from .fisher_exact_nonunity import fisher_exact_nonunity
 
@@ -96,6 +97,10 @@ def binom_2samp(
         stat, pvalue = fisher_exact_nonunity(cont_table, null_odds_ratio=null_odds)
     elif method == "chi2":
         stat, pvalue, _, _ = chi2_contingency(cont_table)
+    elif method == "score":
+        stat, pvalue = test_proportions_2indep(
+            x1, n1, x2, n2, method="score", compare="ratio"
+        )
     else:
         raise ValueError()
 
