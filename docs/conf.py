@@ -86,7 +86,6 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "seaborn": ("https://seaborn.pydata.org", None),
     "sklearn": ("https://scikit-learn.org/dev", None),
-    "statsmodels": ("https://www.statsmodels.org/stable", None),
 }
 
 intersphinx_disabled_reftypes = []
