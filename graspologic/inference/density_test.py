@@ -92,9 +92,9 @@ def density_test(
     References
     ----------
     .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,
-           Vogelstein, J.T., (2022). "Generative network modeling reveals quantitative
+           Vogelstein, J.T. "Generative network modeling reveals quantitative
            definitions of bilateral symmetry exhibited by a whole insect brain
-           connectome," In preparation.
+           connectome," eLife (2023): e83739.
     """
     stat, pvalue, misc = group_connection_test(
         A1,
