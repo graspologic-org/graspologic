@@ -3,11 +3,10 @@ from typing import Literal
 
 import numpy as np
 from scipy.stats import chi2_contingency, fisher_exact
-
-from .fisher_exact_nonunity import fisher_exact_nonunity
+from statsmodels.stats.proportion import test_proportions_2indep
 
 BinomialResult = namedtuple("BinomialResult", ["stat", "pvalue"])
-BinomialTestMethod = Literal["fisher", "chi2"]
+BinomialTestMethod = Literal["fisher", "chi2", 'score']
 
 
 def binom_2samp(
@@ -81,21 +80,25 @@ def binom_2samp(
     if x1 == 0 or x2 == 0:
         # logging.warn("One or more counts were 0, not running test and returning nan")
         return BinomialResult(np.nan, np.nan)
-    if null_ratio != 1 and method != "fisher":
-        raise ValueError("Non-unity null odds only works with Fisher's exact test")
+    if null_ratio != 1 and method != "score":
+        raise ValueError("Non-unity null odds only works with ``method=='score'``")
 
     cont_table = np.array([[x1, n1 - x1], [x2, n2 - x2]])
     if method == "fisher" and null_ratio == 1.0:
         stat, pvalue = fisher_exact(cont_table, alternative="two-sided")
-    elif method == "fisher" and null_ratio != 1.0:
-        p1 = x1 / n1
-        p2 = null_ratio * x2 / n2
-        odds1 = p1 / (1 - p1)
-        odds2 = p2 / (1 - p2)
-        null_odds = odds1 / odds2
-        stat, pvalue = fisher_exact_nonunity(cont_table, null_odds_ratio=null_odds)
     elif method == "chi2":
         stat, pvalue, _, _ = chi2_contingency(cont_table)
+    elif method == 'score': 
+        stat, pvalue = test_proportions_2indep(
+            x1,
+            n1,
+            x2,
+            n2,
+            method="score",
+            compare="ratio",
+            alternative="two-sided",
+            value=null_ratio,
+        )
     else:
         raise ValueError()
 

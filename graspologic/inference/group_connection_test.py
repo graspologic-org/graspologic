@@ -150,7 +150,7 @@ def group_connection_test(
     labels1: Labels,
     labels2: Labels,
     density_adjustment: Union[bool, float] = False,
-    method: BinomialTestMethod = "fisher",
+    method: BinomialTestMethod = "score",
     combine_method: str = "tippett",
     correct_method: str = "bonferroni",
     alpha: float = 0.05,
@@ -189,8 +189,9 @@ def group_connection_test(
     method: str, optional
         Specifies the statistical test to be performed to compare each of the
         group-to-group connection probabilities. By default, this performs
-        Fisher's exact test, but the user may also enter "chi2" to perform the
-        chi-squared test.
+        the score test (essentially equivalent to chi-squared test when 
+        ``density_adjustment=False``), but the user may also enter "chi2" to perform the
+        chi-squared test, or "fisher" for Fisher's exact test.
     combine_method: str, optional
         Specifies the method for combining p-values (see Notes and [1]_ for more
         details). Default is "tippett" for Tippett's method (recommended), but the user

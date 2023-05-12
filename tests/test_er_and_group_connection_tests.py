@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 from graspologic.inference import density_test
 from graspologic.inference import group_connection_test
@@ -12,30 +12,30 @@ class TestGroupConnection(unittest.TestCase):
     def test_gctest_works(self):
         np.random.seed(8888)
         B1 = np.array([[0.8, 0.6], [0.6, 0.8]])
-        B2 = np.array([[0.865, 0.66], [0.66, 0.865]])
+        B2 = 0.8 * B1
         A1, labels1 = sbm([50, 50], B1, return_labels=True)
         A2, labels2 = sbm([60, 60], B2, return_labels=True)
         stat, pvalue, misc = group_connection_test(
-            A1, A2, labels1, labels2, combine_method="fisher", density_adjustment=True
+            A1, A2, labels1, labels2, density_adjustment=True
         )
         self.assertTrue(pvalue > 0.05)
 
     def test_all_kwargs(self):
-        B1 = np.array([[0.8, 0.6], [0.6, 0.8]])
-        B2 = np.array([[0.865, 0.66], [0.66, 0.865]])
-        A1, labels1 = sbm([50, 50], B1, return_labels=True)
-        A2, labels2 = sbm([60, 60], B2, return_labels=True)
+        B1 = np.array([[0.4, 0.6], [0.6, 0.8]])
+        B2 = np.array([[0.9, 0.4], [0.2, 0.865]])
+        A1, labels1 = sbm([60, 60], B1, return_labels=True, directed=True)
+        A2, labels2 = sbm([50, 50], B2, return_labels=True, directed=True)
         stat, pvalue, misc = group_connection_test(
             A1,
             A2,
             labels1,
             labels2,
-            combine_method="fisher",
-            method="fisher",
-            density_adjustment=True,
+            combine_method="tippett",
+            method="score",
             correct_method="Bonferroni",
+            density_adjustment=True
         )
-        self.assertTrue(pvalue >= 0.05)
+        self.assertTrue(pvalue < 0.05)
         self.assertTrue(misc["uncorrected_pvalues"].size == 4)
         self.assertTrue(misc["probabilities1"].size == 4)
         self.assertTrue(misc["probabilities2"].size == 4)
@@ -51,8 +51,8 @@ class TestGroupConnection(unittest.TestCase):
         B2 = np.array([[0.87, 0.66], [0.66, 0.87]])
         A1, labels1 = sbm([50, 50], B1, return_labels=True)
         A2, labels2 = sbm([60, 60], B2, return_labels=True)
-        sA1 = csr_matrix(A1)
-        sA2 = csr_matrix(A2)
+        sA1 = csr_array(A1)
+        sA2 = csr_array(A2)
 
         stat, pvalue, misc = group_connection_test(sA1, sA2, labels1, labels2)
         self.assertTrue(pvalue <= 0.05)
