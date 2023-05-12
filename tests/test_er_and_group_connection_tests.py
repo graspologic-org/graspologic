@@ -57,6 +57,7 @@ class TestGroupConnection(unittest.TestCase):
         stat, pvalue, misc = group_connection_test(sA1, sA2, labels1, labels2)
         self.assertTrue(pvalue <= 0.05)
 
+
 class TestER(unittest.TestCase):
     def test_er(self):
         np.random.seed(234)
@@ -79,7 +80,6 @@ class TestER(unittest.TestCase):
         self.assertTrue(er_misc["probability2"].to_numpy() < 1.0)
         self.assertTrue(er_misc["observed1"].to_numpy() == np.count_nonzero(A1))
         self.assertTrue(er_misc["observed2"].to_numpy() == np.count_nonzero(A2))
-
 
 
 if __name__ == "__main__":
