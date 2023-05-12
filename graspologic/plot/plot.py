@@ -16,7 +16,7 @@ from matplotlib.collections import LineCollection
 from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy import linalg
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
@@ -1165,7 +1165,7 @@ def edgeplot(
 
 @beartype
 def networkplot(
-    adjacency: Union[np.ndarray, csr_matrix],
+    adjacency: Union[np.ndarray, csr_array],
     x: Union[np.ndarray, str],
     y: Union[np.ndarray, str],
     node_data: Optional[pd.DataFrame] = None,
@@ -1195,7 +1195,7 @@ def networkplot(
 
     Parameters
     ----------
-    adjacency: np.ndarray, csr_matrix
+    adjacency: np.ndarray, csr_array
         Adjacency matrix of input network.
     x,y: np.ndarray, str
         Variables that specify the positions on the x and y axes. Either an

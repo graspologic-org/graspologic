@@ -20,12 +20,13 @@ from graspologic.utils import (
 
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
+from ._types import NxGraphType
 from .embeddings import Embeddings
 
 
 @beartype
 def adjacency_spectral_embedding(
-    graph: Union[nx.Graph, nx.DiGraph, nx.OrderedGraph, nx.OrderedDiGraph],
+    graph: NxGraphType,
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
     svd_solver_algorithm: SvdAlgorithmType = "randomized",
@@ -88,7 +89,7 @@ def adjacency_spectral_embedding(
                 :func:`sklearn.utils.extmath.randomized_svd`
             - 'full'
                 Computes full svd using :func:`scipy.linalg.svd`
-                Does not support ``graph`` input of type scipy.sparse.csr_matrix
+                Does not support ``graph`` input of type scipy.sparse.csr_array
             - 'truncated'
                 Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     svd_solver_iterations : int (default=5)
@@ -176,7 +177,7 @@ def adjacency_spectral_embedding(
         )
         used_weight_attribute = None  # this supercedes what the user said, because
         # not all of the weights are real numbers, if they exist at all
-        # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
+        # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_array()
 
     node_labels = np.array(list(graph.nodes()))
 

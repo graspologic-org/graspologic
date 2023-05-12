@@ -58,7 +58,7 @@ def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
 
 
 def select_dimension(
-    X: Union[np.ndarray, sp.csr_matrix],
+    X: Union[np.ndarray, sp.csr_array],
     n_components: Optional[int] = None,
     n_elbows: int = 2,
     threshold: Optional[float] = None,
@@ -108,7 +108,7 @@ def select_dimension(
     """
     # Handle input data
     if not isinstance(X, np.ndarray) and not sp.isspmatrix_csr(X):
-        msg = "X must be a numpy array or scipy.sparse.csr_matrix, not {}.".format(
+        msg = "X must be a numpy array or scipy.sparse.csr_array, not {}.".format(
             type(X)
         )
         raise ValueError(msg)
@@ -185,7 +185,7 @@ def select_dimension(
 
 
 def select_svd(
-    X: Union[np.ndarray, sp.csr_matrix],
+    X: Union[np.ndarray, sp.csr_array],
     n_components: Optional[int] = None,
     n_elbows: Optional[int] = 2,
     algorithm: SvdAlgorithmType = "randomized",
@@ -223,7 +223,7 @@ def select_svd(
             :func:`sklearn.utils.extmath.randomized_svd`
         - 'full'
             Computes full svd using :func:`scipy.linalg.svd`
-            Does not support ``graph`` input of type scipy.sparse.csr_matrix
+            Does not support ``graph`` input of type scipy.sparse.csr_array
         - 'truncated'
             Computes truncated svd using :func:`scipy.sparse.linalg.svds`
         - 'eigsh'
@@ -266,7 +266,7 @@ def select_svd(
         raise ValueError(msg)
 
     if algorithm == "full" and sp.isspmatrix_csr(X):
-        msg = "'full' agorithm does not support scipy.sparse.csr_matrix inputs."
+        msg = "'full' agorithm does not support scipy.sparse.csr_array inputs."
         raise TypeError(msg)
 
     if n_components is None:
