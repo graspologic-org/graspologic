@@ -33,7 +33,7 @@ class TestGroupConnection(unittest.TestCase):
             combine_method="tippett",
             method="score",
             correct_method="Bonferroni",
-            density_adjustment=True
+            density_adjustment=True,
         )
         self.assertTrue(pvalue < 0.05)
         self.assertTrue(misc["uncorrected_pvalues"].size == 4)
