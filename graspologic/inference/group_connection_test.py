@@ -189,7 +189,7 @@ def group_connection_test(
     method: str, optional
         Specifies the statistical test to be performed to compare each of the
         group-to-group connection probabilities. By default, this performs
-        the score test (essentially equivalent to chi-squared test when 
+        the score test (essentially equivalent to chi-squared test when
         ``density_adjustment=False``), but the user may also enter "chi2" to perform the
         chi-squared test, or "fisher" for Fisher's exact test.
     combine_method: str, optional
