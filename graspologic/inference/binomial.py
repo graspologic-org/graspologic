@@ -18,11 +18,11 @@ def binom_2samp(
     method: BinomialTestMethod = "score",
 ) -> BinomialResult:
     """
-    This function computes the likelihood that two binomial samples are drown from 
-    identical underlying distributions. Null hypothesis is that the success probability 
-    for each sample is identical (i.e. p1 = p2), and this function returns the 
-    probability that the null hypothesis is accurate, under a variety of potential 
-    statistical tests (default is score test). 
+    This function computes the likelihood that two binomial samples are drown from
+    identical underlying distributions. Null hypothesis is that the success probability
+    for each sample is identical (i.e. p1 = p2), and this function returns the
+    probability that the null hypothesis is accurate, under a variety of potential
+    statistical tests (default is score test).
 
     Parameters
     ----------
@@ -35,13 +35,13 @@ def binom_2samp(
     n2 : int
         The number of possible successes for group 2
     null_ratio : float, optional
-        Optional parameter for testing whether p1 is a fixed ratio larger or smaller 
-        than p2, i.e. p1 = cp2, where c is the null_ratio. Default is 1.0. This 
+        Optional parameter for testing whether p1 is a fixed ratio larger or smaller
+        than p2, i.e. p1 = cp2, where c is the null_ratio. Default is 1.0. This
         parameter can only be !=1 if the chosen statistical test is the score test.
     method : str, optional
         Defines the statistical test to be run in order to reject or fail to reject the
-        null hypothesis. By default, this is the score test (i.e. "score"). 
-        
+        null hypothesis. By default, this is the score test (i.e. "score").
+
     Returns
     -------
     BinomialResult: namedtuple
