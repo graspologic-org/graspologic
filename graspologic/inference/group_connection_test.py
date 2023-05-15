@@ -23,7 +23,6 @@ GroupTestResult = namedtuple("GroupTestResult", ["stat", "pvalue", "misc"])
 
 
 def fit_sbm(A: AdjacencyMatrix, labels: Labels, loops: bool = False) -> SBMResult:
-
     """
     Fits a stochastic block model to data for a given network with known group
     identities. Required inputs are the adjacency matrix for the
