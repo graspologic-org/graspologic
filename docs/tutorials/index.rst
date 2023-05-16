@@ -80,6 +80,8 @@ are tutorials for robust statistical hypothesis testing on multiple graphs.
    :maxdepth: 1
    :titlesonly:
 
+   inference/density_test
+   inference/group_connection_test
    inference/latent_position_test
    inference/latent_distribution_test
 

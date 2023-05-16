@@ -111,7 +111,7 @@ class SpectralVertexNomination(BaseEstimator):
 
     def _check_y(self, y: np.ndarray) -> None:
         # check y
-        if not np.issubdtype(y.dtype, np.integer):
+        if not np.issubdtype(y.dtype, int):
             raise TypeError("y must have dtype int")
         elif np.ndim(y) > 2 or (y.ndim == 2 and y.shape[1] > 1):
             raise IndexError("y must have shape (n) or (n, 1).")
@@ -223,12 +223,12 @@ class SpectralVertexNomination(BaseEstimator):
         y_checked: np.ndarray = check_array(y, ensure_2d=False)
         self._check_y(y_checked)
         y_checked = y_checked.reshape(-1)
-        y_vec = self.embedding_[y_checked.astype(np.int)]  # type: ignore
+        y_vec = self.embedding_[y_checked.astype(int)]  # type: ignore
         if not hasattr(self, "nearest_neighbors_"):
             raise ValueError("Fit must be called before predict.")
         distance_matrix, nomination_list = self.nearest_neighbors_.kneighbors(y_vec)
         # transpose for consistency with literature
-        return nomination_list.T.astype(np.int_), distance_matrix.T
+        return nomination_list.T.astype(int), distance_matrix.T
 
     def fit_predict(
         self,
