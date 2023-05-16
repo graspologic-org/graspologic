@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 3.0.0dev4534921903 documentation</title>
+  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 3.0.0dev4997377482 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0dev4534921903
+                3.0.0dev4997377482
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -217,6 +217,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -310,8 +313,18 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1063: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1071: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1086: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
 /opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap)
 </pre></div></div>
 </div>
 <section id="Simulate-a-binary-graph-using-stochastic-block-model">
@@ -398,7 +411,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91d056cee0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48a1670970&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -442,7 +455,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f92142b6ca0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489c2bfb20&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -481,7 +494,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91ce1f7fd0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489c275970&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -518,7 +531,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91d05de6d0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489c1717f0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -563,7 +576,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cde70a30&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48a21a3820&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -643,7 +656,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91d0f606a0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48a1fd9c10&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -679,7 +692,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91d0b9c580&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48a1bfa5b0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -715,7 +728,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cc821fd0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48a1f80b20&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -755,7 +768,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cc534ca0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489c22d0a0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -791,7 +804,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91d10f81f0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489759daf0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -830,7 +843,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cdefe0a0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489735e790&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -870,7 +883,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cc0caee0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f489722ecd0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -913,7 +926,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91c5e01190&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f4896f1c8e0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -954,7 +967,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91c5d0a8e0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f4896e33a00&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1002,7 +1015,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f91cc1704f0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f48aca5ca30&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">

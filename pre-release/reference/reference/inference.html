@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 3.0.0dev4534921903 documentation</title>
+  <title>Inference &mdash; graspologic 3.0.0dev4997377482 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0dev4534921903
+                3.0.0dev4997377482
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -216,6 +216,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -292,6 +295,321 @@
 <h1>Inference<a class="headerlink" href="#inference" title="Permalink to this heading">¶</a></h1>
 <section id="two-graph-hypothesis-testing">
 <h2>Two-graph hypothesis testing<a class="headerlink" href="#two-graph-hypothesis-testing" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.inference.density_test">
+<span class="sig-prename descclassname"><span class="pre">graspologic.inference.</span></span><span class="sig-name descname"><span class="pre">density_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fisher'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/inference/density_test.html#density_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.inference.density_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two networks by testing whether the global connection probabilities
+(densites) for the two networks are equal under an Erdos-Renyi model assumption.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A1: np.array, int</strong></dt><dd><p>The adjacency matrix for network 1. Will be treated as a binary network,
+regardless of whether it was weighted.</p>
+</dd>
+<dt><strong>A2: np.array, int</strong></dt><dd><p>Adjacency matrix for network 2. Will be treated as a binary network,
+regardless of whether it was weighted.</p>
+</dd>
+<dt><strong>method: string, optional, default=&quot;fisher&quot;</strong></dt><dd><p>Specifies the statistical test to be used. The default option is &quot;fisher&quot;,
+which uses Fisher's exact test, but the user may also enter &quot;chi2&quot; to use a
+chi-squared test. Fisher's exact test is more appropriate when the expected
+number of edges are small.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>DensityTestResult: namedtuple</dt><dd><p>This named tuple returns the following data:</p>
+<dl>
+<dt>stat: float</dt><dd><p>The statistic for the test specified by <code class="docutils literal notranslate"><span class="pre">method</span></code>.</p>
+</dd>
+<dt>pvalue: float</dt><dd><p>The p-value for the test specified by <code class="docutils literal notranslate"><span class="pre">method</span></code>.</p>
+</dd>
+<dt>misc: dict</dt><dd><p>Dictionary containing a number of computed statistics for the network
+comparison performed:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>&quot;probability1&quot;, float</dt><dd><p>The probability of an edge (density) in network 1 (<span class="math notranslate nohighlight">\(p_1\)</span>).</p>
+</dd>
+<dt>&quot;probability2&quot;, float</dt><dd><p>The probability of an edge (density) in network 2 (<span class="math notranslate nohighlight">\(p_2\)</span>).</p>
+</dd>
+<dt>&quot;observed1&quot;, pd.DataFrame</dt><dd><p>The total number of edge connections for network 1.</p>
+</dd>
+<dt>&quot;observed2&quot;, pd.DataFrame</dt><dd><p>The total number of edge connections for network 2.</p>
+</dd>
+<dt>&quot;possible1&quot;, pd.DataFrame</dt><dd><p>The total number of possible edges for network 1.</p>
+</dd>
+<dt>&quot;possible2&quot;, pd.DataFrame</dt><dd><p>The total number of possible edges for network 1.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'score'</em><em>, </em><em>'fisher'</em><em>, </em><em>'chi2'</em><em>]</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>DensityTestResult</em></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Under the Erdos-Renyi model, edges are generated independently with probability
+<span class="math notranslate nohighlight">\(p\)</span>. <span class="math notranslate nohighlight">\(p\)</span> is also known as the network density. This function tests
+whether the probability of an edge in network 1 (<span class="math notranslate nohighlight">\(p_1\)</span>) is significantly
+different from that in network 2 (<span class="math notranslate nohighlight">\(p_2\)</span>), by assuming that both networks came
+from an Erdos-Renyi model. In other words, the null hypothesis is</p>
+<div class="math notranslate nohighlight">
+\[H_0: p_1 = p_2\]</div>
+<p>And the alternative hypothesis is</p>
+<div class="math notranslate nohighlight">
+\[H_A: p_1 \neq p_2\]</div>
+<p>This test makes several assumptions about the data and test (which could easily be
+loosened in future versions):</p>
+<blockquote>
+<div><p>We assume that the networks are directed. If the networks are undirected
+(and the adjacency matrices are thus symmetric), then edges would be counted
+twice, which would lead to an incorrect calculation of the edge probability.
+We believe passing in the upper or lower triangle of the adjacency matrix
+would solve this, but this has not been tested.</p>
+<p>We assume that the networks are loopless, that is we do not consider the
+probability of an edge existing between a node and itself. This can be
+weakened and made an option in future versions.</p>
+<p>We only implement the alternative hypothesis of &quot;not equals&quot; (two-sided);
+future versions could implement the one-sided alternative hypotheses.</p>
+</div></blockquote>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r149291371f4f-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,
+Vogelstein, J.T. &quot;Generative network modeling reveals quantitative
+definitions of bilateral symmetry exhibited by a whole insect brain
+connectome,&quot; eLife (2023): e83739.</p>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.inference.group_connection_test">
+<span class="sig-prename descclassname"><span class="pre">graspologic.inference.</span></span><span class="sig-name descname"><span class="pre">group_connection_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density_adjustment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'score'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">combine_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tippett'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bonferroni'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/inference/group_connection_test.html#group_connection_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.inference.group_connection_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two networks by testing whether edge probabilities between groups are
+significantly different for the two networks under a stochastic block model
+assumption.</p>
+<p>This function requires the group labels in both networks to be known and to have the
+same categories; although the exact number of nodes belonging to each group does not
+need to be identical. Note that using group labels inferred from the data may
+yield an invalid test.</p>
+<p>This function also permits the user to test whether one network's group connection
+probabilities are a constant multiple of the other's (see <code class="docutils literal notranslate"><span class="pre">density_adjustment</span></code>
+parameter).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>A1: np.array, shape(n1,n1)</strong></dt><dd><p>The adjacency matrix for network 1. Will be treated as a binary network,
+regardless of whether it was weighted.</p>
+</dd>
+<dt><strong>A2 np.array, shape(n2,n2)</strong></dt><dd><p>The adjacency matrix for network 2. Will be treated as a binary network,
+regardless of whether it was weighted.</p>
+</dd>
+<dt><strong>labels1: array-like, shape (n1,)</strong></dt><dd><p>The group labels for each node in network 1.</p>
+</dd>
+<dt><strong>labels2: array-like, shape (n2,)</strong></dt><dd><p>The group labels for each node in network 2.</p>
+</dd>
+<dt><strong>density_adjustment: boolean, optional</strong></dt><dd><p>Whether to perform a density adjustment procedure. If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will test the
+null hypothesis that the group-to-group connection probabilities of one network
+are a constant multiple of those of the other network. Otherwise, no density
+adjustment will be performed.</p>
+</dd>
+<dt><strong>method: str, optional</strong></dt><dd><p>Specifies the statistical test to be performed to compare each of the
+group-to-group connection probabilities. By default, this performs
+the score test (essentially equivalent to chi-squared test when
+<code class="docutils literal notranslate"><span class="pre">density_adjustment=False</span></code>), but the user may also enter &quot;chi2&quot; to perform the
+chi-squared test, or &quot;fisher&quot; for Fisher's exact test.</p>
+</dd>
+<dt><strong>combine_method: str, optional</strong></dt><dd><p>Specifies the method for combining p-values (see Notes and <a class="reference internal" href="#r7ed7fab7df47-1" id="id2">[1]</a> for more
+details). Default is &quot;tippett&quot; for Tippett's method (recommended), but the user
+can also enter any other method supported by
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html#scipy.stats.combine_pvalues" title="(in SciPy v1.10.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.combine_pvalues()</span></code></a>.</p>
+</dd>
+<dt><strong>correct_method: str, optional</strong></dt><dd><p>Specifies the method for correcting for multiple comparisons. Default value is
+&quot;holm&quot; to use the Holm-Bonferroni correction method, but
+many others are possible (see <a class="reference external" href="https://www.statsmodels.org/stable/generated/statsmodels.stats.multitest.multipletests.html#statsmodels.stats.multitest.multipletests" title="(in statsmodels 0.14.0 v0.14.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">statsmodels.stats.multitest.multipletests()</span></code></a>
+for more details and options).</p>
+</dd>
+<dt><strong>alpha: float, optional</strong></dt><dd><p>The significance threshold. By default, this is the conventional value of
+0.05 but any value on the interval <span class="math notranslate nohighlight">\([0,1]\)</span> can be entered. This only
+affects the results in <code class="docutils literal notranslate"><span class="pre">misc['rejections']</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>GroupTestResult: namedtuple</dt><dd><p>A tuple containing the following data:</p>
+<dl>
+<dt>stat: float</dt><dd><p>The statistic computed by the method chosen for combining
+p-values (see <code class="docutils literal notranslate"><span class="pre">combine_method</span></code>).</p>
+</dd>
+<dt>pvalue: float</dt><dd><p>The p-value for the overall network-to-network comparison using under a
+stochastic block model assumption. Note that this is the p-value for the
+comparison of the entire group-to-group connection matrices
+(i.e., <span class="math notranslate nohighlight">\(B_1\)</span> and <span class="math notranslate nohighlight">\(B_2\)</span>).</p>
+</dd>
+<dt>misc: dict</dt><dd><p>A dictionary containing a number of statistics relating to the individual
+group-to-group connection comparisons.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>&quot;uncorrected_pvalues&quot;, pd.DataFrame</dt><dd><p>The p-values for each group-to-group connection comparison, before
+correction for multiple comparisons.</p>
+</dd>
+<dt>&quot;stats&quot;, pd.DataFrame</dt><dd><p>The test statistics for each of the group-to-group comparisons,
+depending on <code class="docutils literal notranslate"><span class="pre">method</span></code>.</p>
+</dd>
+<dt>&quot;probabilities1&quot;, pd.DataFrame</dt><dd><p>This contains the B_hat values computed in fit_sbm above for
+network 1, i.e. the hypothesized group connection density for
+each group-to-group connection for network 1.</p>
+</dd>
+<dt>&quot;probabilities2&quot;, pd.DataFrame</dt><dd><p>Same as above, but for network 2.</p>
+</dd>
+<dt>&quot;observed1&quot;, pd.DataFrame</dt><dd><p>The total number of observed group-to-group edge connections for
+network 1.</p>
+</dd>
+<dt>&quot;observed2&quot;, pd.DataFrame</dt><dd><p>Same as above, but for network 2.</p>
+</dd>
+<dt>&quot;possible1&quot;, pd.DataFrame</dt><dd><p>The total number of possible edges for each group-to-group pair in
+network 1.</p>
+</dd>
+<dt>&quot;possible2&quot;, pd.DataFrame</dt><dd><p>Same as above, but for network 2.</p>
+</dd>
+<dt>&quot;group_counts1&quot;, pd.Series</dt><dd><p>Contains total number of nodes corresponding to each group label for
+network 1.</p>
+</dd>
+<dt>&quot;group_counts2&quot;, pd.Series</dt><dd><p>Same as above, for network 2</p>
+</dd>
+<dt>&quot;null_ratio&quot;, float</dt><dd><p>If the &quot;density adjustment&quot; parameter is set to &quot;true&quot;, this
+variable contains the null hypothesis for the quotient of
+odds ratios for the group-to-group connection densities for the two
+networks. In other words, it contains the hypothesized
+factor by which network 1 is &quot;more dense&quot; or &quot;less dense&quot; than
+network 2. If &quot;density adjustment&quot; is set to &quot;false&quot;, this
+simply returns a value of 1.0.</p>
+</dd>
+<dt>&quot;n_tests&quot;, int</dt><dd><p>This variable contains the number of group-to-group comparisons
+performed by the function.</p>
+</dd>
+<dt>&quot;rejections&quot;, pd.DataFrame</dt><dd><p>Contains a square matrix of boolean variables. The side length of
+the matrix is equal to the number of distinct group
+labels. An entry in the matrix is &quot;true&quot; if the null hypothesis,
+i.e. that the group-to-group connection density
+corresponding to the row and column of the matrix is equal for both
+networks (with or without a density adjustment factor),
+is rejected. In simpler terms, an entry is only &quot;true&quot; if the
+group-to-group density is statistically different between
+the two networks for the connection from the group corresponding to
+the row of the matrix to the group corresponding to the
+column of the matrix.</p>
+</dd>
+<dt>&quot;corrected_pvalues&quot;, pd.DataFrame</dt><dd><p>Contains the p-values for the group-to-group connection densities
+after correction using the chosen correction_method.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>labels1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>) -- </p></li>
+<li><p><strong>labels2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a>) -- </p></li>
+<li><p><strong>density_adjustment</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'score'</em><em>, </em><em>'fisher'</em><em>, </em><em>'chi2'</em><em>]</em>) -- </p></li>
+<li><p><strong>combine_method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>correct_method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>GroupTestResult</em></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Under a stochastic block model assumption, the probability of observing an edge from
+any node in group <span class="math notranslate nohighlight">\(i\)</span> to any node in group <span class="math notranslate nohighlight">\(j\)</span> is given by
+<span class="math notranslate nohighlight">\(B_{ij}\)</span>, where <span class="math notranslate nohighlight">\(B\)</span> is a <span class="math notranslate nohighlight">\(K \times K\)</span> matrix of connection
+probabilities if there are <span class="math notranslate nohighlight">\(K\)</span> groups. This test assumes that both networks
+came from a stochastic block model with the same number of groups, and a fixed
+assignment of nodes to groups. The null hypothesis is that the group-to-group
+connection probabilities are the same</p>
+<div class="math notranslate nohighlight">
+\[H_0: B_1 = B_2\]</div>
+<p>The alternative hypothesis is that they are not the same</p>
+<div class="math notranslate nohighlight">
+\[H_A: B_1 \neq B_2\]</div>
+<p>Note that this alternative includes the case where even just one of these
+group-to-group connection probabilities are different between the two networks. The
+test is conducted by first comparing each group-to-group connection via its own
+test, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[H_0: {B_{1}}_{ij} = {B_{2}}_{ij}\]</div>
+<div class="math notranslate nohighlight">
+\[H_A: {B_{1}}_{ij} \neq {B_{2}}_{ij}\]</div>
+<p>The p-values for each of these individual comparisons are stored in
+<code class="docutils literal notranslate"><span class="pre">misc['uncorrected_pvalues']</span></code>, and after multiple comparisons correction, in
+<code class="docutils literal notranslate"><span class="pre">misc['corrected_pvalues']</span></code>. The test statistic and p-value returned by this
+test are for the overall comparison of the entire group-to-group connection
+matrices. These are computed by appropriately combining the p-values for each of
+the individual comparisons. For more details, see <a class="reference internal" href="#r7ed7fab7df47-1" id="id3">[1]</a>.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">density_adjustment</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, the null hypothesis is adjusted to
+account for the fact that the group-to-group connection densities may be different
+only up to a multiplicative factor which sets the densities of the two networks
+the same in expectation. In other words, the null and alternative hypotheses are
+adjusted to be</p>
+<div class="math notranslate nohighlight">
+\[H_0: B_1 = c B_2\]</div>
+<div class="math notranslate nohighlight">
+\[H_A: B_1 \neq c B_2\]</div>
+<p>where <span class="math notranslate nohighlight">\(c\)</span> is a constant which sets the densities of the two networks the same.</p>
+<p>Note that in cases where one of the networks has no edges in a particular
+group-to-group connection, it is nonsensical to run a statistical test for that
+particular connection. In these cases, the p-values for that individual comparison
+are set to <code class="docutils literal notranslate"><span class="pre">np.nan</span></code>, and that test is not included in the overall test statistic
+or multiple comparison correction.</p>
+<p>This test makes several assumptions about the data and test (which could easily be
+loosened in future versions):</p>
+<blockquote>
+<div><p>We assume that the networks are directed. If the networks are undirected
+(and the adjacency matrices are thus symmetric), then edges would be counted
+twice, which would lead to an incorrect calculation of the edge probability.
+We believe passing in the upper or lower triangle of the adjacency matrix
+would solve this, but this has not been tested.</p>
+<p>We assume that the networks are loopless, that is we do not consider the
+probability of an edge existing between a node and itself. This can be
+weakened and made an option in future versions.</p>
+<p>We only implement the alternative hypothesis of &quot;not equals&quot; (two-sided);
+future versions could implement the one-sided alternative hypotheses.</p>
+</div></blockquote>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r7ed7fab7df47-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p>Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,
+Vogelstein, J.T. &quot;Generative network modeling reveals quantitative
+definitions of bilateral symmetry exhibited by a whole insect brain
+connectome,&quot; eLife (2023): e83739.</p>
+</div>
+</div>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="graspologic.inference.latent_position_test">
 <span class="sig-prename descclassname"><span class="pre">graspologic.inference.</span></span><span class="sig-name descname"><span class="pre">latent_position_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ase'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_case</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rotation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bootstraps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/inference/latent_position_test.html#latent_position_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.inference.latent_position_test" title="Permalink to this definition">¶</a></dt>
@@ -389,8 +707,8 @@ distributions are generated</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>) -- </p></li>
@@ -617,8 +935,8 @@ two input graphs.</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.0)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>) -- </p></li>
 <li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
