@@ -3,6 +3,13 @@
 Release Log
 ===========
 
+graspologic 3.1.0
+-----------------
+- Added density and group connection tests
+  `#1032 <https://github.com/microsoft/graspologic/pull/1032>`
+- Fixed NetworkX 3 compatibility and switched to sparse arrays
+  `#1018 <https://github.com/microsoft/graspologic/commit/13d0d466fd1f28c6504b83ae63c16e53c4445997>`
+
 graspologic 3.0.0
 -----------------
 - Corrected contributing guidelines
