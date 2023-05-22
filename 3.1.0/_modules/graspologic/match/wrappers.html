@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.match.wrappers &mdash; graspologic 3.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graspologic.match.wrappers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.match.wrappers</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
+<span class="c1"># Licensed under the MIT License.</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_scalar</span>
+
+<span class="kn">from</span> <span class="nn">graspologic.match.solver</span> <span class="kn">import</span> <span class="n">_GraphMatchSolver</span>
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">RngType</span>
+
+<span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AdjacencyMatrix</span><span class="p">,</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">MultilayerAdjacency</span><span class="p">,</span>
+    <span class="n">PaddingType</span><span class="p">,</span>
+    <span class="n">PartialMatchType</span><span class="p">,</span>
+    <span class="n">Scalar</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MatchResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+    <span class="n">indices_A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sorted indices in ``A`` which were matched.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">indices_B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched</span>
+<span class="sd">    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a </span>
+<span class="sd">    permutation of the nodes of ``B`` with respect to ``A``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">score</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Objective function value at the end of optimization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">misc</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    List of length ``n_init`` containing information about each run. Fields for</span>
+<span class="sd">    each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="graph_match"><a class="viewcode-back" href="../../../reference/reference/match.html#graspologic.match.graph_match">[docs]</a><span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">graph_match</span><span class="p">(</span>
+    <span class="n">A</span><span class="p">:</span> <span class="n">MultilayerAdjacency</span><span class="p">,</span>
+    <span class="n">B</span><span class="p">:</span> <span class="n">MultilayerAdjacency</span><span class="p">,</span>
+    <span class="n">AB</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MultilayerAdjacency</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">BA</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MultilayerAdjacency</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">S</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">partial_match</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PartialMatchType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">init</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">init_perturbation</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">n_init</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">shuffle_input</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">maximize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="n">PaddingType</span> <span class="o">=</span> <span class="s2">&quot;naive&quot;</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+    <span class="n">tol</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RngType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">transport</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">transport_regularizer</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="n">transport_tol</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mf">5e-2</span><span class="p">,</span>
+    <span class="n">transport_max_iter</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem</span>
+<span class="sd">    (QAP) through an implementation of the Fast Approximate QAP (FAQ) Algorithm [1].</span>
+
+<span class="sd">    This algorithm can be thought of as finding an alignment of the vertices of two</span>
+<span class="sd">    graphs which minimizes the number of induced edge disagreements, or, in the case</span>
+<span class="sd">    of weighted graphs, the sum of squared differences of edge weight disagreements.</span>
+<span class="sd">    Various extensions to the original FAQ algorithm are also included in this function</span>
+<span class="sd">    ([2-5]).</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A : {ndarray, csr_array, csr_array} of shape (n, n), or a list thereof</span>
+<span class="sd">        The first (potentially multilayer) adjacency matrix to be matched. Multiplex</span>
+<span class="sd">        networks (e.g. a network with multiple edge types) can be used by inputting a</span>
+<span class="sd">        list of the adjacency matrices for each edge type.</span>
+
+<span class="sd">    B : {ndarray, csr_array, csr_array} of shape (m, m), or a list thereof</span>
+<span class="sd">        The second (potentially multilayer) adjacency matrix to be matched. Must have</span>
+<span class="sd">        the same number of layers as ``A``, but need not have the same size</span>
+<span class="sd">        (see ``padding``).</span>
+
+<span class="sd">    AB : {ndarray, csr_array, csr_array} of shape (n, m), or a list thereof, default=None</span>
+<span class="sd">        A (potentially multilayer) matrix representing connections from the objects</span>
+<span class="sd">        indexed in ``A`` to those in ``B``, used for bisected graph matching (see [2]).</span>
+
+<span class="sd">    BA : {ndarray, csr_array, csr_array} of shape (m, n), or a list thereof, default=None</span>
+<span class="sd">        A (potentially multilayer) matrix representing connections from the objects</span>
+<span class="sd">        indexed in ``B`` to those in ``A``, used for bisected graph matching (see [2]).</span>
+
+<span class="sd">    S : {ndarray, csr_array, csr_array} of shape (n, m), default=None</span>
+<span class="sd">        A matrix representing the similarity of objects indexed in ``A`` to each object</span>
+<span class="sd">        indexed in ``B``. Note that the scale (i.e. the norm) of this matrix will affect</span>
+<span class="sd">        how strongly the similarity (linear) term is weighted relative to the adjacency</span>
+<span class="sd">        (quadratic) terms.</span>
+
+<span class="sd">    partial_match : ndarray of shape (n_matches, 2), dtype=int, or tuple of two array-likes of shape (n_matches,), default=None</span>
+<span class="sd">        Indices specifying known matches to include in the optimization. The</span>
+<span class="sd">        first column represents indices of the objects in ``A``, and the second column</span>
+<span class="sd">        represents their corresponding matches in ``B``.</span>
+
+<span class="sd">    init : ndarray of shape (n_unseed, n_unseed), default=None</span>
+<span class="sd">        Initialization for the algorithm. Setting to None specifies the &quot;barycenter&quot;,</span>
+<span class="sd">        which is the most commonly used initialization and</span>
+<span class="sd">        represents an uninformative (flat) initialization. If a ndarray, then this</span>
+<span class="sd">        matrix must be square and have size equal to the number of unseeded (not</span>
+<span class="sd">        already matched in ``partial_match``) nodes.</span>
+
+<span class="sd">    init_perturbation : float, default=0.0</span>
+<span class="sd">        Weight of the random perturbation from ``init`` that the initialization will</span>
+<span class="sd">        undergo. Must be between 0 and 1.</span>
+
+<span class="sd">    n_init : int, default=1</span>
+<span class="sd">        Number of initializations/runs of the algorithm to repeat. The solution with</span>
+<span class="sd">        the best objective function value over all initializations is kept. Increasing</span>
+<span class="sd">        ``n_init`` can improve performance but will take longer.</span>
+
+<span class="sd">    shuffle_input : bool, default=True</span>
+<span class="sd">        Whether to shuffle the order of the inputs internally during optimization. This</span>
+<span class="sd">        option is recommended to be kept to True besides for testing purposes; it</span>
+<span class="sd">        alleviates a dependence of the solution on the (arbitrary) ordering of the</span>
+<span class="sd">        input rows/columns.</span>
+
+<span class="sd">    maximize : bool, default=True</span>
+<span class="sd">        Whether to maximize the objective function (graph matching problem) or minimize</span>
+<span class="sd">        it (quadratic assignment problem). ``maximize=True`` corresponds to trying to</span>
+<span class="sd">        find a permutation wherein the input matrices are as similar as possible - for</span>
+<span class="sd">        adjacency matrices, this corresponds to maximizing the overlap of the edges of</span>
+<span class="sd">        the two networks. Conversely, ``maximize=False`` would attempt to make this</span>
+<span class="sd">        overlap as small as possible.</span>
+
+<span class="sd">    padding : {&quot;naive&quot;, &quot;adopted&quot;}, default=&quot;naive&quot;</span>
+<span class="sd">        Specification of a padding scheme if ``A`` and ``B`` are not of equal size. See</span>
+<span class="sd">        the `padded graph matching tutorial &lt;https://microsoft.github.io/graspologic/tutorials/matching/padded_gm.html&gt;`_</span>
+<span class="sd">        or [3] for more explanation. Adopted padding has not been tested for weighted</span>
+<span class="sd">        networks; use with caution.</span>
+
+<span class="sd">    n_jobs : int, default=None</span>
+<span class="sd">        The number of jobs to run in parallel. Parallelization is over the</span>
+<span class="sd">        initializations, so only relevant when ``n_init &gt; 1``. None means 1 unless in a</span>
+<span class="sd">        joblib.parallel_backend context. -1 means using all processors. See</span>
+<span class="sd">        :class:`joblib.Parallel` for more details.</span>
+
+<span class="sd">    max_iter : int, default=30</span>
+<span class="sd">        Must be 1 or greater, specifying the max number of iterations for the algorithm.</span>
+<span class="sd">        Setting this value higher may provide more precise solutions at the cost of</span>
+<span class="sd">        longer computation time.</span>
+
+<span class="sd">    tol : float, default=0.01</span>
+<span class="sd">        Stopping tolerance for the FAQ algorithm. Setting this value smaller may provide</span>
+<span class="sd">        more precise solutions at the cost of longer computation time.</span>
+
+<span class="sd">    verbose : int, default=0</span>
+<span class="sd">        A positive number specifying the level of verbosity for status updates in the</span>
+<span class="sd">        algorithm&#39;s progress. If ``n_jobs`` &gt; 1, then this parameter behaves as the</span>
+<span class="sd">        ``verbose`` parameter for :class:`joblib.Parallel`. Otherwise, will print</span>
+<span class="sd">        increasing levels of information about the algorithm&#39;s progress for each</span>
+<span class="sd">        initialization.</span>
+
+<span class="sd">    rng : int or np.random.Generator, default=None</span>
+<span class="sd">        Allows the specification of a random seed (positive integer) or a</span>
+<span class="sd">        :class:`np.random.Generator` object to ensure reproducibility.</span>
+
+<span class="sd">    transport : bool, default=False</span>
+<span class="sd">        Whether to enable use of regularized optimal transport for determining the step</span>
+<span class="sd">        direction as described in [4]. May improve accuracy/speed, especially for large</span>
+<span class="sd">        inputs and data where the correlation between edges is not close to 1.</span>
+
+<span class="sd">    transport_regularizer : int or float, default=100</span>
+<span class="sd">        Strength of the entropic regularization in the optimal transport solver.</span>
+
+<span class="sd">    transport_tol : int or float, default=0.05,</span>
+<span class="sd">        Must be positive. Stopping tolerance for the optimal transport solver. Setting</span>
+<span class="sd">        this value smaller may provide more precise solutions at the cost of longer</span>
+<span class="sd">        computation time.</span>
+
+<span class="sd">    transport_max_iter : int, default=1000</span>
+<span class="sd">        Must be positive. Maximum number of iterations for the optimal transport solver.</span>
+<span class="sd">        Setting this value higher may provide more precise solutions at the cost of</span>
+<span class="sd">        longer computation time.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    res: MatchResult</span>
+<span class="sd">        ``MatchResult`` containing the following fields.</span>
+
+<span class="sd">        indices_A : ndarray</span>
+<span class="sd">            Sorted indices in ``A`` which were matched.</span>
+
+<span class="sd">        indices_B : ndarray</span>
+<span class="sd">            Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched</span>
+<span class="sd">            to element ``indices_A[i]``. ``indices_B`` can also be thought of as a</span>
+<span class="sd">            permutation of the nodes of ``B`` with respect to ``A``.</span>
+
+<span class="sd">        score : float</span>
+<span class="sd">            Objective function value at the end of optimization.</span>
+
+<span class="sd">        misc : list of dict</span>
+<span class="sd">            List of length ``n_init`` containing information about each run. Fields for</span>
+<span class="sd">            each run are ``score``, ``n_iter``, ``convex_solution``, and ``converged``.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Many extensions [2-5] to the original FAQ algorithm are included in this function.</span>
+<span class="sd">    The full objective function which this function aims to solve can be written as</span>
+
+<span class="sd">    .. math:: f(P) = - \sum_{k=1}^K \|A^{(k)} - PB^{(k)}P^T\|_F^2 - \sum_{k=1}^K \|(AB)^{(k)}P^T - P(BA)^{(k)}\|_F^2 + trace(SP^T)</span>
+
+<span class="sd">    where :math:`P` is a permutation matrix we are trying to learn, :math:`A^{(k)}` is the adjacency</span>
+<span class="sd">    matrix in network :math:`A` for the :math:`k`-th edge type (and likewise for B), :math:`(AB)^{(k)}`</span>
+<span class="sd">    (with a slight abuse of notation, but for consistency with the code) is an adjacency</span>
+<span class="sd">    matrix representing a subgraph of any connections which go from objects in :math:`A` to</span>
+<span class="sd">    those in :math:`B` (and defined likewise for :math:`(BA)`), and :math:`S` is a</span>
+<span class="sd">    similarity matrix indexing the similarity of each object in :math:`A` to each object</span>
+<span class="sd">    in :math:`B`.</span>
+
+<span class="sd">    If ``partial_match`` is used, then the above will be maximized/minimized over the</span>
+<span class="sd">    set of permutations which respect this partial matching of the two networks.</span>
+
+<span class="sd">    If ``maximize``, this function will attempt to maximize :math:`f(P)` (solve the graph</span>
+<span class="sd">    matching problem); otherwise, it will be minimized.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] J.T. Vogelstein, J.M. Conroy, V. Lyzinski, L.J. Podrazik, S.G. Kratzer,</span>
+<span class="sd">        E.T. Harley, D.E. Fishkind, R.J. Vogelstein, and C.E. Priebe, “Fast</span>
+<span class="sd">        approximate quadratic programming for graph matching,” PLOS one, vol. 10,</span>
+<span class="sd">        no. 4, p. e0121002, 2015.</span>
+
+<span class="sd">    .. [2] B.D. Pedigo, M. Winding, C.E. Priebe, J.T. Vogelstein, &quot;Bisected graph</span>
+<span class="sd">        matching improves automated pairing of bilaterally homologous neurons from</span>
+<span class="sd">        connectomes,&quot; bioRxiv 2022.05.19.492713 (2022)</span>
+
+<span class="sd">    .. [3] D. Fishkind, S. Adali, H. Patsolic, L. Meng, D. Singh, V. Lyzinski, C. Priebe,</span>
+<span class="sd">        &quot;Seeded graph matching,&quot; Pattern Recognit. 87 (2019) 203–215</span>
+
+<span class="sd">    .. [4] A. Saad-Eldin, B.D. Pedigo, C.E. Priebe, J.T. Vogelstein &quot;Graph Matching via</span>
+<span class="sd">       Optimal Transport,&quot; arXiv 2111.05366 (2021)</span>
+
+<span class="sd">    .. [5] K. Pantazis, D.L. Sussman, Y. Park, Z. Li, C.E. Priebe, V. Lyzinski,</span>
+<span class="sd">       &quot;Multiplex graph matching matched filters,&quot; Applied Network Science (2022)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">max_seed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">rng</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">Generator</span><span class="p">)):</span>
+        <span class="n">check_scalar</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="s2">&quot;rng&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">),</span> <span class="n">min_val</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_val</span><span class="o">=</span><span class="n">max_seed</span><span class="p">)</span>
+    <span class="c1"># otherwise the input is None or a random Generator - these can be passed in to</span>
+    <span class="c1"># default_rng safely</span>
+
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+
+    <span class="n">seeds</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">max_seed</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_init</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">n_init</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">parallel_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="n">solver_verbose</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parallel_verbose</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">solver_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">_GraphMatchSolver</span><span class="p">(</span>
+        <span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span>
+        <span class="n">B</span><span class="o">=</span><span class="n">B</span><span class="p">,</span>
+        <span class="n">AB</span><span class="o">=</span><span class="n">AB</span><span class="p">,</span>
+        <span class="n">BA</span><span class="o">=</span><span class="n">BA</span><span class="p">,</span>
+        <span class="n">S</span><span class="o">=</span><span class="n">S</span><span class="p">,</span>
+        <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span>
+        <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
+        <span class="n">init_perturbation</span><span class="o">=</span><span class="n">init_perturbation</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">solver_verbose</span><span class="p">,</span>
+        <span class="n">shuffle_input</span><span class="o">=</span><span class="n">shuffle_input</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span>
+        <span class="n">maximize</span><span class="o">=</span><span class="n">maximize</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
+        <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">,</span>
+        <span class="n">transport</span><span class="o">=</span><span class="n">transport</span><span class="p">,</span>
+        <span class="n">transport_regularizer</span><span class="o">=</span><span class="n">transport_regularizer</span><span class="p">,</span>
+        <span class="n">transport_tol</span><span class="o">=</span><span class="n">transport_tol</span><span class="p">,</span>
+        <span class="n">transport_max_iter</span><span class="o">=</span><span class="n">transport_max_iter</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">run_single_graph_matching</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="n">RngType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchResult</span><span class="p">:</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">matching</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">matching_</span>
+        <span class="n">indices_A</span> <span class="o">=</span> <span class="n">matching</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">indices_B</span> <span class="o">=</span> <span class="n">matching</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">score_</span>
+        <span class="n">misc</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;score&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">score</span>
+        <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;n_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">n_iter_</span>
+        <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;convex_solution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">convex_solution_</span>
+        <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;converged&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">converged_</span>
+        <span class="k">return</span> <span class="n">MatchResult</span><span class="p">(</span><span class="n">indices_A</span><span class="p">,</span> <span class="n">indices_B</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="p">[</span><span class="n">misc</span><span class="p">])</span>
+
+    <span class="n">seeds</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">max_seed</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_init</span><span class="p">)</span>
+    <span class="n">parallel</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">parallel_verbose</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">parallel</span><span class="p">(</span><span class="n">delayed</span><span class="p">(</span><span class="n">run_single_graph_matching</span><span class="p">)(</span><span class="n">seed</span><span class="p">)</span> <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">)</span>
+
+    <span class="c1"># get the indices for the best run</span>
+    <span class="n">best_func</span> <span class="o">=</span> <span class="nb">max</span> <span class="k">if</span> <span class="n">maximize</span> <span class="k">else</span> <span class="nb">min</span>
+    <span class="n">best_result</span> <span class="o">=</span> <span class="n">best_func</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+
+    <span class="c1"># also collate various extra info about all of the runs</span>
+    <span class="n">miscs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">misc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">results</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">MatchResult</span><span class="p">(</span>
+        <span class="n">best_result</span><span class="o">.</span><span class="n">indices_A</span><span class="p">,</span> <span class="n">best_result</span><span class="o">.</span><span class="n">indices_B</span><span class="p">,</span> <span class="n">best_result</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">miscs</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

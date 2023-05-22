@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Correlated Random Dot Product Graph (RDPG) Graph Pair &mdash; graspologic 3.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Automatic Gaussian Mixture Modeling" href="../clustering/autogmm.html" />
+    <link rel="prev" title="Correlated Graph Pairs" href="corr.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#simulations">Simulations</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Correlated Random Dot Product Graph (RDPG) Graph Pair</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/simulations/rdpg_corr.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Correlated-Random-Dot-Product-Graph-(RDPG)-Graph-Pair">
+<h1>Correlated Random Dot Product Graph (RDPG) Graph Pair<a class="headerlink" href="#Correlated-Random-Dot-Product-Graph-(RDPG)-Graph-Pair" title="Permalink to this heading">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.simulations.rdpg_corr</span> <span class="kn">import</span> <span class="n">rdpg_corr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">sns</span><span class="o">.</span><span class="n">set_context</span><span class="p">(</span><span class="s1">&#39;talk&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1063: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1071: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1086: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap)
+</pre></div></div>
+</div>
+<p>RDPG is a latent position generative model. An explanation of the uncorrelated model is in the <a class="reference external" href="https://graspy.neurodata.io/tutorials/simulations/rdpg.html">tutorial</a>.</p>
+<p>Here, we want to generate a pair of graphs with the same latent positions but with correlation between edges.</p>
+<p>There are several parameters in this function: <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are the input matrices (latent positions) which are used to generate the probability matrix; <span class="math notranslate nohighlight">\(r\)</span> is the correlation between the graph pair, which should be (-1,1) (note that not all values of r may be possible for a given set of latent positions).</p>
+<p>Below, we sample a RDPG graph pair (undirected and no self-loops), G1 and G2, with the following parameters: <span class="math">\begin{align*}
+n &= [50, 50]\\
+r &= 0.5
+\end{align*}</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">50</span> <span class="o">+</span> <span class="p">[[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.3</span>
+
+<span class="n">G1</span><span class="p">,</span> <span class="n">G2</span> <span class="o">=</span> <span class="n">rdpg_corr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">@</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[0.33, 0.33, 0.33, ..., 0.09, 0.09, 0.09],
+       [0.33, 0.33, 0.33, ..., 0.09, 0.09, 0.09],
+       [0.33, 0.33, 0.33, ..., 0.09, 0.09, 0.09],
+       ...,
+       [0.09, 0.09, 0.09, ..., 0.03, 0.03, 0.03],
+       [0.09, 0.09, 0.09, ..., 0.03, 0.03, 0.03],
+       [0.09, 0.09, 0.09, ..., 0.03, 0.03, 0.03]])
+</pre></div></div>
+</div>
+<section id="Visualize-the-graphs-using-heatmap">
+<h2>Visualize the graphs using heatmap<a class="headerlink" href="#Visualize-the-graphs-using-heatmap" title="Permalink to this heading">¶</a></h2>
+<p>Here, we define <em>difference rate</em> to be the number of edges between the two graphs which are not the same (exist or not exist) out of all potential edges (roughly <span class="math notranslate nohighlight">\(n^2\)</span>)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Corr. RDPG 1&#39;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Corr. RDPG 2&#39;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;diff(G1-G2)&#39;</span><span class="p">)</span>
+<span class="n">ndim</span><span class="o">=</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Difference rate is &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Difference rate is  0.1438
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_6_1.png" src="../../_images/tutorials_simulations_rdpg_corr_6_1.png" />
+</div>
+</div>
+</section>
+<section id="Compare-it-to-the-correlated-SBM-graph-pair">
+<h2>Compare it to the correlated SBM graph pair<a class="headerlink" href="#Compare-it-to-the-correlated-SBM-graph-pair" title="Permalink to this heading">¶</a></h2>
+<p>Below, we sample a two-block SBM graph pair (undirected and no self-loops) G1 and G2 with the following parameters:</p>
+<p><span class="math">\begin{align*}
+n &= [50, 50]\\
+p &= \begin{bmatrix}
+0.33 & 0.09\\
+0.09 & 0.03
+\end{bmatrix}\\
+r &= 0.5
+\end{align*}</span></p>
+<p>This happens to be the SBM formulation of the same model framed as an RDPG above. Let’s see the difference between the correlated RDPG and correlated SBM graph pairs.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.simulations</span> <span class="kn">import</span> <span class="n">sbm_corr</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">directed</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">loops</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">n_per_block</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">block_members</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_blocks</span> <span class="o">*</span> <span class="p">[</span><span class="n">n_per_block</span><span class="p">])</span>
+<span class="n">n_verts</span> <span class="o">=</span> <span class="n">block_members</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mf">.3</span>
+<span class="n">block_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.33</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">]])</span>
+
+<span class="n">A1</span><span class="p">,</span> <span class="n">A2</span> <span class="o">=</span> <span class="n">sbm_corr</span><span class="p">(</span><span class="n">block_members</span><span class="p">,</span> <span class="n">block_probs</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="n">directed</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="n">loops</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. SBM 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. SBM 2&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">A1</span> <span class="o">-</span> <span class="n">A2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2)&quot;</span><span class="p">)</span>
+
+<span class="n">ndim</span><span class="o">=</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Difference rate with sbm_corr function is &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">A1</span><span class="o">-</span><span class="n">A2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Difference rate with sbm_corr function is  0.145
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_9_1.png" src="../../_images/tutorials_simulations_rdpg_corr_9_1.png" />
+</div>
+</div>
+<p>We can see the difference between G1 and G2 with both functions are similar.</p>
+</section>
+<section id="Varying-the-correlation">
+<h2>Varying the correlation<a class="headerlink" href="#Varying-the-correlation" title="Permalink to this heading">¶</a></h2>
+<p>We change the correlation between the graph pairs from -0.5 to 0.9 and see the difference between graph 1 and graph 2:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
+
+<span class="n">G1</span><span class="p">,</span> <span class="n">G2</span> <span class="o">=</span> <span class="n">rdpg_corr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 2&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span> <span class="o">-</span> <span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2)&quot;</span><span class="p">)</span>
+<span class="n">ndim</span><span class="o">=</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Difference rate when correlation = -0.5 is &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Difference rate when correlation = -0.5 is  0.7332
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_13_1.png" src="../../_images/tutorials_simulations_rdpg_corr_13_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.3</span>
+
+<span class="n">G1</span><span class="p">,</span> <span class="n">G2</span> <span class="o">=</span> <span class="n">rdpg_corr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 2&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span> <span class="o">-</span> <span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2)&quot;</span><span class="p">)</span>
+<span class="n">ndim</span><span class="o">=</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Difference rate when correlation =0.3 is &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Difference rate when correlation =0.3 is  0.3544
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_14_1.png" src="../../_images/tutorials_simulations_rdpg_corr_14_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mf">0.9</span>
+
+<span class="n">G1</span><span class="p">,</span> <span class="n">G2</span> <span class="o">=</span> <span class="n">rdpg_corr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 1&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Corr. RDPG 2&quot;</span><span class="p">)</span>
+<span class="n">heatmap</span><span class="p">(</span><span class="n">G1</span> <span class="o">-</span> <span class="n">G2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diff (G1 - G2)&quot;</span><span class="p">)</span>
+<span class="n">ndim</span><span class="o">=</span><span class="n">G1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Difference rate when correlation =0.9 is &quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">G1</span><span class="o">-</span><span class="n">G2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Difference rate when correlation =0.9 is  0.0508
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_15_1.png" src="../../_images/tutorials_simulations_rdpg_corr_15_1.png" />
+</div>
+</div>
+<p>We calculate the difference rate between graph 1 and graph 2 with different correlation ranging from -0.5 to 0.9, and show them in a scatter plot:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">dirichlet</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">rlist</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">g1</span><span class="p">,</span><span class="n">g2</span> <span class="o">=</span> <span class="n">rdpg_corr</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">i</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="n">g1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">rate</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">g1</span><span class="o">-</span><span class="n">g2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ndim</span><span class="o">*</span><span class="n">ndim</span><span class="p">)</span>
+    <span class="n">rlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.9</span><span class="p">,</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_list</span><span class="p">,</span><span class="n">rlist</span><span class="p">,</span><span class="s1">&#39;o-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Correlation&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Difference rate&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorials_simulations_rdpg_corr_18_0.png" src="../../_images/tutorials_simulations_rdpg_corr_18_0.png" />
+</div>
+</div>
+<p>We can see that the difference rate goes down as the correlation grows.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="corr.html" class="btn btn-neutral float-left" title="Correlated Graph Pairs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../clustering/autogmm.html" class="btn btn-neutral float-right" title="Automatic Gaussian Mixture Modeling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

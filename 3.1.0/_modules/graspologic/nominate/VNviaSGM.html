@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.nominate.VNviaSGM &mdash; graspologic 3.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graspologic.nominate.VNviaSGM</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.nominate.VNviaSGM</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span>
+
+<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">..match</span> <span class="kn">import</span> <span class="n">graph_match</span>
+
+<span class="c1"># Type aliases</span>
+<span class="n">SeedsType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span>
+
+
+<div class="viewcode-block" id="VNviaSGM"><a class="viewcode-back" href="../../../reference/reference/nominate.html#graspologic.nominate.VNviaSGM">[docs]</a><span class="k">class</span> <span class="nc">VNviaSGM</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class implements Vertex Nomination via Seeded Graph Matching (VNviaSGM) with</span>
+<span class="sd">    the algorithm described in [1].</span>
+
+<span class="sd">    Rather than providing a 1-1 matching for the vertices of two graphs, as in</span>
+<span class="sd">    :class:`~graspologic.match.GraphMatch`, VNviaSGM ranks the potential matches for a</span>
+<span class="sd">    vertex of interst (VOI) in one to graph to the vertices in another graph, based on</span>
+<span class="sd">    probability of matching.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    order_voi_subgraph: int, positive (default = 1)</span>
+<span class="sd">        Order used to create induced subgraph on ``A`` about VOI where the max distance</span>
+<span class="sd">        between VOI and other nodes is ``order_voi_subgraph``. This induced subgraph</span>
+<span class="sd">        will be used to determine what seeds are used when the SGM algorithm is called.</span>
+<span class="sd">        If no seeds are in this subgraph about VOI, then a UserWarning is thrown, and</span>
+<span class="sd">        ``nomination_list_`` is None.</span>
+
+<span class="sd">    order_seeds_subgraph: int, positive (default = 1)</span>
+<span class="sd">        Order used to  create induced subgraphs on ``A`` and ``B``. These subgraphs</span>
+<span class="sd">        are centered about the seeds that were determined by the subgraph generated</span>
+<span class="sd">        by ``order_voi_subgraph``. These two subgraphs will be passed into the SGM</span>
+<span class="sd">        algorithm.</span>
+
+<span class="sd">    n_init: int, positive (default = 100)</span>
+<span class="sd">        Number of random initializations of the seeded graph matching algorithm (SGM).</span>
+<span class="sd">        Increasing the number of restarts will make the probabilities returned more</span>
+<span class="sd">        precise.</span>
+
+<span class="sd">    max_nominations: int (default = None)</span>
+<span class="sd">        Max number of nominations to include in the nomination list. If None is passed,</span>
+<span class="sd">        then all nominations computed will be returned.</span>
+
+<span class="sd">    graph_match_kws : dict (default = {})</span>
+<span class="sd">        Gives users the option to pass custom arguments to the graph matching</span>
+<span class="sd">        algorithm. Format should be {&#39;arg_name&#39;: arg_value, ...}. See</span>
+<span class="sd">        :class:`~graspologic.match.GraphMatch`</span>
+
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_seeds_: int</span>
+<span class="sd">        Number of seeds passed in `seedsA` that occured in the induced subgraph about</span>
+<span class="sd">        VOI</span>
+
+<span class="sd">    nomination_list_: 2d-array</span>
+<span class="sd">        An array containing vertex nominations in the form nomination</span>
+<span class="sd">        list = [[j, p_val],...] where p_val is the probability that the VOI matches</span>
+<span class="sd">        to node j in graph B (sorted by descending probability)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    VNviaSGM generates an initial induced subgraph about the VOI to determine which</span>
+<span class="sd">    seeds are close enough to be used. If no seeds are close enough, then a warning</span>
+<span class="sd">    is thrown and ``nomination_list_`` is set to None.</span>
+
+<span class="sd">    All the seeds that are close enough are then used to generate subgraphs in both</span>
+<span class="sd">    ``A`` and ``B``. These subgraphs are matched using several random initializations</span>
+<span class="sd">    of the seeded graph matching algorithm (SGM), and a nomination list is returned.</span>
+<span class="sd">    See :class:`~graspologic.match.GraphMatch` for SGM docs</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Patsolic, HG, Park, Y, Lyzinski, V, Priebe, CE. Vertex nomination via seeded</span>
+<span class="sd">        graph matching. Stat Anal Data Min: The ASA Data Sci Journal. 2020; 13: 229–</span>
+<span class="sd">        244. https://doi.org/10.1002/sam.11454</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nomination_list_</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+
+<div class="viewcode-block" id="VNviaSGM.__init__"><a class="viewcode-back" href="../../../reference/reference/nominate.html#graspologic.nominate.VNviaSGM.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">order_voi_subgraph</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">order_seeds_subgraph</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">n_init</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="n">max_nominations</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">graph_match_kws</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_voi_subgraph</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">order_voi_subgraph</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_voi_subgraph</span> <span class="o">=</span> <span class="n">order_voi_subgraph</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;order_voi_subgraph&quot; must be an integer &gt; 0&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">order_seeds_subgraph</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">order_seeds_subgraph</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">order_seeds_subgraph</span> <span class="o">=</span> <span class="n">order_seeds_subgraph</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;order_seeds_subgraph&quot; must be an integer &gt; 0&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_init</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n_init</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_init</span> <span class="o">=</span> <span class="n">n_init</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;n_init&quot; must be an integer &gt; 0&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">max_nominations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_nominations</span> <span class="o">=</span> <span class="n">max_nominations</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_nominations</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">max_nominations</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_nominations</span> <span class="o">=</span> <span class="n">max_nominations</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;max_nominations&quot; must be an integer &gt;= 1&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Error checking of these will be handled by GMP</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph_match_kws</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">graph_match_kws</span> <span class="o">=</span> <span class="n">graph_match_kws</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;graph_match_kws` must be type dict&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VNviaSGM.fit"><a class="viewcode-back" href="../../../reference/reference/nominate.html#graspologic.nominate.VNviaSGM.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">voi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seeds</span><span class="p">:</span> <span class="n">SeedsType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;VNviaSGM&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits the model to two graphs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        A: 2d-array, square</span>
+<span class="sd">            Adjacency matrix, the graph where ``voi`` is known</span>
+
+<span class="sd">        B: 2d-array, square</span>
+<span class="sd">            Adjacency matrix, the graph where ``voi`` is not known</span>
+
+<span class="sd">        voi: int</span>
+<span class="sd">            Vertex of interest</span>
+
+<span class="sd">        seeds: list, 2d-array</span>
+<span class="sd">            List of length two, of form `[seedsA, seedsB]`. The elements of `seedsA`</span>
+<span class="sd">            and `seedsB` are vertex indices from ``A`` and ``B``, respectively, which</span>
+<span class="sd">            are known to be matched; that is, vertex `seedsA[i]` is matched to vertex</span>
+<span class="sd">            `seedsB[i]`. Note: `len(seedsA)==len(seedsB)`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self: An instance of self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; and &quot;B&quot; must be type np.ndarray&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">A</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; and &quot;B&quot; must be two-dimensional&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; and &quot;B&quot; must be square&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="c1"># NOTE: the new graph_match function can absolutely handle the reverse case.</span>
+            <span class="c1"># However, it would require me to appropriately deal with the nodes of A</span>
+            <span class="c1"># which are not matched, and I dont have time to figure out what this class</span>
+            <span class="c1"># is doing right now. Further, I think with the old code using GraphMatch</span>
+            <span class="c1"># this would have raised a silent bug in this case, so I think this is</span>
+            <span class="c1"># at least an improvement.</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;A&quot; is larger than &quot;B&quot;; please reverse the ordering of these inputs.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">voi</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;voi&quot; must be an integer&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">voi</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">voi</span> <span class="o">&gt;=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;voi&quot; must be in range[0, num_verts_A)&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; must be a list&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;seeds must be length two, with first element containing seeds </span><span class="se">\</span>
+<span class="s1">                      of &quot;A&quot; and the second containing seeds of &quot;B&quot;&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+            <span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; elements must be lists or arrays&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="n">seedsA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">seedsB</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">seeds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">seeds</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">seeds</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; be a list or 2d-array&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">seeds</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; must have a second dimension of two&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="n">seedsA</span> <span class="o">=</span> <span class="n">seeds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">seedsB</span> <span class="o">=</span> <span class="n">seeds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsB</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Must have the same number of seeds for each adjacency matrix&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;len(&quot;seeds&quot;) must be at least one&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">seedsA</span><span class="p">))</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">seedsB</span><span class="p">))</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsB</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; column entries must be unique&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; cant have more entries than its associated adjacency matrix&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">seedsA</span> <span class="o">&gt;=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">or</span> <span class="p">(</span><span class="n">seedsB</span> <span class="o">&gt;=</span> <span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;&quot;seeds&quot; entries must be less than number of nodes in their graphs&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># get vertex reordering for Ax</span>
+        <span class="c1"># in the form (seedsA, voi, rest in order)</span>
+        <span class="n">nsx1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seedsA</span><span class="p">,</span> <span class="n">voi</span><span class="p">))</span>
+        <span class="n">a_reord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seedsA</span><span class="p">,</span> <span class="n">voi</span><span class="p">),</span> <span class="n">nsx1</span><span class="p">)</span>
+
+        <span class="c1"># get reordering for B in the form (seedsB, rest in numerical order)</span>
+        <span class="n">nsx2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">seedsB</span><span class="p">)</span>
+        <span class="n">b_reord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">seedsB</span><span class="p">,</span> <span class="n">nsx2</span><span class="p">))</span>
+
+        <span class="c1"># Reorder the two graphs with our new vertices order</span>
+        <span class="n">A_perm</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">a_reord</span><span class="p">][:,</span> <span class="n">a_reord</span><span class="p">]</span>
+        <span class="n">B_perm</span> <span class="o">=</span> <span class="n">B</span><span class="p">[</span><span class="n">b_reord</span><span class="p">][:,</span> <span class="n">b_reord</span><span class="p">]</span>
+
+        <span class="c1"># Record where the new seeds and voi locations are</span>
+        <span class="c1"># in our re-ordered graphs</span>
+        <span class="n">seeds_reord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">))</span>
+        <span class="n">voi_reord</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">seedsA</span><span class="p">)</span>
+
+        <span class="c1"># Determine what seeds are within a specified subgraph</span>
+        <span class="c1"># given by `self.order_voi_subgraph`. If there are no</span>
+        <span class="c1"># seeds in this subgraph, print a message and return None</span>
+        <span class="n">subgraph_A_perm</span> <span class="o">=</span> <span class="n">_get_induced_subgraph_list</span><span class="p">(</span>
+            <span class="n">A_perm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_voi_subgraph</span><span class="p">,</span> <span class="n">voi_reord</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="mi">1</span>
+        <span class="p">)</span>
+
+        <span class="n">close_seeds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">subgraph_A_perm</span><span class="p">,</span> <span class="n">seeds_reord</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">close_seeds</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;Voi </span><span class="si">{}</span><span class="s1"> was not a member of the induced subgraph A[</span><span class="si">{}</span><span class="s1">], </span><span class="se">\</span>
+<span class="s1">                Try increasing &quot;order_voi_subgraph&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">voi</span><span class="p">,</span> <span class="n">seedsA</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nomination_list_</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="bp">self</span>
+
+        <span class="c1"># Generate the two induced subgraphs that will be used by the matching</span>
+        <span class="c1"># algorithm using the seeds that we identified in the previous step.</span>
+        <span class="n">verts_A</span> <span class="o">=</span> <span class="n">_get_induced_subgraph_list</span><span class="p">(</span>
+            <span class="n">A_perm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_seeds_subgraph</span><span class="p">,</span> <span class="n">close_seeds</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="n">verts_B</span> <span class="o">=</span> <span class="n">_get_induced_subgraph_list</span><span class="p">(</span>
+            <span class="n">B_perm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">order_seeds_subgraph</span><span class="p">,</span> <span class="n">close_seeds</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Determine the final reordering for the graphs that include only</span>
+        <span class="c1"># the vertices found by the induced subgraphs in the previous step</span>
+        <span class="c1"># For graph A, its of the form (close_seeds, voi, rest in verts_A</span>
+        <span class="c1"># in num order). For graph B its of the form (close_seeds, rest in</span>
+        <span class="c1"># verts_B in num order)</span>
+        <span class="n">permed_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">close_seeds</span><span class="p">,</span> <span class="n">voi_reord</span><span class="p">)</span>
+        <span class="n">ind1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">close_seeds</span><span class="p">,</span> <span class="n">voi_reord</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">verts_A</span><span class="p">,</span> <span class="n">permed_verts</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">ind2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">close_seeds</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">verts_B</span><span class="p">,</span> <span class="n">close_seeds</span><span class="p">)))</span>
+
+        <span class="c1"># Generate adjacency matrices for the ordering found in the prev step</span>
+        <span class="n">SG_1</span> <span class="o">=</span> <span class="n">A_perm</span><span class="p">[</span><span class="n">ind1</span><span class="p">][:,</span> <span class="n">ind1</span><span class="p">]</span>
+        <span class="n">SG_2</span> <span class="o">=</span> <span class="n">B_perm</span><span class="p">[</span><span class="n">ind2</span><span class="p">][:,</span> <span class="n">ind2</span><span class="p">]</span>
+
+        <span class="c1"># Record the number of seeds used because this may differ from the number</span>
+        <span class="c1"># of seeds passed. See the step where close_seeds was computed for an</span>
+        <span class="c1"># explanation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">close_seeds</span><span class="p">)</span>
+        <span class="n">seeds_fin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">)</span>
+        <span class="n">partial_match</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">seeds_fin</span><span class="p">,</span> <span class="n">seeds_fin</span><span class="p">))</span>
+
+        <span class="c1"># Call the SGM algorithm using user set parameters and generate a prob</span>
+        <span class="c1"># vector for the voi.</span>
+        <span class="n">prob_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">max</span><span class="p">(</span><span class="n">SG_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">SG_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_init</span><span class="p">):</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">perm_inds</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">graph_match</span><span class="p">(</span>
+                <span class="n">SG_1</span><span class="p">,</span> <span class="n">SG_2</span><span class="p">,</span> <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">graph_match_kws</span>
+            <span class="p">)</span>
+            <span class="n">prob_vector</span><span class="p">[</span><span class="n">perm_inds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">1.0</span>
+
+        <span class="n">prob_vector</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_init</span>
+
+        <span class="c1"># Get the original vertices names in the B graph to make the nom list</span>
+        <span class="n">b_inds</span> <span class="o">=</span> <span class="n">b_reord</span><span class="p">[</span><span class="n">ind2</span><span class="p">]</span>
+
+        <span class="c1"># Generate the nomination list. Note, the probability matrix does not</span>
+        <span class="c1"># include the seeds, so we must remove them from b_inds. Return a list</span>
+        <span class="c1"># sorted so it returns the vertex with the highest probability first.</span>
+        <span class="n">nomination_list_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">b_inds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_seeds_</span> <span class="p">:],</span> <span class="n">prob_vector</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nomination_list_</span> <span class="o">=</span> <span class="n">nomination_list_</span><span class="p">[</span><span class="n">nomination_list_</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_nominations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_nominations</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span>
+            <span class="n">nomination_list_</span>
+        <span class="p">):</span>
+            <span class="n">nomination_list_</span> <span class="o">=</span> <span class="n">nomination_list_</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_nominations</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nomination_list_</span> <span class="o">=</span> <span class="n">nomination_list_</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="VNviaSGM.fit_predict"><a class="viewcode-back" href="../../../reference/reference/nominate.html#graspologic.nominate.VNviaSGM.fit_predict">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">A</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">voi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">seeds</span><span class="p">:</span> <span class="n">SeedsType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits model to two adjacency matrices and returns nomination list</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        A: 2d-array, square</span>
+<span class="sd">            Adjacency matrix, the graph where ``voi`` is known</span>
+
+<span class="sd">        B: 2d-array, square</span>
+<span class="sd">            Adjacency matrix, the graph where ``voi`` is not known</span>
+
+<span class="sd">        voi: int</span>
+<span class="sd">            Vertex of interest</span>
+
+<span class="sd">        seeds: list, 2d-array</span>
+<span class="sd">            List of length two, of form `[seedsA, seedsB]`. The elements of `seedsA`</span>
+<span class="sd">            and `seedsB` are vertex indices from ``A`` and ``B``, respectively, which</span>
+<span class="sd">            are known to be matched; that is, vertex `seedsA[i]` is matched to</span>
+<span class="sd">            vertex `seedsB[i]`. Note: `len(seedsA)==len(seedsB)`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        nomination_list_ : 2d-array</span>
+<span class="sd">            The nomination list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">voi</span><span class="p">,</span> <span class="n">seeds</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nomination_list_</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_get_induced_subgraph</span><span class="p">(</span>
+    <span class="n">graph_adj_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mindist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a vertex list for the induced subgraph about a node with</span>
+<span class="sd">    max and min distance parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph_adj_matrix: 2-d array</span>
+<span class="sd">        Adjacency matrix of interest.</span>
+
+<span class="sd">    order: int</span>
+<span class="sd">        Distance to create the induced subgraph with. Max distance away from the node</span>
+<span class="sd">        to include in subgraph.</span>
+
+<span class="sd">    node: int</span>
+<span class="sd">        The vertex to center the induced subgraph about.</span>
+
+<span class="sd">    mindist: int (default = 1)</span>
+<span class="sd">        The minimum distance away from the node to include in the subgraph.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    induced_subgraph : list</span>
+<span class="sd">        The list containing all the vertices in the induced subgraph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Note all nodes are zero based in this implementation, i.e the first node is 0</span>
+    <span class="n">dists</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[[</span><span class="n">node</span><span class="p">]]</span>
+    <span class="n">dists_conglom</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">clst</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">dists</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">clst</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">graph_adj_matrix</span><span class="p">[</span><span class="n">nn</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">clst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">clst</span><span class="p">)</span>
+
+        <span class="n">cn_proc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">clst</span><span class="p">,</span> <span class="n">dists_conglom</span><span class="p">)</span>
+
+        <span class="n">dists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cn_proc</span><span class="p">)</span>
+
+        <span class="n">dists_conglom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dists_conglom</span><span class="p">,</span> <span class="n">cn_proc</span><span class="p">))</span>
+
+    <span class="n">ress</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">dists</span><span class="p">[</span><span class="n">mindist</span> <span class="p">:</span> <span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ress</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_induced_subgraph_list</span><span class="p">(</span>
+    <span class="n">graph_adj_matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mindist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a vertex list for the induced subgraph about a node with</span>
+<span class="sd">    max and min distance parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    graph_adj_matrix: 2-d array</span>
+<span class="sd">        Adjacency matrix of interest.</span>
+
+<span class="sd">    order: int</span>
+<span class="sd">        Distance to create the induce subgraph with. Max distance away from the node</span>
+<span class="sd">        to include in subgraph.</span>
+
+<span class="sd">    node: int or list</span>
+<span class="sd">        The list of vertices to center the induced subgraph about.</span>
+
+<span class="sd">    mindist: int (default = 1)</span>
+<span class="sd">        The minimum distance away from the node to include in the subgraph.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    induced_subgraph : list</span>
+<span class="sd">        The list containing all the vertices in the induced subgraph.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">total_res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+            <span class="n">ego_res</span> <span class="o">=</span> <span class="n">_get_induced_subgraph</span><span class="p">(</span>
+                <span class="n">graph_adj_matrix</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">nn</span><span class="p">,</span> <span class="n">mindist</span><span class="o">=</span><span class="n">mindist</span>
+            <span class="p">)</span>
+            <span class="n">total_res</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ego_res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">total_res</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_get_induced_subgraph</span><span class="p">(</span><span class="n">graph_adj_matrix</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

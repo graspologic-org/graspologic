@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.inference.density_test &mdash; graspologic 3.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graspologic.inference.density_test</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.inference.density_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span>
+<span class="kn">from</span> <span class="nn">.binomial</span> <span class="kn">import</span> <span class="n">BinomialTestMethod</span>
+<span class="kn">from</span> <span class="nn">.group_connection_test</span> <span class="kn">import</span> <span class="n">group_connection_test</span>
+
+<span class="n">DensityTestResult</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;DensityTestResult&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc&quot;</span><span class="p">])</span>
+
+
+<div class="viewcode-block" id="density_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.density_test">[docs]</a><span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">density_test</span><span class="p">(</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">A2</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">BinomialTestMethod</span> <span class="o">=</span> <span class="s2">&quot;fisher&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DensityTestResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compares two networks by testing whether the global connection probabilities</span>
+<span class="sd">    (densites) for the two networks are equal under an Erdos-Renyi model assumption.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A1: np.array, int</span>
+<span class="sd">        The adjacency matrix for network 1. Will be treated as a binary network,</span>
+<span class="sd">        regardless of whether it was weighted.</span>
+<span class="sd">    A2: np.array, int</span>
+<span class="sd">        Adjacency matrix for network 2. Will be treated as a binary network,</span>
+<span class="sd">        regardless of whether it was weighted.</span>
+<span class="sd">    method: string, optional, default=&quot;fisher&quot;</span>
+<span class="sd">        Specifies the statistical test to be used. The default option is &quot;fisher&quot;,</span>
+<span class="sd">        which uses Fisher&#39;s exact test, but the user may also enter &quot;chi2&quot; to use a</span>
+<span class="sd">        chi-squared test. Fisher&#39;s exact test is more appropriate when the expected</span>
+<span class="sd">        number of edges are small.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DensityTestResult: namedtuple</span>
+<span class="sd">        This named tuple returns the following data:</span>
+
+<span class="sd">        stat: float</span>
+<span class="sd">            The statistic for the test specified by ``method``.</span>
+<span class="sd">        pvalue: float</span>
+<span class="sd">            The p-value for the test specified by ``method``.</span>
+<span class="sd">        misc: dict</span>
+<span class="sd">            Dictionary containing a number of computed statistics for the network</span>
+<span class="sd">            comparison performed:</span>
+
+<span class="sd">                &quot;probability1&quot;, float</span>
+<span class="sd">                    The probability of an edge (density) in network 1 (:math:`p_1`).</span>
+<span class="sd">                &quot;probability2&quot;, float</span>
+<span class="sd">                    The probability of an edge (density) in network 2 (:math:`p_2`).</span>
+<span class="sd">                &quot;observed1&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of edge connections for network 1.</span>
+<span class="sd">                &quot;observed2&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of edge connections for network 2.</span>
+<span class="sd">                &quot;possible1&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of possible edges for network 1.</span>
+<span class="sd">                &quot;possible2&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of possible edges for network 1.</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Under the Erdos-Renyi model, edges are generated independently with probability</span>
+<span class="sd">    :math:`p`. :math:`p` is also known as the network density. This function tests</span>
+<span class="sd">    whether the probability of an edge in network 1 (:math:`p_1`) is significantly</span>
+<span class="sd">    different from that in network 2 (:math:`p_2`), by assuming that both networks came</span>
+<span class="sd">    from an Erdos-Renyi model. In other words, the null hypothesis is</span>
+
+<span class="sd">    .. math:: H_0: p_1 = p_2</span>
+
+<span class="sd">    And the alternative hypothesis is</span>
+
+<span class="sd">    .. math:: H_A: p_1 \neq p_2</span>
+
+<span class="sd">    This test makes several assumptions about the data and test (which could easily be</span>
+<span class="sd">    loosened in future versions):</span>
+
+<span class="sd">            We assume that the networks are directed. If the networks are undirected</span>
+<span class="sd">            (and the adjacency matrices are thus symmetric), then edges would be counted</span>
+<span class="sd">            twice, which would lead to an incorrect calculation of the edge probability.</span>
+<span class="sd">            We believe passing in the upper or lower triangle of the adjacency matrix</span>
+<span class="sd">            would solve this, but this has not been tested.</span>
+
+<span class="sd">            We assume that the networks are loopless, that is we do not consider the</span>
+<span class="sd">            probability of an edge existing between a node and itself. This can be</span>
+<span class="sd">            weakened and made an option in future versions.</span>
+
+<span class="sd">            We only implement the alternative hypothesis of &quot;not equals&quot; (two-sided);</span>
+<span class="sd">            future versions could implement the one-sided alternative hypotheses.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,</span>
+<span class="sd">           Vogelstein, J.T. &quot;Generative network modeling reveals quantitative</span>
+<span class="sd">           definitions of bilateral symmetry exhibited by a whole insect brain</span>
+<span class="sd">           connectome,&quot; eLife (2023): e83739.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc</span> <span class="o">=</span> <span class="n">group_connection_test</span><span class="p">(</span>
+        <span class="n">A1</span><span class="p">,</span>
+        <span class="n">A2</span><span class="p">,</span>
+        <span class="n">labels1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="n">labels2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">A2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probability1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities1&quot;</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities1&quot;</span><span class="p">]</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probability2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities2&quot;</span><span class="p">]</span>
+    <span class="k">del</span> <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities2&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">DensityTestResult</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
