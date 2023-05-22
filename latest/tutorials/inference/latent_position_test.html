@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Latent Position Two-Graph Testing &mdash; graspologic 3.0.0 documentation</title>
+  <title>Latent Position Two-Graph Testing &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -22,7 +22,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Latent Distribution Two-Graph Testing" href="latent_distribution_test.html" />
-    <link rel="prev" title="Omnibus Embedding for Multiple Graphs" href="../embedding/Omnibus.html" /> 
+    <link rel="prev" title="Group connection test" href="group_connection_test.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -67,6 +67,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -217,6 +218,9 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#inference">Inference</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -312,8 +316,18 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1063: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1071: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1086: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
 /opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap)
 </pre></div></div>
 </div>
 <section id="Generate-a-stochastic-block-model-graph-to-model-as-a-random-dot-product-graph">
@@ -707,7 +721,7 @@ p = 0.07920792079207921
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../embedding/Omnibus.html" class="btn btn-neutral float-left" title="Omnibus Embedding for Multiple Graphs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="group_connection_test.html" class="btn btn-neutral float-left" title="Group connection test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="latent_distribution_test.html" class="btn btn-neutral float-right" title="Latent Distribution Two-Graph Testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

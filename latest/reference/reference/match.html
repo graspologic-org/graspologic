@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matching &mdash; graspologic 3.0.0 documentation</title>
+  <title>Matching &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -66,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -216,6 +217,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -305,21 +309,21 @@ Various extensions to the original FAQ algorithm are also included in this funct
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>A</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, n), or a list thereof</span></dt><dd><p>The first (potentially multilayer) adjacency matrix to be matched. Multiplex
+<dt><strong>A</strong><span class="classifier">{ndarray, csr_array, csr_array} of shape (n, n), or a list thereof</span></dt><dd><p>The first (potentially multilayer) adjacency matrix to be matched. Multiplex
 networks (e.g. a network with multiple edge types) can be used by inputting a
 list of the adjacency matrices for each edge type.</p>
 </dd>
-<dt><strong>B</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (m, m), or a list thereof</span></dt><dd><p>The second (potentially multilayer) adjacency matrix to be matched. Must have
+<dt><strong>B</strong><span class="classifier">{ndarray, csr_array, csr_array} of shape (m, m), or a list thereof</span></dt><dd><p>The second (potentially multilayer) adjacency matrix to be matched. Must have
 the same number of layers as <code class="docutils literal notranslate"><span class="pre">A</span></code>, but need not have the same size
 (see <code class="docutils literal notranslate"><span class="pre">padding</span></code>).</p>
 </dd>
-<dt><strong>AB</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, m), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
+<dt><strong>AB</strong><span class="classifier">{ndarray, csr_array, csr_array} of shape (n, m), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
 indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to those in <code class="docutils literal notranslate"><span class="pre">B</span></code>, used for bisected graph matching (see [2]).</p>
 </dd>
-<dt><strong>BA</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (m, n), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
+<dt><strong>BA</strong><span class="classifier">{ndarray, csr_array, csr_array} of shape (m, n), or a list thereof, default=None</span></dt><dd><p>A (potentially multilayer) matrix representing connections from the objects
 indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code> to those in <code class="docutils literal notranslate"><span class="pre">A</span></code>, used for bisected graph matching (see [2]).</p>
 </dd>
-<dt><strong>S</strong><span class="classifier">{ndarray, csr_matrix, csr_array} of shape (n, m), default=None</span></dt><dd><p>A matrix representing the similarity of objects indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to each object
+<dt><strong>S</strong><span class="classifier">{ndarray, csr_array, csr_array} of shape (n, m), default=None</span></dt><dd><p>A matrix representing the similarity of objects indexed in <code class="docutils literal notranslate"><span class="pre">A</span></code> to each object
 indexed in <code class="docutils literal notranslate"><span class="pre">B</span></code>. Note that the scale (i.e. the norm) of this matrix will affect
 how strongly the similarity (linear) term is weighted relative to the adjacency
 (quadratic) terms.</p>
@@ -416,11 +420,11 @@ each run are <code class="docutils literal notranslate"><span class="pre">score<
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
-<li><p><strong>B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
-<li><p><strong>AB</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
-<li><p><strong>BA</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
-<li><p><strong>S</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_matrix.html#scipy.sparse.csr_matrix" title="(in SciPy v1.10.1)"><em>csr_matrix</em></a><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>A</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>B</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a>) -- </p></li>
+<li><p><strong>AB</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>BA</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em>] </em><em>| </em><em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>S</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>partial_match</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Tuple" title="(in Python v3.9)"><em>Tuple</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>init</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>init_perturbation</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>integer</em>) -- </p></li>

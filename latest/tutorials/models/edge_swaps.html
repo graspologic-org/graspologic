@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Degree Preserving Edge Swaps &mdash; graspologic 3.0.0 documentation</title>
+  <title>Degree Preserving Edge Swaps &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -67,6 +67,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -217,6 +218,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -299,7 +303,7 @@
 <span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
 <span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">binarize</span><span class="p">,</span> <span class="n">symmetrize</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_array</span>
 </pre></div>
 </div>
 </div>
@@ -308,11 +312,21 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1063: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1071: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/distances.py:1086: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
 /opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
+/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  @numba.jit()
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap)
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> is a class that performs degree preserving edge swaps on networks. The distributions of graphs with a fixed degree sequence are known as configuration models, and these have extensive application for analyzing network datasets. The current implementation works on simple graphs (unewighted, no loops) that are of type <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> or <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> is a class that performs degree preserving edge swaps on networks. The distributions of graphs with a fixed degree sequence are known as configuration models, and these have extensive application for analyzing network datasets. The current implementation works on simple graphs (unewighted, no loops) that are of type <code class="docutils literal notranslate"><span class="pre">np.ndarray</span></code> or <code class="docutils literal notranslate"><span class="pre">csr_array</span></code>.</p>
 <p>Now let us run dpes on these graphs and ensure that they have the same degree sequence</p>
 <p>To begin, we’ll look at an example network, the <em>Drosophila melanogaster</em> larva right mushroom body connectome from <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28796202">Eichler et al. 2017</a>.</p>
 <p>Note: here we make the network undirected and unweighted for compatibility with the current implementation.</p>
@@ -383,12 +397,12 @@
 True
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> also works with <code class="docutils literal notranslate"><span class="pre">csr_matrix</span></code> adjacency representations.</p>
+<p><code class="docutils literal notranslate"><span class="pre">EdgeSwapper</span></code> also works with <code class="docutils literal notranslate"><span class="pre">csr_array</span></code> adjacency representations.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_matrix</span><span class="p">(</span><span class="n">adj</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">swapper</span> <span class="o">=</span> <span class="n">EdgeSwapper</span><span class="p">(</span><span class="n">csr_array</span><span class="p">(</span><span class="n">adj</span><span class="p">),</span> <span class="n">seed</span><span class="o">=</span><span class="mi">8888</span><span class="p">)</span>
 <span class="n">swapped_adj</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">swapper</span><span class="o">.</span><span class="n">swap_edges</span><span class="p">(</span><span class="n">n_swaps</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
 <span class="n">swapped_g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">from_numpy_array</span><span class="p">(</span><span class="n">swapped_adj</span><span class="p">)</span>

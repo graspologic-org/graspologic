@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>graspologic.inference.group_connection_test &mdash; graspologic 3.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../reference/reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">graspologic.inference.group_connection_test</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for graspologic.inference.group_connection_test</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">combine_pvalues</span>
+<span class="kn">from</span> <span class="nn">statsmodels.stats.multitest</span> <span class="kn">import</span> <span class="n">multipletests</span>
+
+<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">import_graph</span><span class="p">,</span> <span class="n">is_loopless</span><span class="p">,</span> <span class="n">is_symmetric</span><span class="p">,</span> <span class="n">is_unweighted</span><span class="p">,</span> <span class="n">remove_loops</span>
+<span class="kn">from</span> <span class="nn">.binomial</span> <span class="kn">import</span> <span class="n">BinomialTestMethod</span><span class="p">,</span> <span class="n">binom_2samp</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">compute_density</span>
+
+<span class="n">Labels</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span>
+
+<span class="n">SBMResult</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;SBMResult&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;probabilities&quot;</span><span class="p">,</span> <span class="s2">&quot;observed&quot;</span><span class="p">,</span> <span class="s2">&quot;possible&quot;</span><span class="p">,</span> <span class="s2">&quot;group_counts&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">GroupTestResult</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;GroupTestResult&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">,</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">,</span> <span class="s2">&quot;misc&quot;</span><span class="p">])</span>
+
+
+<span class="k">def</span> <span class="nf">fit_sbm</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">Labels</span><span class="p">,</span> <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SBMResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fits a stochastic block model to data for a given network with known group</span>
+<span class="sd">    identities. Required inputs are the adjacency matrix for the</span>
+<span class="sd">    network and the group label for each node of the network. The number of labels must</span>
+<span class="sd">    equal the number of nodes of the network.</span>
+
+<span class="sd">    For each possible group-to-group connection, e.g. group 1-to-group 1,</span>
+<span class="sd">    group 1-to-group 2, etc., this function computes the total number</span>
+<span class="sd">    of possible edges between the groups, the actual number of edges connecting the</span>
+<span class="sd">    groups, and the estimated probability of an edge</span>
+<span class="sd">    connecting each pair of groups (i.e. B_hat). The function also calculates and</span>
+<span class="sd">    returns the total number of nodes corresponding to each</span>
+<span class="sd">    provided label.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A: np.array, int shape(n1,n1)</span>
+<span class="sd">        The adjacency matrix for the network at issue. Entries are either 1</span>
+<span class="sd">        (edge present) or 0 (edge absent). This is a square matrix with</span>
+<span class="sd">        side length equal to the number of nodes in the network.</span>
+
+<span class="sd">    labels: array-like, int shape(n1,1)</span>
+<span class="sd">        The group labels corresponding to each node in the network. This is a</span>
+<span class="sd">        one-dimensional array with a number of entries equal to the</span>
+<span class="sd">        number of nodes in the network.</span>
+
+<span class="sd">    loops: boolean</span>
+<span class="sd">        This parameter instructs the function to either include or exclude self-loops</span>
+<span class="sd">        (i.e. connections between a node and itself) when</span>
+<span class="sd">        fitting the SBM model. This parameter is optional; default is false, meaning</span>
+<span class="sd">        self-loops will be excluded.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    SBMResult: namedtuple</span>
+<span class="sd">        This function returns a namedtuple with four key/value pairs:</span>
+<span class="sd">            (&quot;probabilities&quot;,B_hat):</span>
+<span class="sd">                B_hat: array-like, float shape((number of unique labels)^2,1)</span>
+<span class="sd">                    This variable stores the computed edge probabilities for all</span>
+<span class="sd">                    possible group-to-group connections, computed as the ratio</span>
+<span class="sd">                    of number of actual edges to number of possible edges.</span>
+<span class="sd">            (&quot;observed&quot;,n_observed):</span>
+<span class="sd">                n_observed: dataframe</span>
+<span class="sd">                    This variable stores the number of observed edges for each</span>
+<span class="sd">                    group-to-group connection. Data is indexed as the number</span>
+<span class="sd">                    of edges between each source group and each target group.</span>
+<span class="sd">            (&quot;possibe&quot;,n_possible):</span>
+<span class="sd">                n_possible: dataframe</span>
+<span class="sd">                    This variable stores the total number of possible edges for each</span>
+<span class="sd">                    group-to-group connection. Indexing is identical to</span>
+<span class="sd">                    the above. Network density for each group-to-group connection can</span>
+<span class="sd">                    easily be determined as n_observed/n_possible.</span>
+<span class="sd">            (&quot;group_counts&quot;,counts_labels):</span>
+<span class="sd">                counts_labels: pd.series</span>
+<span class="sd">                    This variable stores the number of nodes belonging to each group</span>
+<span class="sd">                    label.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loops</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">remove_loops</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">node_to_comm_map</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">labels</span><span class="p">))</span>
+
+    <span class="c1"># map edges to their incident communities</span>
+    <span class="n">source_inds</span><span class="p">,</span> <span class="n">target_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="n">comm_mapper</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="n">node_to_comm_map</span><span class="o">.</span><span class="n">get</span><span class="p">)</span>
+    <span class="n">source_comm</span> <span class="o">=</span> <span class="n">comm_mapper</span><span class="p">(</span><span class="n">source_inds</span><span class="p">)</span>
+    <span class="n">target_comm</span> <span class="o">=</span> <span class="n">comm_mapper</span><span class="p">(</span><span class="n">target_inds</span><span class="p">)</span>
+
+    <span class="c1"># get the total number of possible edges for each community -&gt; community cell</span>
+    <span class="n">unique_labels</span><span class="p">,</span> <span class="n">counts_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">return_counts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_labels</span><span class="p">)</span>
+
+    <span class="n">n_observed</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span>
+            <span class="n">source_comm</span><span class="p">,</span>
+            <span class="n">target_comm</span><span class="p">,</span>
+            <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">rownames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">],</span>
+            <span class="n">colnames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">unique_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">unique_labels</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">num_possible</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">counts_labels</span><span class="p">,</span> <span class="n">counts_labels</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">loops</span><span class="p">:</span>
+        <span class="c1"># then there would have been n fewer possible edges</span>
+        <span class="n">num_possible</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">num_possible</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">K</span><span class="p">)]</span> <span class="o">-</span> <span class="n">counts_labels</span>
+        <span class="p">)</span>
+
+    <span class="n">n_possible</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">num_possible</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">unique_labels</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">unique_labels</span>
+    <span class="p">)</span>
+    <span class="n">n_possible</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+    <span class="n">n_possible</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+
+    <span class="n">B_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">n_observed</span><span class="p">,</span> <span class="n">n_possible</span><span class="p">)</span>
+
+    <span class="n">counts_labels</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">unique_labels</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">counts_labels</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">SBMResult</span><span class="p">(</span><span class="n">B_hat</span><span class="p">,</span> <span class="n">n_observed</span><span class="p">,</span> <span class="n">n_possible</span><span class="p">,</span> <span class="n">counts_labels</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_make_adjacency_dataframe</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">Labels</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to convert data with a given index into a dataframe data structure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">columns</span><span class="o">=</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<div class="viewcode-block" id="group_connection_test"><a class="viewcode-back" href="../../../reference/reference/inference.html#graspologic.inference.group_connection_test">[docs]</a><span class="nd">@beartype</span>
+<span class="k">def</span> <span class="nf">group_connection_test</span><span class="p">(</span>
+    <span class="n">A1</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span>
+    <span class="n">A2</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span>
+    <span class="n">labels1</span><span class="p">:</span> <span class="n">Labels</span><span class="p">,</span>
+    <span class="n">labels2</span><span class="p">:</span> <span class="n">Labels</span><span class="p">,</span>
+    <span class="n">density_adjustment</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="n">BinomialTestMethod</span> <span class="o">=</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span>
+    <span class="n">combine_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tippett&quot;</span><span class="p">,</span>
+    <span class="n">correct_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;bonferroni&quot;</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupTestResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compares two networks by testing whether edge probabilities between groups are</span>
+<span class="sd">    significantly different for the two networks under a stochastic block model</span>
+<span class="sd">    assumption.</span>
+
+<span class="sd">    This function requires the group labels in both networks to be known and to have the</span>
+<span class="sd">    same categories; although the exact number of nodes belonging to each group does not</span>
+<span class="sd">    need to be identical. Note that using group labels inferred from the data may</span>
+<span class="sd">    yield an invalid test.</span>
+
+<span class="sd">    This function also permits the user to test whether one network&#39;s group connection</span>
+<span class="sd">    probabilities are a constant multiple of the other&#39;s (see ``density_adjustment``</span>
+<span class="sd">    parameter).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A1: np.array, shape(n1,n1)</span>
+<span class="sd">        The adjacency matrix for network 1. Will be treated as a binary network,</span>
+<span class="sd">        regardless of whether it was weighted.</span>
+<span class="sd">    A2 np.array, shape(n2,n2)</span>
+<span class="sd">        The adjacency matrix for network 2. Will be treated as a binary network,</span>
+<span class="sd">        regardless of whether it was weighted.</span>
+<span class="sd">    labels1: array-like, shape (n1,)</span>
+<span class="sd">        The group labels for each node in network 1.</span>
+<span class="sd">    labels2: array-like, shape (n2,)</span>
+<span class="sd">        The group labels for each node in network 2.</span>
+<span class="sd">    density_adjustment: boolean, optional</span>
+<span class="sd">        Whether to perform a density adjustment procedure. If ``True``, will test the</span>
+<span class="sd">        null hypothesis that the group-to-group connection probabilities of one network</span>
+<span class="sd">        are a constant multiple of those of the other network. Otherwise, no density</span>
+<span class="sd">        adjustment will be performed.</span>
+<span class="sd">    method: str, optional</span>
+<span class="sd">        Specifies the statistical test to be performed to compare each of the</span>
+<span class="sd">        group-to-group connection probabilities. By default, this performs</span>
+<span class="sd">        the score test (essentially equivalent to chi-squared test when</span>
+<span class="sd">        ``density_adjustment=False``), but the user may also enter &quot;chi2&quot; to perform the</span>
+<span class="sd">        chi-squared test, or &quot;fisher&quot; for Fisher&#39;s exact test.</span>
+<span class="sd">    combine_method: str, optional</span>
+<span class="sd">        Specifies the method for combining p-values (see Notes and [1]_ for more</span>
+<span class="sd">        details). Default is &quot;tippett&quot; for Tippett&#39;s method (recommended), but the user</span>
+<span class="sd">        can also enter any other method supported by</span>
+<span class="sd">        :func:`scipy.stats.combine_pvalues`.</span>
+<span class="sd">    correct_method: str, optional</span>
+<span class="sd">        Specifies the method for correcting for multiple comparisons. Default value is</span>
+<span class="sd">        &quot;holm&quot; to use the Holm-Bonferroni correction method, but</span>
+<span class="sd">        many others are possible (see :func:`statsmodels.stats.multitest.multipletests`</span>
+<span class="sd">        for more details and options).</span>
+<span class="sd">    alpha: float, optional</span>
+<span class="sd">        The significance threshold. By default, this is the conventional value of</span>
+<span class="sd">        0.05 but any value on the interval :math:`[0,1]` can be entered. This only</span>
+<span class="sd">        affects the results in ``misc[&#39;rejections&#39;]``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    GroupTestResult: namedtuple</span>
+<span class="sd">        A tuple containing the following data:</span>
+
+<span class="sd">        stat: float</span>
+<span class="sd">            The statistic computed by the method chosen for combining</span>
+<span class="sd">            p-values (see ``combine_method``).</span>
+<span class="sd">        pvalue: float</span>
+<span class="sd">            The p-value for the overall network-to-network comparison using under a</span>
+<span class="sd">            stochastic block model assumption. Note that this is the p-value for the</span>
+<span class="sd">            comparison of the entire group-to-group connection matrices</span>
+<span class="sd">            (i.e., :math:`B_1` and :math:`B_2`).</span>
+<span class="sd">        misc: dict</span>
+<span class="sd">            A dictionary containing a number of statistics relating to the individual</span>
+<span class="sd">            group-to-group connection comparisons.</span>
+
+<span class="sd">                &quot;uncorrected_pvalues&quot;, pd.DataFrame</span>
+<span class="sd">                    The p-values for each group-to-group connection comparison, before</span>
+<span class="sd">                    correction for multiple comparisons.</span>
+<span class="sd">                &quot;stats&quot;, pd.DataFrame</span>
+<span class="sd">                    The test statistics for each of the group-to-group comparisons,</span>
+<span class="sd">                    depending on ``method``.</span>
+<span class="sd">                &quot;probabilities1&quot;, pd.DataFrame</span>
+<span class="sd">                    This contains the B_hat values computed in fit_sbm above for</span>
+<span class="sd">                    network 1, i.e. the hypothesized group connection density for</span>
+<span class="sd">                    each group-to-group connection for network 1.</span>
+<span class="sd">                &quot;probabilities2&quot;, pd.DataFrame</span>
+<span class="sd">                    Same as above, but for network 2.</span>
+<span class="sd">                &quot;observed1&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of observed group-to-group edge connections for</span>
+<span class="sd">                    network 1.</span>
+<span class="sd">                &quot;observed2&quot;, pd.DataFrame</span>
+<span class="sd">                    Same as above, but for network 2.</span>
+<span class="sd">                &quot;possible1&quot;, pd.DataFrame</span>
+<span class="sd">                    The total number of possible edges for each group-to-group pair in</span>
+<span class="sd">                    network 1.</span>
+<span class="sd">                &quot;possible2&quot;, pd.DataFrame</span>
+<span class="sd">                    Same as above, but for network 2.</span>
+<span class="sd">                &quot;group_counts1&quot;, pd.Series</span>
+<span class="sd">                    Contains total number of nodes corresponding to each group label for</span>
+<span class="sd">                    network 1.</span>
+<span class="sd">                &quot;group_counts2&quot;, pd.Series</span>
+<span class="sd">                    Same as above, for network 2</span>
+<span class="sd">                &quot;null_ratio&quot;, float</span>
+<span class="sd">                    If the &quot;density adjustment&quot; parameter is set to &quot;true&quot;, this</span>
+<span class="sd">                    variable contains the null hypothesis for the quotient of</span>
+<span class="sd">                    odds ratios for the group-to-group connection densities for the two</span>
+<span class="sd">                    networks. In other words, it contains the hypothesized</span>
+<span class="sd">                    factor by which network 1 is &quot;more dense&quot; or &quot;less dense&quot; than</span>
+<span class="sd">                    network 2. If &quot;density adjustment&quot; is set to &quot;false&quot;, this</span>
+<span class="sd">                    simply returns a value of 1.0.</span>
+<span class="sd">                &quot;n_tests&quot;, int</span>
+<span class="sd">                    This variable contains the number of group-to-group comparisons</span>
+<span class="sd">                    performed by the function.</span>
+<span class="sd">                &quot;rejections&quot;, pd.DataFrame</span>
+<span class="sd">                    Contains a square matrix of boolean variables. The side length of</span>
+<span class="sd">                    the matrix is equal to the number of distinct group</span>
+<span class="sd">                    labels. An entry in the matrix is &quot;true&quot; if the null hypothesis,</span>
+<span class="sd">                    i.e. that the group-to-group connection density</span>
+<span class="sd">                    corresponding to the row and column of the matrix is equal for both</span>
+<span class="sd">                    networks (with or without a density adjustment factor),</span>
+<span class="sd">                    is rejected. In simpler terms, an entry is only &quot;true&quot; if the</span>
+<span class="sd">                    group-to-group density is statistically different between</span>
+<span class="sd">                    the two networks for the connection from the group corresponding to</span>
+<span class="sd">                    the row of the matrix to the group corresponding to the</span>
+<span class="sd">                    column of the matrix.</span>
+<span class="sd">                &quot;corrected_pvalues&quot;, pd.DataFrame</span>
+<span class="sd">                    Contains the p-values for the group-to-group connection densities</span>
+<span class="sd">                    after correction using the chosen correction_method.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Under a stochastic block model assumption, the probability of observing an edge from</span>
+<span class="sd">    any node in group :math:`i` to any node in group :math:`j` is given by</span>
+<span class="sd">    :math:`B_{ij}`, where :math:`B` is a :math:`K \times K` matrix of connection</span>
+<span class="sd">    probabilities if there are :math:`K` groups. This test assumes that both networks</span>
+<span class="sd">    came from a stochastic block model with the same number of groups, and a fixed</span>
+<span class="sd">    assignment of nodes to groups. The null hypothesis is that the group-to-group</span>
+<span class="sd">    connection probabilities are the same</span>
+
+<span class="sd">    .. math:: H_0: B_1 = B_2</span>
+
+<span class="sd">    The alternative hypothesis is that they are not the same</span>
+
+<span class="sd">    .. math:: H_A: B_1 \neq B_2</span>
+
+<span class="sd">    Note that this alternative includes the case where even just one of these</span>
+<span class="sd">    group-to-group connection probabilities are different between the two networks. The</span>
+<span class="sd">    test is conducted by first comparing each group-to-group connection via its own</span>
+<span class="sd">    test, i.e.,</span>
+
+<span class="sd">    .. math:: H_0: {B_{1}}_{ij} = {B_{2}}_{ij}</span>
+
+<span class="sd">    .. math:: H_A: {B_{1}}_{ij} \neq {B_{2}}_{ij}</span>
+
+<span class="sd">    The p-values for each of these individual comparisons are stored in</span>
+<span class="sd">    ``misc[&#39;uncorrected_pvalues&#39;]``, and after multiple comparisons correction, in</span>
+<span class="sd">    ``misc[&#39;corrected_pvalues&#39;]``. The test statistic and p-value returned by this</span>
+<span class="sd">    test are for the overall comparison of the entire group-to-group connection</span>
+<span class="sd">    matrices. These are computed by appropriately combining the p-values for each of</span>
+<span class="sd">    the individual comparisons. For more details, see [1]_.</span>
+
+<span class="sd">    When ``density_adjustment`` is set to ``True``, the null hypothesis is adjusted to</span>
+<span class="sd">    account for the fact that the group-to-group connection densities may be different</span>
+<span class="sd">    only up to a multiplicative factor which sets the densities of the two networks</span>
+<span class="sd">    the same in expectation. In other words, the null and alternative hypotheses are</span>
+<span class="sd">    adjusted to be</span>
+
+<span class="sd">    .. math:: H_0: B_1 = c B_2</span>
+
+<span class="sd">    .. math:: H_A: B_1 \neq c B_2</span>
+
+<span class="sd">    where :math:`c` is a constant which sets the densities of the two networks the same.</span>
+
+<span class="sd">    Note that in cases where one of the networks has no edges in a particular</span>
+<span class="sd">    group-to-group connection, it is nonsensical to run a statistical test for that</span>
+<span class="sd">    particular connection. In these cases, the p-values for that individual comparison</span>
+<span class="sd">    are set to ``np.nan``, and that test is not included in the overall test statistic</span>
+<span class="sd">    or multiple comparison correction.</span>
+
+<span class="sd">    This test makes several assumptions about the data and test (which could easily be</span>
+<span class="sd">    loosened in future versions):</span>
+
+<span class="sd">            We assume that the networks are directed. If the networks are undirected</span>
+<span class="sd">            (and the adjacency matrices are thus symmetric), then edges would be counted</span>
+<span class="sd">            twice, which would lead to an incorrect calculation of the edge probability.</span>
+<span class="sd">            We believe passing in the upper or lower triangle of the adjacency matrix</span>
+<span class="sd">            would solve this, but this has not been tested.</span>
+
+<span class="sd">            We assume that the networks are loopless, that is we do not consider the</span>
+<span class="sd">            probability of an edge existing between a node and itself. This can be</span>
+<span class="sd">            weakened and made an option in future versions.</span>
+
+<span class="sd">            We only implement the alternative hypothesis of &quot;not equals&quot; (two-sided);</span>
+<span class="sd">            future versions could implement the one-sided alternative hypotheses.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Pedigo, B.D., Powell, M., Bridgeford, E.W., Winding, M., Priebe, C.E.,</span>
+<span class="sd">           Vogelstein, J.T. &quot;Generative network modeling reveals quantitative</span>
+<span class="sd">           definitions of bilateral symmetry exhibited by a whole insect brain</span>
+<span class="sd">           connectome,&quot; eLife (2023): e83739.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">A1</span> <span class="o">=</span> <span class="n">import_graph</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
+    <span class="n">A2</span> <span class="o">=</span> <span class="n">import_graph</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">is_symmetric</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span> <span class="ow">or</span> <span class="n">is_symmetric</span><span class="p">(</span><span class="n">A2</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;This test assumes that the networks are directed, &quot;</span>
+            <span class="s2">&quot;but one or both adjacency matrices are symmetric.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_unweighted</span><span class="p">(</span><span class="n">A1</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_unweighted</span><span class="p">(</span><span class="n">A2</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;This test assumes that the networks are unweighted, &quot;</span>
+            <span class="s2">&quot;but one or both adjacency matrices are weighted.&quot;</span>
+            <span class="s2">&quot;Test will be run on the binarized version of these adjacency matrices.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_loopless</span><span class="p">(</span><span class="n">A1</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_loopless</span><span class="p">(</span><span class="n">A2</span><span class="p">)):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;This test assumes that the networks are loopless, &quot;</span>
+            <span class="s2">&quot;but one or both adjacency matrices have self-loops.&quot;</span>
+            <span class="s2">&quot;Test will be run on the loopless version of these adjacency matrices.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">B1</span><span class="p">,</span> <span class="n">n_observed1</span><span class="p">,</span> <span class="n">n_possible1</span><span class="p">,</span> <span class="n">group_counts1</span> <span class="o">=</span> <span class="n">fit_sbm</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">labels1</span><span class="p">)</span>
+    <span class="n">B2</span><span class="p">,</span> <span class="n">n_observed2</span><span class="p">,</span> <span class="n">n_possible2</span><span class="p">,</span> <span class="n">group_counts2</span> <span class="o">=</span> <span class="n">fit_sbm</span><span class="p">(</span><span class="n">A2</span><span class="p">,</span> <span class="n">labels2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">n_observed2</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">n_observed2</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">n_possible1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">n_possible2</span><span class="o">.</span><span class="n">index</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">n_observed2</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+    <span class="n">index</span> <span class="o">=</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n_observed2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+    <span class="n">K</span> <span class="o">=</span> <span class="n">n_observed1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">uncorrected_pvalues_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
+    <span class="p">)</span>  <span class="c1"># had to make a new variable to keep mypy happy</span>
+    <span class="n">uncorrected_pvalues</span> <span class="o">=</span> <span class="n">_make_adjacency_dataframe</span><span class="p">(</span><span class="n">uncorrected_pvalues_temp</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+    <span class="n">stats_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">_make_adjacency_dataframe</span><span class="p">(</span><span class="n">stats_temp</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">density_adjustment</span> <span class="o">!=</span> <span class="kc">False</span><span class="p">:</span>  <span class="c1"># cause could be float</span>
+        <span class="k">if</span> <span class="n">density_adjustment</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">density1</span> <span class="o">=</span> <span class="n">compute_density</span><span class="p">(</span><span class="n">A1</span><span class="p">)</span>
+            <span class="n">density2</span> <span class="o">=</span> <span class="n">compute_density</span><span class="p">(</span><span class="n">A2</span><span class="p">)</span>
+            <span class="n">adjustment_factor</span> <span class="o">=</span> <span class="n">density1</span> <span class="o">/</span> <span class="n">density2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">adjustment_factor</span> <span class="o">=</span> <span class="n">density_adjustment</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">adjustment_factor</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+            <span class="n">curr_stat</span><span class="p">,</span> <span class="n">curr_pvalue</span> <span class="o">=</span> <span class="n">binom_2samp</span><span class="p">(</span>
+                <span class="n">n_observed1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                <span class="n">n_possible1</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                <span class="n">n_observed2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                <span class="n">n_possible2</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">null_ratio</span><span class="o">=</span><span class="n">adjustment_factor</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">uncorrected_pvalues</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr_pvalue</span>
+            <span class="n">stats</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">curr_stat</span>
+
+    <span class="n">misc</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;uncorrected_pvalues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uncorrected_pvalues</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;stats&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stats</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B1</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;probabilities2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B2</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;observed1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_observed1</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;observed2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_observed2</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;possible1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_possible1</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;possible2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_possible2</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;group_counts1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_counts1</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;group_counts2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group_counts2</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;null_ratio&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjustment_factor</span>
+
+    <span class="n">run_pvalues</span> <span class="o">=</span> <span class="n">uncorrected_pvalues</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">run_pvalues</span><span class="p">))</span>
+    <span class="n">run_pvalues</span> <span class="o">=</span> <span class="n">run_pvalues</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">n_tests</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">run_pvalues</span><span class="p">)</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;n_tests&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_tests</span>
+
+    <span class="c1"># correct for multiple comparisons</span>
+    <span class="n">rejections_flat</span><span class="p">,</span> <span class="n">corrected_pvalues_flat</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">multipletests</span><span class="p">(</span>
+        <span class="n">run_pvalues</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">correct_method</span><span class="p">,</span>
+        <span class="n">is_sorted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">returnsorted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">rejections</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">rejections</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">rejections_flat</span>
+    <span class="n">rejections</span> <span class="o">=</span> <span class="n">_make_adjacency_dataframe</span><span class="p">(</span><span class="n">rejections</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;rejections&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rejections</span>
+
+    <span class="n">corrected_pvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">K</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    <span class="n">corrected_pvalues</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues_flat</span>
+    <span class="n">corrected_pvalues</span> <span class="o">=</span> <span class="n">_make_adjacency_dataframe</span><span class="p">(</span><span class="n">corrected_pvalues</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+    <span class="n">misc</span><span class="p">[</span><span class="s2">&quot;corrected_pvalues&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corrected_pvalues</span>
+
+    <span class="c1"># combine p-values (on the UNcorrected p-values)</span>
+    <span class="k">if</span> <span class="n">run_pvalues</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="c1"># TODO consider raising a new warning here</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+        <span class="n">pvalue</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span> <span class="o">=</span> <span class="n">combine_pvalues</span><span class="p">(</span><span class="n">run_pvalues</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">combine_method</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GroupTestResult</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">pvalue</span><span class="p">,</span> <span class="n">misc</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

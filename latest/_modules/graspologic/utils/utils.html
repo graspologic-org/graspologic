@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.utils.utils &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.utils.utils &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -296,7 +300,7 @@
 <span class="kn">import</span> <span class="nn">scipy.sparse</span>
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">linear_sum_assignment</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csgraph</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">diags</span><span class="p">,</span> <span class="n">isspmatrix_csr</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csgraph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">,</span> <span class="n">diags</span><span class="p">,</span> <span class="n">isspmatrix_csr</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse.csgraph</span> <span class="kn">import</span> <span class="n">connected_components</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">confusion_matrix</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_consistent_length</span><span class="p">,</span> <span class="n">column_or_1d</span>
@@ -310,32 +314,32 @@
 
 <span class="nd">@beartype</span>
 <span class="k">def</span> <span class="nf">average_matrices</span><span class="p">(</span>
-    <span class="n">matrices</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_matrix</span><span class="p">]]]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]:</span>
+    <span class="n">matrices</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_array</span><span class="p">]]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper method to encapsulate calculating the average of matrices represented either as a</span>
-<span class="sd">    list of numpy.ndarray or a list of scipy.sparse.csr_matrix.</span>
+<span class="sd">    list of numpy.ndarray or a list of scipy.sparse.csr_array.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_matrix]]]</span>
+<span class="sd">    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_array]]]</span>
 <span class="sd">        The list of matrices to be averaged</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    Union[np.ndarray, csr_matrix]</span>
+<span class="sd">    Union[np.ndarray, csr_array]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">matrices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">matrices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="k">elif</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">matrices</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">matrices</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrices</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">matrices</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">matrices</span><span class="p">)</span>
 
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected type </span><span class="si">{</span><span class="n">matrices</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="import_graph"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.import_graph">[docs]</a><span class="k">def</span> <span class="nf">import_graph</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function for reading a graph and returning a shared data type.</span>
 
@@ -343,7 +347,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    graph: GraphRepresentation</span>
 <span class="sd">        Either array-like, shape (n_vertices, n_vertices) numpy array,</span>
-<span class="sd">        a scipy.sparse.csr_matrix, or an object of type networkx.Graph.</span>
+<span class="sd">        a scipy.sparse.csr_array, or an object of type networkx.Graph.</span>
 
 <span class="sd">    copy: bool, (default=True)</span>
 <span class="sd">        Whether to return a copied version of array. If False and input is np.array,</span>
@@ -360,7 +364,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)):</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">to_numpy_array</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nodelist</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">)):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">memmap</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)):</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input tensor must have at most 3 dimensions, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
@@ -387,7 +391,7 @@
             <span class="n">copy</span><span class="o">=</span><span class="n">copy</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input must be networkx.Graph, np.array, or scipy.sparse.csr_matrix,</span><span class="se">\</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input must be networkx.Graph, np.array, or scipy.sparse.csr_array,</span><span class="se">\</span>
 <span class="s2">        not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
         <span class="p">)</span>
@@ -505,10 +509,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    graph : Union[np.ndarray, scipy.sparse.csr_matrix, nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDigraph]</span>
+<span class="sd">    graph : Union[np.ndarray, scipy.sparse.csr_array, nx.Graph, nx.DiGraph, nx.MultiGraph, nx.MultiDigraph]</span>
 <span class="sd">        The graph to test for weightedness. If a networkx graph, we can just ask it directly by querying the weight</span>
 <span class="sd">        attribute specified on every edge. It&#39;s possible an individual edge can be weighted but the full graph is not.</span>
-<span class="sd">        If an adjacency matrix defined by a numpy.ndarray or scipy.sparse.csr_matrix, we check every value; if</span>
+<span class="sd">        If an adjacency matrix defined by a numpy.ndarray or scipy.sparse.csr_array, we check every value; if</span>
 <span class="sd">        they are only 0 and 1, we claim the graph is unweighted.</span>
 <span class="sd">    weight_attribute : Any</span>
 <span class="sd">        Default is ``weight``. Only used for networkx, and used on the edge data dictionary as a key to look up the</span>
@@ -522,17 +526,17 @@
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    TypeError</span>
-<span class="sd">        If the provided graph is not a numpy.ndarray, scipy.sparse.csr_matrix, or nx.Graph</span>
+<span class="sd">        If the provided graph is not a numpy.ndarray, scipy.sparse.csr_array, or nx.Graph</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">((</span><span class="n">graph</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">graph</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">graph</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="n">graph</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">()</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">is_weighted</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;This function only works on numpy.ndarray or scipy.sparse.csr_matrix instances&quot;</span>
+            <span class="s2">&quot;This function only works on numpy.ndarray or scipy.sparse.csr_array instances&quot;</span>
         <span class="p">)</span>
 
 
@@ -570,15 +574,15 @@
 
 
 <div class="viewcode-block" id="symmetrize"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.symmetrize">[docs]</a><span class="k">def</span> <span class="nf">symmetrize</span><span class="p">(</span>
-    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;triu&quot;</span><span class="p">,</span> <span class="s2">&quot;tril&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;avg&quot;</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]:</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;triu&quot;</span><span class="p">,</span> <span class="s2">&quot;tril&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;avg&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function for forcing symmetry upon a graph.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    graph: object</span>
-<span class="sd">        Either array-like, (n_vertices, n_vertices) numpy matrix or csr_matrix</span>
+<span class="sd">        Either array-like, (n_vertices, n_vertices) numpy matrix or csr_array</span>
 
 <span class="sd">    method: {&#39;avg&#39; (default), &#39;triu&#39;, &#39;tril&#39;,}, optional</span>
 <span class="sd">        An option indicating which half of the edges to</span>
@@ -609,7 +613,9 @@
 <span class="sd">           [1, 1, 1]])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># graph = import_graph(graph)</span>
-    <span class="n">sparse</span> <span class="o">=</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+    <span class="n">sparse</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)</span>
+
     <span class="n">pac</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">np</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;triu&quot;</span><span class="p">:</span>
@@ -624,10 +630,15 @@
 
     <span class="n">dia</span> <span class="o">=</span> <span class="n">diags</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span> <span class="o">+</span> <span class="n">graph</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">dia</span>
+
+    <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="c1"># some scipy funcs still output a sparse matrix</span>
+        <span class="n">graph</span> <span class="o">=</span> <span class="n">csr_array</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">graph</span></div>
 
 
-<div class="viewcode-block" id="remove_loops"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remove_loops">[docs]</a><span class="k">def</span> <span class="nf">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]:</span>
+<div class="viewcode-block" id="remove_loops"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remove_loops">[docs]</a><span class="k">def</span> <span class="nf">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to remove loops from a graph.</span>
 
@@ -644,7 +655,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">graph</span> <span class="o">=</span> <span class="n">import_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
-    <span class="n">dia</span> <span class="o">=</span> <span class="n">diags</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">diagonal</span><span class="p">())</span> <span class="k">if</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
+    <span class="n">dia</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">csr_array</span><span class="p">(</span><span class="n">diags</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)</span>
+        <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
+    <span class="p">)</span>
 
     <span class="n">graph</span> <span class="o">=</span> <span class="n">graph</span> <span class="o">-</span> <span class="n">dia</span>
 
@@ -671,7 +686,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    graph: object</span>
 <span class="sd">        Either array-like, (n_vertices, n_vertices) numpy array,</span>
-<span class="sd">        scipy.sparse.csr_matrix, or an object of type networkx.Graph.</span>
+<span class="sd">        scipy.sparse.csr_array, or an object of type networkx.Graph.</span>
 
 <span class="sd">    form: {&#39;I-DAD&#39;, &#39;DAD&#39; (default), &#39;R-DAD&#39;}, string, optional</span>
 
@@ -744,7 +759,9 @@
         <span class="n">in_root</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">in_degree</span><span class="p">)</span>  <span class="c1"># this is 10x faster than ** -0.5</span>
         <span class="n">out_root</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">out_degree</span><span class="p">)</span>
 
-    <span class="n">diag</span> <span class="o">=</span> <span class="n">diags</span> <span class="k">if</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span>
+    <span class="n">sparse</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)</span>
+
+    <span class="n">diag</span> <span class="o">=</span> <span class="n">diags</span> <span class="k">if</span> <span class="n">sparse</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span>
 
     <span class="n">in_root</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">in_root</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">out_root</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">out_root</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -752,15 +769,18 @@
     <span class="n">in_root</span> <span class="o">=</span> <span class="n">diag</span><span class="p">(</span><span class="n">in_root</span><span class="p">)</span>  <span class="c1"># just change to sparse diag for sparse support</span>
     <span class="n">out_root</span> <span class="o">=</span> <span class="n">diag</span><span class="p">(</span><span class="n">out_root</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+        <span class="c1"># for some reason scipy is still returning in csr_matrix form, not what we want</span>
+        <span class="n">in_root</span> <span class="o">=</span> <span class="n">csr_array</span><span class="p">(</span><span class="n">in_root</span><span class="p">)</span>
+        <span class="n">out_root</span> <span class="o">=</span> <span class="n">csr_array</span><span class="p">(</span><span class="n">out_root</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">form</span> <span class="o">==</span> <span class="s2">&quot;I-DAD&quot;</span><span class="p">:</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">diag</span><span class="p">(</span><span class="n">in_degree</span><span class="p">)</span> <span class="o">-</span> <span class="n">A</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">in_root</span> <span class="o">@</span> <span class="n">L</span> <span class="o">@</span> <span class="n">in_root</span>
     <span class="k">elif</span> <span class="n">form</span> <span class="o">==</span> <span class="s2">&quot;DAD&quot;</span> <span class="ow">or</span> <span class="n">form</span> <span class="o">==</span> <span class="s2">&quot;R-DAD&quot;</span><span class="p">:</span>
         <span class="n">L</span> <span class="o">=</span> <span class="n">out_root</span> <span class="o">@</span> <span class="n">A</span> <span class="o">@</span> <span class="n">in_root</span>
     <span class="k">if</span> <span class="n">is_symmetric</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">symmetrize</span><span class="p">(</span>
-            <span class="n">L</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span>
-        <span class="p">)</span>  <span class="c1"># sometimes machine prec. makes this necessary</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>  <span class="c1"># sometimes machine prec. makes this necessary</span>
     <span class="k">return</span> <span class="n">L</span></div>
 
 
@@ -777,7 +797,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph,</span>
-<span class="sd">        scipy.sparse.csr_matrix, np.ndarray</span>
+<span class="sd">        scipy.sparse.csr_array, np.ndarray</span>
 <span class="sd">        Input graph in any of the above specified formats. If np.ndarray,</span>
 <span class="sd">        interpreted as an :math:`n \times n` adjacency matrix</span>
 
@@ -800,7 +820,7 @@
 <span class="sd">    False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)):</span>
         <span class="n">directed</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">is_symmetric</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
 
         <span class="n">n_components</span> <span class="o">=</span> <span class="n">connected_components</span><span class="p">(</span>
@@ -815,12 +835,10 @@
 
 <div class="viewcode-block" id="largest_connected_component"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.largest_connected_component">[docs]</a><span class="k">def</span> <span class="nf">largest_connected_component</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
-        <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span>
+        <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span>
     <span class="p">],</span>
     <span class="n">return_inds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
-    <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span>
-<span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the largest connected component for the input graph.</span>
 
@@ -829,9 +847,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix</span>
+<span class="sd">    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_array</span>
 <span class="sd">        Input graph in any of the above specified formats. If np.ndarray or</span>
-<span class="sd">        scipy.sparse.csr_matrix interpreted as an :math:`n \times n` adjacency matrix.</span>
+<span class="sd">        scipy.sparse.csr_array interpreted as an :math:`n \times n` adjacency matrix.</span>
 
 <span class="sd">    return_inds: boolean, default: False</span>
 <span class="sd">        Whether to return a np.ndarray containing the indices/nodes in the original</span>
@@ -839,7 +857,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_matrix</span>
+<span class="sd">    graph: nx.Graph, nx.DiGraph, nx.MultiDiGraph, nx.MultiGraph, np.ndarray, scipy.sparse.csr_array</span>
 <span class="sd">        New graph of the largest connected component, returned in the input format.</span>
 
 <span class="sd">    inds: (optional)</span>
@@ -848,7 +866,7 @@
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    For networks input in ``scipy.sparse.csr_matrix`` format, explicit zeros are removed</span>
+<span class="sd">    For networks input in ``scipy.sparse.csr_array`` format, explicit zeros are removed</span>
 <span class="sd">    prior to finding the largest connected component, thus they are not treated as</span>
 <span class="sd">    edges. This differs from the convention in</span>
 <span class="sd">    :func:`scipy.sparse.csgraph.connected_components`.</span>
@@ -856,12 +874,12 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">_largest_connected_component_networkx</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">return_inds</span><span class="o">=</span><span class="n">return_inds</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">)):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)):</span>
         <span class="k">return</span> <span class="n">_largest_connected_component_adjacency</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">return_inds</span><span class="o">=</span><span class="n">return_inds</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;`graph` must either be a networkx graph or an adjacency matrix in&quot;</span>
-            <span class="s2">&quot; numpy ndarray or scipy csr_matrix format.&quot;</span>
+            <span class="s2">&quot; numpy ndarray or scipy csr_array format.&quot;</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
@@ -885,12 +903,12 @@
 
 
 <span class="k">def</span> <span class="nf">_largest_connected_component_adjacency</span><span class="p">(</span>
-    <span class="n">adjacency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">adjacency</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span>
     <span class="n">return_inds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">csr_array</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]</span>
 <span class="p">]:</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">):</span>
         <span class="n">adjacency</span><span class="o">.</span><span class="n">eliminate_zeros</span><span class="p">()</span>
 
     <span class="c1"># If you treat an undirected graph as directed and take the largest weakly connected</span>
@@ -1062,7 +1080,7 @@
 
 <div class="viewcode-block" id="augment_diagonal"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.augment_diagonal">[docs]</a><span class="k">def</span> <span class="nf">augment_diagonal</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Replaces the diagonal of an adjacency matrix with :math:`\frac{d}{nverts - 1}` where</span>
 <span class="sd">    :math:`d` is the degree vector for an unweighted graph and the sum of magnitude of</span>
@@ -1080,7 +1098,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    graph : np.array or csr_matrix</span>
+<span class="sd">    graph : np.array or csr_array</span>
 <span class="sd">        Adjacency matrix with average degrees added to the diagonal.</span>
 
 <span class="sd">    Examples</span>
@@ -1111,7 +1129,7 @@
     <span class="k">return</span> <span class="n">graph</span></div>
 
 
-<span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">]:</span>
+<span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Binarize the input adjacency matrix.</span>
 
@@ -1210,9 +1228,9 @@
     <span class="n">indices</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
     <span class="n">return_removed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
-    <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span>
-    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
+    <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+    <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]],</span>
 <span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove a subgraph of adjacency vectors from an adjacency matrix, giving back the</span>

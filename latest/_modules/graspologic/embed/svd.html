@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.svd &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.embed.svd &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -342,7 +346,7 @@
 
 
 <div class="viewcode-block" id="select_dimension"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.select_dimension">[docs]</a><span class="k">def</span> <span class="nf">select_dimension</span><span class="p">(</span>
-    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_array</span><span class="p">],</span>
     <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">n_elbows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
     <span class="n">threshold</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -392,7 +396,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Handle input data</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">sp</span><span class="o">.</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;X must be a numpy array or scipy.sparse.csr_matrix, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;X must be a numpy array or scipy.sparse.csr_array, not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="nb">type</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -469,7 +473,7 @@
 
 
 <div class="viewcode-block" id="select_svd"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.select_svd">[docs]</a><span class="k">def</span> <span class="nf">select_svd</span><span class="p">(</span>
-    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_matrix</span><span class="p">],</span>
+    <span class="n">X</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">csr_array</span><span class="p">],</span>
     <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
     <span class="n">algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
@@ -507,7 +511,7 @@
 <span class="sd">            :func:`sklearn.utils.extmath.randomized_svd`</span>
 <span class="sd">        - &#39;full&#39;</span>
 <span class="sd">            Computes full svd using :func:`scipy.linalg.svd`</span>
-<span class="sd">            Does not support ``graph`` input of type scipy.sparse.csr_matrix</span>
+<span class="sd">            Does not support ``graph`` input of type scipy.sparse.csr_array</span>
 <span class="sd">        - &#39;truncated&#39;</span>
 <span class="sd">            Computes truncated svd using :func:`scipy.sparse.linalg.svds`</span>
 <span class="sd">        - &#39;eigsh&#39;</span>
@@ -550,7 +554,7 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span> <span class="ow">and</span> <span class="n">sp</span><span class="o">.</span><span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;full&#39; agorithm does not support scipy.sparse.csr_matrix inputs.&quot;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&#39;full&#39; agorithm does not support scipy.sparse.csr_array inputs.&quot;</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">n_components</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

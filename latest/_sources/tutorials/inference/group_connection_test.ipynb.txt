@@ -1,0 +1,238 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "567eb99a",
+   "metadata": {},
+   "source": [
+    "# Group connection test\n",
+    "In this tutorial, we demonstrate the use of the ``graspologic.inference`` module to compare subgraph densities of two networks, both of which contain nodes belonging to some known set of families or groups. The number and identity of the families or groups must be the same in the two networks. The ``group_connection_test`` function can then be used to determine whether there are any statistical differences in the group-to-group connection densities of the two networks.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "78dfca69",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2022-04-13T20:42:53.628597Z",
+     "iopub.status.busy": "2022-04-13T20:42:53.627851Z",
+     "iopub.status.idle": "2022-04-13T20:42:59.829258Z",
+     "shell.execute_reply": "2022-04-13T20:42:59.829874Z"
+    },
+    "tags": [
+     "hide-input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "\n",
+    "from graspologic.inference.group_connection_test import group_connection_test\n",
+    "from graspologic.simulations import sbm\n",
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "np.random.seed(8888)\n",
+    "\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "75aa28e9",
+   "metadata": {},
+   "source": [
+    "## The stochastic block model (SBM)\n",
+    "A [**stochastic block model (SBM)**\n",
+    "](https://en.wikipedia.org/wiki/Stochastic_block_model)\n",
+    "is a popular statistical model of networks. Put simply, this model treats the\n",
+    "probability of an edge occuring between node $i$ and node $j$ as purely a function of\n",
+    "the *communities* or *groups* that node $i$ and $j$ belong to. Therefore, this model\n",
+    "is parameterized by:\n",
+    "\n",
+    "   1. An assignment of each node in the network to a group. Note that this assignment\n",
+    "      can be considered to be deterministic or random, depending on the specific\n",
+    "      framing of the model one wants to use.\n",
+    "   2. A set of group-to-group connection probabilities\n",
+    "\n",
+    "Let $n$ be the number of nodes, and $K$ be the number of groups in an SBM. For a\n",
+    "network $A$ sampled from an SBM:\n",
+    "\n",
+    "$$ A \\sim SBM(B, \\tau)$$\n",
+    "\n",
+    "We say that for all $(i,j), i \\neq j$, with $i$ and $j$ both running\n",
+    "from $1 ... n$ the probability of edge $(i,j)$ occuring is:\n",
+    "\n",
+    "$$ P[A_{ij} = 1] = P_{ij} = B_{\\tau_i, \\tau_j} $$\n",
+    "\n",
+    "where $B \\in [0,1]^{K \\times K}$ is a matrix of group-to-group connection\n",
+    "probabilities and $\\tau \\in \\{1...K\\}^n$ is a vector of node-to-group assignments.\n",
+    "Note that here we are assuming $\\tau$ is a fixed vector of assignments, though other\n",
+    "formuations of the SBM allow these assignments to themselves come from a categorical\n",
+    "distribution.\n"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "c94ac2f1",
+   "metadata": {},
+   "source": [
+    "## Testing under the SBM model\n",
+    "Assuming this model, there are a few ways that one could test for differences between\n",
+    "two networks. In this example, we are interested in comparing the group-to-group\n",
+    "connection probability matrices, $B$,  for the two graphs.\n",
+    "\n",
+    "We are interested in testing:\n",
+    "\n",
+    "$$ H_0: B^{(L)} = B^{(R)}, \\quad H_A: B^{(L)} \\neq B^{(R)} $$\n",
+    "\n",
+    "Rather than having to compare one proportion as in the density test, this test \n",
+    "requires comparing all $K^2$ probabilities between the SBM models for both\n",
+    "networks.\n",
+    "\n",
+    "\n",
+    "The hypothesis test above can be decomposed into $K^2$ indpendent hypotheses. \n",
+    "$B^{(L)}$ and $B^{(R)}$ are both $K \\times K$ matrices, where each element $b_{kl}$ \n",
+    "represents the probability of a connection from a node in group $k$ to one in group $l$. We\n",
+    "also know that group $k$ for the left network corresponds with group $k$ for the\n",
+    "right. In other words, the *groups* are matched. Thus, we are interested in testing,\n",
+    "for $k, l$ both running from $1...K$:\n",
+    "\n",
+    "$$ H_0: B_{kl}^{(L)} = B_{kl}^{(R)}, \\quad H_A: B_{kl}^{(L)} \\neq B_{kl}^{(R)}$$\n",
+    "\n"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "7dfedeec",
+   "metadata": {},
+   "source": [
+    "To perform the comparison, the user provides the adjacency matrices and label vectors for both networks. In this example, we will generate random networks with known properties to demonstrate the use of the ``group_connection_test`` function.\n",
+    "\n",
+    "First, we generate and plot an adjacency matrix representing a network with two groups and a specified array of group-to-group connection probabilities."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8ecfa8db",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2022-04-13T20:42:59.842240Z",
+     "iopub.status.busy": "2022-04-13T20:42:59.841624Z",
+     "iopub.status.idle": "2022-04-13T20:43:04.453604Z",
+     "shell.execute_reply": "2022-04-13T20:43:04.454013Z"
+    },
+    "lines_to_next_cell": 2,
+    "tags": [
+     "hide-input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "P = np.array([[0.8, 0.6],\n",
+    "              [0.6, 0.8]])\n",
+    "csize = [50] * 2\n",
+    "A1, labels1 = sbm(csize, P, return_labels = True)\n",
+    "heatmap(A1, title='2-block SBM adjacency matrix')\n"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "84334ee7",
+   "metadata": {},
+   "source": [
+    "Next, we generate a second adjacency matrix for a second network. We will give this network a different number of nodes and a different connection probability matrix."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9220a838",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "P = np.array([[0.865, 0.66],\n",
+    "              [0.66, 0.865]])\n",
+    "csize = [60] * 2\n",
+    "A2, labels2 = sbm(csize, P, return_labels = True)\n",
+    "heatmap(A2, title='2-block SBM adjacency matrix')"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "81e09cff",
+   "metadata": {},
+   "source": [
+    "Now, we can run ``group_connection_test`` to assess whether there is a statistical difference between these two networks. Of course, we expect that there will be as, by design, their group-to-group connection densities are different."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dddfad17",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stat, pvalue, misc = group_connection_test(A1, A2, labels1, labels2)\n",
+    "print(pvalue)"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "935ebedb",
+   "metadata": {},
+   "source": [
+    "This extremely low p-value suggests that we should reject the null hypothesis and conclude that the two networks are statistically different under the stochastic block model. The individual p-values which compare each group-to-group connection are also extremely low:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c9169bd1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(misc[\"corrected_pvalues\"])"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "cell_metadata_filter": "-all",
+   "main_language": "python",
+   "notebook_metadata_filter": "-all"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.9.5 ('venv')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.5"
+  },
+  "vscode": {
+   "interpreter": {
+    "hash": "7b0fa2133086a4b245bc2fc6826174141053e0208e756a5fae09980b942619c9"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

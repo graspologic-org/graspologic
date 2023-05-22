@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.edge_swaps &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.models.edge_swaps &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -287,7 +291,7 @@
 <span class="kn">import</span> <span class="nn">numba</span> <span class="k">as</span> <span class="nn">nb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">lil_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_array</span><span class="p">,</span> <span class="n">lil_matrix</span>
 <span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_scalar</span>
 
 <span class="kn">from</span> <span class="nn">graspologic.preconditions</span> <span class="kn">import</span> <span class="n">check_argument</span>
@@ -305,7 +309,7 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)</span>
+<span class="sd">    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)</span>
 <span class="sd">        The initial adjacency matrix to perform edge swaps on. Must be unweighted and undirected.</span>
 
 <span class="sd">    edge_list : np.ndarray, shape (n_verts, 2)</span>
@@ -349,7 +353,7 @@
 
         <span class="n">adjacency</span> <span class="o">=</span> <span class="n">import_graph</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">):</span>
             <span class="c1"># more efficient for manipulations which change sparsity structure</span>
             <span class="n">adjacency</span> <span class="o">=</span> <span class="n">lil_matrix</span><span class="p">(</span><span class="n">adjacency</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_edge_swap_function</span> <span class="o">=</span> <span class="n">_edge_swap</span>
@@ -412,7 +416,7 @@
 
         <span class="n">adjacency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adjacency</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">adjacency</span><span class="p">,</span> <span class="n">lil_matrix</span><span class="p">):</span>
-            <span class="n">adjacency</span> <span class="o">=</span> <span class="n">csr_matrix</span><span class="p">(</span><span class="n">adjacency</span><span class="p">)</span>
+            <span class="n">adjacency</span> <span class="o">=</span> <span class="n">csr_array</span><span class="p">(</span><span class="n">adjacency</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">adjacency</span> <span class="o">=</span> <span class="n">adjacency</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
@@ -425,11 +429,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Performs the edge swap on the adjacency matrix. If adjacency is</span>
 <span class="sd">    np.ndarray, then nopython=True is used in numba, but if adjacency</span>
-<span class="sd">    is csr_matrix, then forceobj=True is used in numba</span>
+<span class="sd">    is csr_array, then forceobj=True is used in numba</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)</span>
+<span class="sd">    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)</span>
 <span class="sd">        The initial adjacency matrix in which edge swaps are performed on it</span>
 
 <span class="sd">    edge_list : np.ndarray, shape (n_verts, 2)</span>
@@ -440,7 +444,7 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    adjacency : np.ndarray OR csr_matrix, shape (n_verts, n_verts)</span>
+<span class="sd">    adjacency : np.ndarray OR csr_array, shape (n_verts, n_verts)</span>
 <span class="sd">        The adjancency matrix after an edge swap is performed on the graph</span>
 
 <span class="sd">    edge_list : np.ndarray (n_verts, 2)</span>

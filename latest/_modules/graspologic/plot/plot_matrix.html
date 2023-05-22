@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot_matrix &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.plot.plot_matrix &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -294,13 +298,13 @@
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">ListedColormap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_array</span>
 
 
 <span class="k">def</span> <span class="nf">_check_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">plot_type</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="s2">&quot;scattermap&quot;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_matrix</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`data` must be a np.ndarray or scipy.sparse.csr_matrix.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`data` must be a np.ndarray or scipy.sparse.csr_array.&quot;</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="s2">&quot;heatmap&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;`data` must be a np.ndarray. If your data is a sparse matrix, please&quot;</span>
@@ -655,7 +659,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : np.narray, scipy.sparse.csr_matrix, ndim=2</span>
+<span class="sd">    data : np.narray, scipy.sparse.csr_array, ndim=2</span>
 <span class="sd">        Matrix to plot</span>
 <span class="sd">    ax: matplotlib axes object, optional</span>
 <span class="sd">        Axes in which to draw the plot, by default None</span>
@@ -812,7 +816,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2</span>
+<span class="sd">    data : np.ndarray or scipy.sparse.csr_array with ndim=2</span>
 <span class="sd">        Matrix to plot. Sparse matrix input is only accepted if ``plot_type == &#39;scattermap&#39;``.</span>
 <span class="sd">    ax : matplotlib axes object (default=None)</span>
 <span class="sd">        Axes in which to draw the plot. If no axis is passed, one will be created.</span>
@@ -1195,7 +1199,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2</span>
+<span class="sd">    data : np.ndarray or scipy.sparse.csr_array with ndim=2</span>
 <span class="sd">        Matrix to plot, must be square.</span>
 <span class="sd">        Sparse matrix input is only accepted if ``plot_type == &#39;scattermap&#39;``.</span>
 <span class="sd">    ax : matplotlib axes object (default=None)</span>

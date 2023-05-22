@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.embed.adjacency_spectral_embedding &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.pipeline.embed.adjacency_spectral_embedding &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -304,12 +308,13 @@
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">__SVD_SOLVER_TYPES</span>  <span class="c1"># from the module init</span>
 <span class="kn">from</span> <span class="nn">._elbow</span> <span class="kn">import</span> <span class="n">_index_of_elbow</span>
+<span class="kn">from</span> <span class="nn">._types</span> <span class="kn">import</span> <span class="n">NxGraphType</span>
 <span class="kn">from</span> <span class="nn">.embeddings</span> <span class="kn">import</span> <span class="n">Embeddings</span>
 
 
 <div class="viewcode-block" id="adjacency_spectral_embedding"><a class="viewcode-back" href="../../../../reference/reference/pipeline.html#graspologic.pipeline.embed.adjacency_spectral_embedding">[docs]</a><span class="nd">@beartype</span>
 <span class="k">def</span> <span class="nf">adjacency_spectral_embedding</span><span class="p">(</span>
-    <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">OrderedGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">OrderedDiGraph</span><span class="p">],</span>
+    <span class="n">graph</span><span class="p">:</span> <span class="n">NxGraphType</span><span class="p">,</span>
     <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
     <span class="n">elbow_cut</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">svd_solver_algorithm</span><span class="p">:</span> <span class="n">SvdAlgorithmType</span> <span class="o">=</span> <span class="s2">&quot;randomized&quot;</span><span class="p">,</span>
@@ -372,7 +377,7 @@
 <span class="sd">                :func:`sklearn.utils.extmath.randomized_svd`</span>
 <span class="sd">            - &#39;full&#39;</span>
 <span class="sd">                Computes full svd using :func:`scipy.linalg.svd`</span>
-<span class="sd">                Does not support ``graph`` input of type scipy.sparse.csr_matrix</span>
+<span class="sd">                Does not support ``graph`` input of type scipy.sparse.csr_array</span>
 <span class="sd">            - &#39;truncated&#39;</span>
 <span class="sd">                Computes truncated svd using :func:`scipy.sparse.linalg.svds`</span>
 <span class="sd">    svd_solver_iterations : int (default=5)</span>
@@ -460,7 +465,7 @@
         <span class="p">)</span>
         <span class="n">used_weight_attribute</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># this supercedes what the user said, because</span>
         <span class="c1"># not all of the weights are real numbers, if they exist at all</span>
-        <span class="c1"># this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()</span>
+        <span class="c1"># this weight=1.0 treatment actually happens in nx.to_scipy_sparse_array()</span>
 
     <span class="n">node_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">()))</span>
 

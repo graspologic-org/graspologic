@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.omni &mdash; graspologic 3.0.0 documentation</title>
+  <title>graspologic.embed.omni &mdash; graspologic 3.1.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.0.0
+                3.1.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
@@ -211,6 +212,9 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
 </ul>
@@ -290,7 +294,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_matrix</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">isspmatrix_csr</span><span class="p">,</span> <span class="n">vstack</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">csr_array</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">isspmatrix_csr</span><span class="p">,</span> <span class="n">vstack</span>
 
 <span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">List</span>
 
@@ -301,7 +305,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_get_omnibus_matrix_sparse</span><span class="p">(</span><span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_matrix</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">csr_matrix</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_get_omnibus_matrix_sparse</span><span class="p">(</span><span class="n">matrices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_array</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">csr_array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate the omnibus matrix from a list of sparse adjacency matrices as described by &#39;A central limit theorem</span>
 <span class="sd">    for an omnibus embedding of random dot product graphs.&#39;</span>
@@ -336,7 +340,7 @@
         <span class="c1"># row</span>
         <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hstack</span><span class="p">(</span><span class="n">current_row</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">vstack</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">csr_array</span><span class="p">(</span><span class="n">vstack</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;csr&quot;</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_get_laplacian_matrices</span><span class="p">(</span>
@@ -381,7 +385,7 @@
 <span class="sd">    out : 2d-array</span>
 <span class="sd">        Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">isspmatrix_csr</span><span class="p">(</span><span class="n">graphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graphs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">csr_array</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">_get_omnibus_matrix_sparse</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="n">shape</span> <span class="o">=</span> <span class="n">graphs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
@@ -528,7 +532,7 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        graphs : list of nx.Graph or ndarray, or csr_matrix</span>
+<span class="sd">        graphs : list of nx.Graph or ndarray, or csr_array</span>
 <span class="sd">            If list of nx.Graph, each Graph must contain same number of nodes.</span>
 <span class="sd">            If list of ndarray, each array must have shape (n_vertices, n_vertices).</span>
 <span class="sd">            If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).</span>
