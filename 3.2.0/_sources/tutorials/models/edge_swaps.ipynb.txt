@@ -1,0 +1,174 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Degree Preserving Edge Swaps"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.datasets import load_drosophila_right\n",
+    "from graspologic.models import EdgeSwapper\n",
+    "from graspologic.plot import heatmap\n",
+    "from graspologic.utils import binarize, symmetrize\n",
+    "import networkx as nx\n",
+    "from scipy.sparse import csr_array"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "`EdgeSwapper` is a class that performs degree preserving edge swaps on networks. The distributions of graphs with a fixed degree sequence are known as configuration models, and these have extensive application for analyzing network datasets. The current implementation works on simple graphs (unewighted, no loops) that are of type `np.ndarray` or `csr_array`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now let us run dpes on these graphs and ensure that they have the same degree sequence"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "To begin, we'll look at an example network, the _Drosophila melanogaster_ larva right mushroom body connectome from [Eichler et al. 2017](https://www.ncbi.nlm.nih.gov/pubmed/28796202). \n",
+    "\n",
+    "Note: here we make the network undirected and unweighted for compatibility with the current\n",
+    "implementation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#load the data\n",
+    "adj, labels = load_drosophila_right(return_labels=True)\n",
+    "adj = symmetrize(adj)\n",
+    "adj = binarize(adj)\n",
+    "_ = heatmap(adj,\n",
+    "        inner_hier_labels=labels,\n",
+    "        title='Drosophila right MB',\n",
+    "        font_scale=1.5,\n",
+    "        sort_nodes=True, \n",
+    "        cbar=False)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, we'll use `EdgeSwapper` to perform 10,000 random degree-preserving edge swaps - this\n",
+    "will dramatically change the structure of the network but keep the degree of each node\n",
+    "the same.  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "swapper = EdgeSwapper(adj, seed=8888)\n",
+    "swapped_adj, _ = swapper.swap_edges(n_swaps=10000)\n",
+    "_ = heatmap(swapped_adj,\n",
+    "        title='Drosophila right MB swapped',\n",
+    "        font_scale=1.5,\n",
+    "        sort_nodes=True, \n",
+    "        inner_hier_labels=labels,\n",
+    "        cbar=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can see how the structure of the network above has changed: for example, there are\n",
+    "now many edges among \"I\" (input) neurons when there were none before. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can verify that the degree of each node in the network has been preserved:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "g = nx.from_numpy_array(adj)\n",
+    "swapped_g = nx.from_numpy_array(swapped_adj)\n",
+    "print(list(g.degree()) == list(swapped_g.degree()))"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "`EdgeSwapper` also works with `csr_array` adjacency representations. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "swapper = EdgeSwapper(csr_array(adj), seed=8888)\n",
+    "swapped_adj, _ = swapper.swap_edges(n_swaps=1000)\n",
+    "g = nx.from_numpy_array(adj)\n",
+    "swapped_g = nx.from_numpy_array(swapped_adj)\n",
+    "print(list(g.degree()) == list(swapped_g.degree()))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Often, degree-preserving edge swaps are used to sample a series of networks which resemble\n",
+    "the original network in degree, but are otherwise random. This distribution of networks\n",
+    "(sometimes called a configuration model) can be used to compare properties of the original\n",
+    "network to this null distribution in order to evaluate whether some property is more or\n",
+    "less prevalent in a given network than would be expected by chance. However, it is important\n",
+    "to know that in practice, it can be difficult to tell _how many_ edge swaps to perform\n",
+    "to find a new network which is independent from the one you started with. "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
