@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 3.1.0 documentation</title>
+  <title>Inference &mdash; graspologic 3.2.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
             graspologic
           </a>
               <div class="version">
-                3.1.0
+                3.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -66,6 +66,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-2-0">graspologic 3.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
@@ -710,9 +711,9 @@ distributions are generated</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
-<li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>) -- </p></li>
+<li><p><strong>embedding</strong> (<em>typing_extensions.Literal</em><em>[</em><em>ase</em><em>, </em><em>omnibus</em><em>]</em>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
-<li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>) -- </p></li>
+<li><p><strong>test_case</strong> (<em>typing_extensions.Literal</em><em>[</em><em>rotation</em><em>, </em><em>scalar-rotation</em><em>, </em><em>diagonal-rotation</em><em>]</em>) -- </p></li>
 <li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 </ul>
@@ -938,7 +939,7 @@ two input graphs.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
 <li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.10.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.1)"><em>Graph</em></a>) -- </p></li>
-<li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>) -- </p></li>
+<li><p><strong>test</strong> (<em>typing_extensions.Literal</em><em>[</em><em>cca</em><em>, </em><em>dcorr</em><em>, </em><em>hhg</em><em>, </em><em>rv</em><em>, </em><em>hsic</em><em>, </em><em>mgc</em><em>]</em>) -- </p></li>
 <li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a>) -- </p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>n_bootstraps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
@@ -946,7 +947,7 @@ two input graphs.</p>
 <li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
 <li><p><strong>size_correction</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 <li><p><strong>pooled</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
-<li><p><strong>align_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'sign_flips'</em><em>, </em><em>'seedless_procrustes'</em><em>] </em><em>| </em><em>None</em>) -- </p></li>
+<li><p><strong>align_type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>sign_flips</em><em>, </em><em>seedless_procrustes</em><em>] </em><em>| </em><em>None</em>) -- </p></li>
 <li><p><strong>align_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>
 <li><p><strong>input_graph</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) -- </p></li>
 </ul>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 3.1.0 documentation</title>
+  <title>Matrixplot and Adjplot: Visualize and sort matrices with metadata &mdash; graspologic 3.2.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.1.0
+                3.2.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -67,6 +67,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-2-0">graspologic 3.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../reference/release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
@@ -324,8 +325,8 @@
   from .autonotebook import tqdm as notebook_tqdm
 /opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
   @numba.jit()
-/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
-  _edge_swap_numba = nb.jit(_edge_swap)
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The keyword argument &#39;nopython=False&#39; was supplied. From Numba 0.59.0 the default is being changed to True and use of &#39;nopython=False&#39; will raise a warning as the argument will have no effect. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap, nopython=False)
 </pre></div></div>
 </div>
 <section id="Simulate-a-binary-graph-using-stochastic-block-model">
@@ -412,7 +413,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe852834880&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22fb195310&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -456,7 +457,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe8528c9cd0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f23405938b0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -495,7 +496,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe8527dbe50&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f8d44fd0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -532,7 +533,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84d2dbc70&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f8c75970&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -577,7 +578,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe8533e29a0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22fbd99910&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -657,7 +658,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe853686cd0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22fbfcf730&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -693,7 +694,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe852b0daf0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22fb5ce8b0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -729,7 +730,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe85326e670&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f5591ee0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -769,7 +770,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe85313ea60&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f8cb75e0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -805,7 +806,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84c79b9a0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f5085f10&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -844,7 +845,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84c5c6310&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f4efedf0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -884,7 +885,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84c3ad130&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f4cdceb0&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -927,7 +928,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84c11ea30&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f4a63310&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -968,7 +969,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe84c0dc5e0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f48f8370&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1016,7 +1017,7 @@ P &=
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 (&lt;Axes: &gt;,
- &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7fe847faefa0&gt;)
+ &lt;mpl_toolkits.axes_grid1.axes_divider.AxesDivider at 0x7f22f47f6f40&gt;)
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
