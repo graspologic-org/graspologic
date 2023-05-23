@@ -3,6 +3,11 @@
 Release Log
 ===========
 
+graspologic 3.2.0
+-----------------
+- Added Python 3.11 support
+  `#1039 <https://github.com/microsoft/graspologic/pull/1039>`
+
 graspologic 3.1.0
 -----------------
 - Added density and group connection tests
