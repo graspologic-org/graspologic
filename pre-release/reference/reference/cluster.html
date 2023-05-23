@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clustering &mdash; graspologic 3.1.0dev5027620150 documentation</title>
+  <title>Clustering &mdash; graspologic 3.2.0dev5059761238 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -34,7 +34,7 @@
             graspologic
           </a>
               <div class="version">
-                3.1.0dev5027620150
+                3.2.0dev5059761238
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -601,12 +601,12 @@ for all possible number of clusters given by <code class="docutils literal notra
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>min_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>max_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>) -- </p></li>
-<li><p><strong>covariance_type</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'all'</em><em>, </em><em>typing.Literal</em><em>[</em><em>'spherical'</em><em>, </em><em>'diag'</em><em>, </em><em>'tied'</em><em>, </em><em>'full'</em><em>]</em><em>] </em><em>| </em><em>~typing.List</em><em>[</em><em>~typing.Literal</em><em>[</em><em>'spherical'</em><em>, </em><em>'diag'</em><em>, </em><em>'tied'</em><em>, </em><em>'full'</em><em>]</em><em>] </em><em>| </em><em>~numpy.ndarray</em>) -- </p></li>
+<li><p><strong>covariance_type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>all</em><em>, </em><em>spherical</em><em>, </em><em>diag</em><em>, </em><em>tied</em><em>, </em><em>full</em><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.List" title="(in Python v3.9)"><em>List</em></a><em>[</em><em>typing_extensions.Literal</em><em>[</em><em>spherical</em><em>, </em><em>diag</em><em>, </em><em>tied</em><em>, </em><em>full</em><em>]</em><em>] </em><em>| </em><em>ndarray</em>) -- </p></li>
 <li><p><strong>tol</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>reg_covar</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
 <li><p><strong>max_iter</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>n_init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>init_params</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'random'</em><em>, </em><em>'kmeans'</em><em>]</em>) -- </p></li>
+<li><p><strong>init_params</strong> (<em>typing_extensions.Literal</em><em>[</em><em>random</em><em>, </em><em>kmeans</em><em>]</em>) -- </p></li>
 <li><p><strong>random_state</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>RandomState</em><em> | </em><em>None</em>) -- </p></li>
 </ul>
 </dd>
@@ -1235,7 +1235,7 @@ Engineering, 4(1), 13-26.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cluster_method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'gmm'</em><em>, </em><em>'kmeans'</em><em>]</em>) -- </p></li>
+<li><p><strong>cluster_method</strong> (<em>typing_extensions.Literal</em><em>[</em><em>gmm</em><em>, </em><em>kmeans</em><em>]</em>) -- </p></li>
 <li><p><strong>min_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>max_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
 <li><p><strong>cluster_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>]</em>) -- </p></li>

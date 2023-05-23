@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction to Graph Matching &mdash; graspologic 3.1.0dev5027620150 documentation</title>
+  <title>Introduction to Graph Matching &mdash; graspologic 3.2.0dev5059761238 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/nbsphinx-code-cells.css" type="text/css" />
@@ -37,7 +37,7 @@
             graspologic
           </a>
               <div class="version">
-                3.1.0dev5027620150
+                3.2.0dev5059761238
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -348,8 +348,8 @@
   from .autonotebook import tqdm as notebook_tqdm
 /opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/umap/umap_.py:660: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
   @numba.jit()
-/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The &#39;nopython&#39; keyword argument was not supplied to the &#39;numba.jit&#39; decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
-  _edge_swap_numba = nb.jit(_edge_swap)
+/home/runner/work/graspologic/graspologic/graspologic/models/edge_swaps.py:215: NumbaDeprecationWarning: The keyword argument &#39;nopython=False&#39; was supplied. From Numba 0.59.0 the default is being changed to True and use of &#39;nopython=False&#39; will raise a warning as the argument will have no effect. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.
+  _edge_swap_numba = nb.jit(_edge_swap, nopython=False)
 </pre></div></div>
 </div>
 <p>For the sake of this tutorial, we will use FAQ to solve the GMP for two graphs where we know a solution exists. Below, we sample a binary graph (undirected and no self-loops) <span class="math notranslate nohighlight">\(G_1 \sim ER_{NP}(50, 0.3)\)</span>. Then, we randomly shuffle the nodes of <span class="math notranslate nohighlight">\(G_1\)</span> to initiate <span class="math notranslate nohighlight">\(G_2\)</span>. The number of edge disagreements as a result of the node shuffle is printed below.</p>
