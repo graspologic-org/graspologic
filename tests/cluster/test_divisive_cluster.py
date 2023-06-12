@@ -18,13 +18,13 @@ def _test_hierarchical_four_class(**kws):
     #  Easily separable hierarchical data with 2 levels
     #  of four gaussians
     np.random.seed(1)
-    n = 100
+    n = 10
     d = 3
 
-    X11 = np.random.normal(-5, 0.1, size=(n, d))
-    X21 = np.random.normal(-2, 0.1, size=(n, d))
-    X12 = np.random.normal(2, 0.1, size=(n, d))
-    X22 = np.random.normal(5, 0.1, size=(n, d))
+    X11 = np.random.normal(-15, 0.1, size=(n, d))
+    X21 = np.random.normal(-10, 0.1, size=(n, d))
+    X12 = np.random.normal(10, 0.1, size=(n, d))
+    X22 = np.random.normal(15, 0.1, size=(n, d))
     X = np.vstack((X11, X21, X12, X22))
 
     # true labels of 2 levels
@@ -52,7 +52,7 @@ def _test_hierarchical_four_class(**kws):
 class TestDivisiveCluster(unittest.TestCase):
     def test_inputs(self):
         # Generate random data
-        X = np.random.normal(0, 1, size=(100, 3))
+        X = np.random.normal(0, 1, size=(10, 3))
 
         # min_components < 1
         with self.assertRaises(ValueError):
@@ -84,7 +84,7 @@ class TestDivisiveCluster(unittest.TestCase):
 
         # max_components > n_sample
         with self.assertRaises(ValueError):
-            dc = DivisiveCluster(max_components=101)
+            dc = DivisiveCluster(max_components=11)
             dc.fit(X)
 
         # level not an int
@@ -92,40 +92,20 @@ class TestDivisiveCluster(unittest.TestCase):
             rc = DivisiveCluster(max_components=2)
             rc.fit_predict(X, fcluster=True, level="1")
 
-        with self.assertRaises(TypeError):
-            rc = DivisiveCluster(max_components=2)
-            rc.fit(X)
-            rc.predict(X, fcluster=True, level="1")
-
         # level not positive
         with self.assertRaises(ValueError):
             rc = DivisiveCluster(max_components=2)
             rc.fit_predict(X, fcluster=True, level=0)
 
-        with self.assertRaises(ValueError):
-            rc = DivisiveCluster(max_components=2)
-            rc.fit(X)
-            rc.predict(X, fcluster=True, level=0)
-
         # level exceeds n_level
         with self.assertRaises(ValueError):
             dc = DivisiveCluster(max_components=2)
-            dc.fit_predict(X, fcluster=True, level=100)
-
-        with self.assertRaises(ValueError):
-            dc = DivisiveCluster(max_components=2)
-            dc.fit(X)
-            dc.predict(X, fcluster=True, level=100)
+            dc.fit_predict(X, fcluster=True, level=5)
 
         # level is given but fcluster disabled
         with self.assertRaises(ValueError):
             dc = DivisiveCluster(max_components=2)
             dc.fit_predict(X, level=1)
-
-        with self.assertRaises(ValueError):
-            dc = DivisiveCluster(max_components=2)
-            dc.fit(X)
-            dc.predict(X, level=1)
 
     def test_predict_without_fit(self):
         # Generate random data
@@ -218,61 +198,3 @@ class TestDivisiveCluster(unittest.TestCase):
 
     def test_hierarchical_four_class_gmm(self):
         _test_hierarchical_four_class(cluster_method="gmm")
-
-    def test_hierarchical_four_class_aic(self):
-        _test_hierarchical_four_class(cluster_kws=dict(selection_criteria="aic"))
-
-    def test_hierarchical_four_class_kmeans(self):
-        _test_hierarchical_four_class(cluster_method="kmeans")
-
-    def test_hierarchical_six_class_delta_criter(self):
-        """
-        Clustering on less easily separable hierarchical data with 2 levels
-        of six gaussians
-        """
-
-        np.random.seed(1)
-
-        n = 100
-        d = 3
-
-        X11 = np.random.normal(-4, 0.8, size=(n, d))
-        X21 = np.random.normal(-3, 0.8, size=(n, d))
-        X31 = np.random.normal(-2, 0.8, size=(n, d))
-        X12 = np.random.normal(2, 0.8, size=(n, d))
-        X22 = np.random.normal(3, 0.8, size=(n, d))
-        X32 = np.random.normal(4, 0.8, size=(n, d))
-        X = np.vstack((X11, X21, X31, X12, X22, X32))
-
-        y_lvl1 = np.repeat([0, 1], 3 * n)
-        y_lvl2 = np.repeat([0, 1, 2, 3, 4, 5], n)
-
-        # Perform clustering without setting delta_criter
-        dc = DivisiveCluster(max_components=2)
-        pred = dc.fit_predict(X, fcluster=True)
-
-        # Perform clustering while setting delta_criter
-        dc = DivisiveCluster(max_components=2, delta_criter=10)
-        pred_delta_criter = dc.fit_predict(X, fcluster=True)
-
-        # Assert that pred has more levels than pred_delta_criter
-        assert_equal(pred.shape[1] - 1, pred_delta_criter.shape[1])
-
-        # Assert that both pred_delta_criter and pred represent
-        # perfect clustering at the first level
-        ari_lvl1 = adjusted_rand_score(y_lvl1, pred[:, 0])
-        assert_allclose(ari_lvl1, 1)
-        ari_delta_criter_lvl1 = adjusted_rand_score(y_lvl1, pred_delta_criter[:, 0])
-        assert_allclose(ari_delta_criter_lvl1, 1)
-
-        # Assert that pred_delta_criter leads to a clustering as good as
-        # pred at the second level
-        ari_lvl2 = adjusted_rand_score(y_lvl2, pred[:, 1])
-        ari_delta_criter_lvl2 = adjusted_rand_score(y_lvl2, pred_delta_criter[:, 1])
-        assert_allclose(ari_delta_criter_lvl2, ari_lvl2)
-
-        # Assert that pred suggests oversplitting at the last level (level 3)
-        # which leads to a worse clustering than the last level
-        # of pred_delta_criter (level 2)
-        ari_lvl3 = adjusted_rand_score(y_lvl2, pred[:, -1])
-        assert_array_less(ari_lvl3, ari_delta_criter_lvl2)

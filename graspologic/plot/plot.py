@@ -17,13 +17,14 @@ from matplotlib.collections import LineCollection
 from matplotlib.colors import Colormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from scipy import linalg
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
 from graspologic.types import Dict, List, Tuple
 
 from ..embed import select_svd
+from ..pipeline.embed._elbow import _index_of_elbow
 from ..preconditions import (
     check_argument,
     check_argument_types,
@@ -441,7 +442,7 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
@@ -606,14 +607,14 @@ def pairplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     alpha : float, optional, default: 0.7
         Opacity value of plotter markers between 0 and 1
     size : float or int, optional, default: 50
         Size of plotted markers.
     marker : string, optional, default: '.'
         Matplotlib marker specifier, see the marker options at
-        :doc:`Matplotlib style marker specification <matplotlib:api/markers_api>`
+        :doc:`Matplotlib style marker specification <api/markers_api>`
     """
     _check_common_inputs(
         height=height,
@@ -1005,7 +1006,6 @@ def _distplot(
     xlabel: str = "",
     ylabel: str = "Density",
 ) -> matplotlib.pyplot.Axes:
-
     plt.figure(figsize=figsize)
     ax = plt.gca()
     palette = sns.color_palette(palette)
@@ -1069,7 +1069,7 @@ def degreeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -1138,7 +1138,7 @@ def edgeplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <matplotlib:tutorials/colors/colormaps>`.
+        :doc:`Choosing Colormaps in Matplotlib <tutorials/colors/colormaps>`.
     figsize : tuple of length 2, default (10, 5)
         Size of the figure (width, height)
 
@@ -1175,7 +1175,7 @@ def edgeplot(
 
 @beartype
 def networkplot(
-    adjacency: Union[np.ndarray, csr_matrix],
+    adjacency: Union[np.ndarray, csr_array],
     x: Union[np.ndarray, str],
     y: Union[np.ndarray, str],
     node_data: Optional[pd.DataFrame] = None,
@@ -1205,7 +1205,7 @@ def networkplot(
 
     Parameters
     ----------
-    adjacency: np.ndarray, csr_matrix
+    adjacency: np.ndarray, csr_array
         Adjacency matrix of input network.
     x,y: np.ndarray, str
         Variables that specify the positions on the x and y axes. Either an
@@ -1423,6 +1423,7 @@ def screeplot(
     figsize: Tuple[int, int] = (10, 5),
     cumulative: bool = True,
     show_first: Optional[int] = None,
+    show_elbow: Optional[Union[bool, int]] = False,
 ) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
@@ -1445,11 +1446,22 @@ def screeplot(
         Whether or not to plot a cumulative cdf of singular values
     show_first : int or None, default: None
         Whether to restrict the plot to the first ``show_first`` components
+    show_elbow : bool, or int, default: False
+        Whether to show an elbow (an optimal embedding dimension) estimated
+        via [1]. An integer is interpreted as a number of likelihood
+        elbows to return. Must be ``> 1``.
 
     Returns
     -------
     ax : matplotlib axis object
         Output plot
+
+    References
+    ----------
+    .. [1] Zhu, M. and Ghodsi, A. (2006).
+        Automatic dimensionality selection from the scree plot via the use of
+        profile likelihood. Computational Statistics & Data Analysis, 51(2),
+        pp.918-930.
     """
     _check_common_inputs(
         figsize=figsize, title=title, context=context, font_scale=font_scale
@@ -1474,6 +1486,13 @@ def screeplot(
     ylabel = "Variance explained"
     with sns.plotting_context(context=context, font_scale=font_scale):
         plt.plot(y)
+        if show_elbow:
+            n_elbows = 2
+            if isinstance(show_elbow, int):
+                n_elbows = show_elbow
+            elb_index = _index_of_elbow(D, n_elbows)
+            if elb_index < len(y):
+                plt.plot(elb_index, y[elb_index], "rx", markersize=20)
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

@@ -15,7 +15,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath('./sphinx-ext/'))
+sys.path.append(os.path.abspath("./sphinx-ext/"))
 sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
@@ -64,11 +64,11 @@ autosummary_generate = True
 # -- sphinx.ext.autodoc
 autoclass_content = "both"
 autodoc_default_options = {
-    'members': True,
-    'inherited-members': True,
-    'member-order': 'bysource',
-    'special-members': '__init__',
-    'undoc-members': True,
+    "members": True,
+    "inherited-members": True,
+    "member-order": "bysource",
+    "special-members": "__init__",
+    "undoc-members": True,
 }
 autodoc_class_signature = "separated"
 autodoc_typehints = "description"
@@ -86,12 +86,21 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "seaborn": ("https://seaborn.pydata.org", None),
     "sklearn": ("https://scikit-learn.org/dev", None),
+    "statsmodels": ("https://www.statsmodels.org/stable", None),
 }
+
+intersphinx_disabled_reftypes = []
 
 # -- sphinx options ----------------------------------------------------------
 source_suffix = ".rst"
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints", "tutorials"]
-toc_filter_exclude = ['tutorials/index']
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "**.ipynb_checkpoints",
+    "tutorials",
+]
+toc_filter_exclude = ["tutorials/index"]
 master_doc = "index"
 source_encoding = "utf-8"
 if tags.has("build_tutorials"):

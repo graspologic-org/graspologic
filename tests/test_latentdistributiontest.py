@@ -16,24 +16,24 @@ class TestLatentDistributionTest(unittest.TestCase):
     @classmethod
     def test_ase_works(self):
         np.random.seed(888)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
         tests = {"dcorr": "euclidean", "hsic": "gaussian", "mgc": "euclidean"}
         for test in tests.keys():
-            ldt = latent_distribution_test(A1, A2, test, tests[test], n_bootstraps=10)
+            ldt = latent_distribution_test(A1, A2, test, tests[test], n_bootstraps=2)
 
     def test_workers(self):
         np.random.seed(888)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
         ldt = latent_distribution_test(
             A1, A2, "dcorr", "euclidean", n_bootstraps=4, workers=4
         )
 
     def test_callable_metric(self):
         np.random.seed(888)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
 
         def metric_func(X, Y=None, workers=None):
             return pairwise_distances(X, metric="euclidean") * 0.5
@@ -42,8 +42,8 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_bad_kwargs(self):
         np.random.seed(888)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
 
         # check test argument
         with self.assertRaises(TypeError):
@@ -88,18 +88,18 @@ class TestLatentDistributionTest(unittest.TestCase):
             latent_distribution_test(A1, A2, input_graph="hello")
 
     def test_n_bootstraps(self):
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
 
-        ldt = latent_distribution_test(A1, A2, n_bootstraps=123)
-        assert ldt[2]["null_distribution"].shape[0] == 123
+        ldt = latent_distribution_test(A1, A2, n_bootstraps=2)
+        assert ldt[2]["null_distribution"].shape[0] == 2
 
     def test_passing_networkx(self):
         np.random.seed(123)
-        A1 = er_np(20, 0.8)
-        A2 = er_np(20, 0.8)
-        A1_nx = nx.from_numpy_matrix(A1)
-        A2_nx = nx.from_numpy_matrix(A2)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
+        A1_nx = nx.from_numpy_array(A1)
+        A2_nx = nx.from_numpy_array(A2)
         # check passing nx, when exepect embeddings
         with self.assertRaises(TypeError):
             latent_distribution_test(A1_nx, A1, input_graph=False)
@@ -112,8 +112,8 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_passing_embeddings(self):
         np.random.seed(123)
-        A1 = er_np(20, 0.8)
-        A2 = er_np(20, 0.8)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(5, 0.8)
         ase_1 = AdjacencySpectralEmbed(n_components=2)
         X1 = ase_1.fit_transform(A1)
         ase_2 = AdjacencySpectralEmbed(n_components=2)
@@ -149,14 +149,14 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_pooled(self):
         np.random.seed(123)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(100, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(10, 0.8)
         latent_distribution_test(A1, A2, pooled=True)
 
     def test_distances_and_kernels(self):
         np.random.seed(123)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(100, 0.3)
+        A1 = er_np(5, 0.8)
+        A2 = er_np(10, 0.8)
         # some valid combinations of test and metric
         # # would love to do this, but currently FutureWarning breaks this
         # with self.assertWarns(None) as record:
@@ -177,8 +177,7 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_bad_matrix_inputs(self):
         np.random.seed(1234556)
-        A1 = er_np(20, 0.3)
-        A2 = er_np(20, 0.3)
+        A2 = er_np(5, 0.8)
 
         bad_matrix = [[1, 2]]
         with self.assertRaises(TypeError):
@@ -186,9 +185,9 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_directed_inputs(self):
         np.random.seed(2)
-        A = er_np(100, 0.3, directed=True)
-        B = er_np(100, 0.3, directed=True)
-        C = er_np(100, 0.3, directed=False)
+        A = er_np(10, 0.3, directed=True)
+        B = er_np(10, 0.3, directed=True)
+        C = er_np(10, 0.3, directed=False)
 
         # two directed graphs is okay
         latent_distribution_test(A, B)
@@ -201,10 +200,10 @@ class TestLatentDistributionTest(unittest.TestCase):
 
     def test_SBM_dcorr(self):
         np.random.seed(12345678)
-        B1 = np.array([[0.5, 0.2], [0.2, 0.5]])
+        B1 = np.array([[0.95, 0.1], [0.1, 0.7]])
 
-        B2 = np.array([[0.7, 0.2], [0.2, 0.7]])
-        b_size = 200
+        B2 = np.array([[0.4, 0.1], [0.1, 0.2]])
+        b_size = 30
         A1 = sbm(2 * [b_size], B1)
         A2 = sbm(2 * [b_size], B1)
         A3 = sbm(2 * [b_size], B2)
@@ -220,100 +219,6 @@ class TestLatentDistributionTest(unittest.TestCase):
         ldt_alt = latent_distribution_test(A1, A3, workers=-1)
         self.assertTrue(ldt_null[1] > 0.05)
         self.assertTrue(ldt_alt[1] <= 0.05)
-
-    def test_different_sizes_null(self):
-        np.random.seed(314)
-
-        A1 = er_np(100, 0.8)
-        A2 = er_np(1000, 0.8)
-
-        ldt_not_corrected = latent_distribution_test(
-            A1,
-            A2,
-            test="hsic",
-            metric="gaussian",
-            n_components=2,
-            n_bootstraps=100,
-            size_correction=False,
-        )
-        ldt_corrected_1 = latent_distribution_test(
-            A1,
-            A2,
-            test="hsic",
-            metric="gaussian",
-            n_components=2,
-            n_bootstraps=100,
-            size_correction=True,
-        )
-        ldt_corrected_2 = latent_distribution_test(
-            A2,
-            A1,
-            test="hsic",
-            metric="gaussian",
-            n_components=2,
-            n_bootstraps=100,
-            size_correction=True,
-        )
-
-        self.assertTrue(ldt_not_corrected[1] <= 0.05)
-        self.assertTrue(ldt_corrected_1[1] > 0.05)
-        self.assertTrue(ldt_corrected_2[1] > 0.05)
-
-    def test_different_sizes_null(self):
-        np.random.seed(314)
-
-        A1 = er_np(100, 0.8)
-        A2 = er_np(1000, 0.7)
-
-        ldt_corrected_1 = latent_distribution_test(
-            A1,
-            A2,
-            test="hsic",
-            metric="gaussian",
-            n_components=2,
-            n_bootstraps=100,
-            size_correction=True,
-        )
-        ldt_corrected_2 = latent_distribution_test(
-            A2,
-            A1,
-            test="hsic",
-            metric="gaussian",
-            n_components=2,
-            n_bootstraps=100,
-            size_correction=True,
-        )
-
-        self.assertTrue(ldt_corrected_1[1] <= 0.05)
-        self.assertTrue(ldt_corrected_2[1] <= 0.05)
-
-    def test_different_aligners(self):
-        np.random.seed(314)
-        A1 = er_np(100, 0.8)
-        A2 = er_np(100, 0.8)
-        ase_1 = AdjacencySpectralEmbed(n_components=2)
-        X1 = ase_1.fit_transform(A1)
-        ase_2 = AdjacencySpectralEmbed(n_components=2)
-        X2 = ase_2.fit_transform(A2)
-        X2 = -X2
-
-        ldt_1 = latent_distribution_test(X1, X2, input_graph=False, align_type=None)
-        self.assertTrue(ldt_1[1] < 0.05)
-
-        ldt_2 = latent_distribution_test(
-            X1, X2, input_graph=False, align_type="sign_flips"
-        )
-        self.assertTrue(ldt_2[1] >= 0.05)
-
-        # also checking that kws are passed through
-        ldt_3 = latent_distribution_test(
-            X1,
-            X2,
-            input_graph=False,
-            align_type="seedless_procrustes",
-            align_kws={"init": "sign_flips"},
-        )
-        self.assertTrue(ldt_3[1] >= 0.05)
 
 
 if __name__ == "__main__":

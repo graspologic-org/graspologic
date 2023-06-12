@@ -8,7 +8,6 @@ from graspologic.layouts.nooverlap._node import _Node
 
 
 class TestGrid(unittest.TestCase):
-
     # def setUp(self):
     # 	self.g = _GridBuckets(10)
 

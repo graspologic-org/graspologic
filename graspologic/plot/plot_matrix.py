@@ -10,13 +10,13 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.colors import ListedColormap
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 
 def _check_data(data, plot_type):
     if plot_type == "scattermap":
-        if not isinstance(data, (np.ndarray, csr_matrix)):
-            raise TypeError("`data` must be a np.ndarray or scipy.sparse.csr_matrix.")
+        if not isinstance(data, (np.ndarray, csr_array)):
+            raise TypeError("`data` must be a np.ndarray or scipy.sparse.csr_array.")
     elif plot_type == "heatmap":
         if not isinstance(data, np.ndarray):
             msg = "`data` must be a np.ndarray. If your data is a sparse matrix, please"
@@ -371,7 +371,7 @@ def scattermap(data, ax=None, legend=False, sizes=(5, 10), **kws):
 
     Parameters
     ----------
-    data : np.narray, scipy.sparse.csr_matrix, ndim=2
+    data : np.narray, scipy.sparse.csr_array, ndim=2
         Matrix to plot
     ax: matplotlib axes object, optional
         Axes in which to draw the plot, by default None
@@ -528,7 +528,7 @@ def matrixplot(  # type: ignore
 
     Parameters
     ----------
-    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
+    data : np.ndarray or scipy.sparse.csr_array with ndim=2
         Matrix to plot. Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)
         Axes in which to draw the plot. If no axis is passed, one will be created.
@@ -812,7 +812,6 @@ def matrixplot(  # type: ignore
         # in the opposite order
         rev_group = list(col_group[::-1])
         for i, sc in enumerate(rev_group):
-
             # Add a new axis when needed
             tick_ax = divider.append_axes(
                 "top", size="1%", pad=col_tick_pad[i], sharex=ax
@@ -912,7 +911,7 @@ def adjplot(  # type: ignore
 
     Parameters
     ----------
-    data : np.ndarray or scipy.sparse.csr_matrix with ndim=2
+    data : np.ndarray or scipy.sparse.csr_array with ndim=2
         Matrix to plot, must be square.
         Sparse matrix input is only accepted if ``plot_type == 'scattermap'``.
     ax : matplotlib axes object (default=None)

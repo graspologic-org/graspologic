@@ -7,7 +7,7 @@ import numpy as np
 import pytest
 from numpy.linalg import norm
 from numpy.testing import assert_allclose
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 from graspologic.embed.omni import OmnibusEmbed, _get_omni_matrix
 from graspologic.simulations.simulations import er_nm, er_np
@@ -39,7 +39,6 @@ def generate_data(n, seed=1, symetric=True):
 
 
 class TestOmni(unittest.TestCase):
-
     # Below tests omni matrix generation code
     def test_omni_matrix_ones_zeros(self):
         # Should get all ones
@@ -201,7 +200,7 @@ class TestOmni(unittest.TestCase):
             Abar = (A1 + A2) / 2
 
             omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
-            OmniBar = compute_bar(omni.fit_transform([csr_matrix(A1), csr_matrix(A2)]))
+            OmniBar = compute_bar(omni.fit_transform([csr_array(A1), csr_array(A2)]))
 
             omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug)
             ABar = compute_bar(omni.fit_transform([Abar, Abar]))
@@ -263,7 +262,7 @@ class TestOmni(unittest.TestCase):
             Lbar = (L1 + L2) / 2
 
             omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
-            OmniBar = compute_bar(omni.fit_transform([csr_matrix(L1), csr_matrix(L2)]))
+            OmniBar = compute_bar(omni.fit_transform([csr_array(L1), csr_array(L2)]))
 
             omni = OmnibusEmbed(n_components=3, diag_aug=diag_aug, lse=True)
             LBar = compute_bar(omni.fit_transform([Lbar, Lbar]))

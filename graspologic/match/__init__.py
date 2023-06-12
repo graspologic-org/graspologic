@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from .gmp import GraphMatch
+from .wrappers import graph_match
 
-__all__ = ["GraphMatch"]
+__all__ = ["graph_match"]

@@ -6,7 +6,7 @@ This module includes common graspologic type hint declarations.
 """
 
 import sys
-from typing import Union
+from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
@@ -34,8 +34,18 @@ if sys.version_info >= (3, 9):
 else:
     from typing import Dict, List, Set, Tuple
 
-AdjacencyMatrix = Union[np.ndarray, sp.csr_matrix]
+AdjacencyMatrix = Union[np.ndarray, sp.csr_array]
 
-GraphRepresentation = Union[np.ndarray, sp.csr_matrix, nx.Graph]
+GraphRepresentation = Union[np.ndarray, sp.csr_array, nx.Graph]
 
-__all__ = ["AdjacencyMatrix", "Dict", "List", "GraphRepresentation", "Set", "Tuple"]
+RngType = Optional[Union[int, np.integer, np.random.Generator]]
+
+__all__ = [
+    "AdjacencyMatrix",
+    "Dict",
+    "List",
+    "GraphRepresentation",
+    "RngType",
+    "Set",
+    "Tuple",
+]

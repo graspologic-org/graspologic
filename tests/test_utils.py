@@ -9,7 +9,7 @@ from math import sqrt
 import networkx as nx
 import numpy as np
 from numpy.testing import assert_equal
-from scipy.sparse import csr_matrix
+from scipy.sparse import csr_array
 
 from graspologic.utils import remap_labels
 from graspologic.utils import utils as gus
@@ -26,7 +26,7 @@ class TestAverageMatrices(unittest.TestCase):
             dim2 = random.randint(2, 100)
 
             graphs = [np.random.rand(dim, dim2) for _ in range(number_of_graphs)]
-            graphs_sparse = [csr_matrix(graph) for graph in graphs]
+            graphs_sparse = [csr_array(graph) for graph in graphs]
 
             graphs_averaged = gus.average_matrices(graphs)
             graphs_sparse_averaged = gus.average_matrices(graphs_sparse).todense()
@@ -166,27 +166,27 @@ class TestChecks(unittest.TestCase):
     def test_is_unweighted_for_ones_ndarray(self):
         self.assertTrue(gus.is_unweighted(np.ones((10, 10))))
 
-    def test_is_unweighted_for_zeros_csr_matrix(self):
-        m = csr_matrix((10, 10))
+    def test_is_unweighted_for_zeros_csr_array(self):
+        m = csr_array((10, 10))
         self.assertTrue(gus.is_unweighted(m))
 
-    def test_is_unweighted_for_ones_csr_matrix(self):
-        m = csr_matrix(np.ones((10, 10)))
+    def test_is_unweighted_for_ones_csr_array(self):
+        m = csr_array(np.ones((10, 10)))
         self.assertTrue(gus.is_unweighted(m))
 
-    def test_is_unweighted_for_mixed_zeros_ones_csr_matrix(self):
-        m = csr_matrix((10_000, 10_000))
+    def test_is_unweighted_for_mixed_zeros_ones_csr_array(self):
+        m = csr_array((10_000, 10_000))
         m[0, 1] = 1
         m[1, 1] = 0
         m[9_999, 9_999] = 1.0
         self.assertTrue(gus.is_unweighted(m))
 
-    def test_is_unweighted_for_random_csr_matrix(self):
+    def test_is_unweighted_for_random_csr_array(self):
         dim = 10_000
         num_nonzero = 20
         rows = np.random.randint(0, dim, num_nonzero)
         columns = np.random.randint(0, dim, num_nonzero)
-        m = csr_matrix((dim, dim))
+        m = csr_array((dim, dim))
         m[rows, columns] = np.random.random(num_nonzero)
         self.assertFalse(gus.is_unweighted(m))
 
@@ -312,7 +312,7 @@ class TestLCC(unittest.TestCase):
                 [0, 0, 0, 0, 0, 0, 0],  # not connected
             ]
         )
-        sparse_adjacency = csr_matrix(adjacency)
+        sparse_adjacency = csr_array(adjacency)
 
         lcc_matrix, nodelist = gus.largest_connected_component(
             sparse_adjacency, return_inds=True
@@ -322,7 +322,7 @@ class TestLCC(unittest.TestCase):
 
     def test_lcc_scipy_empty(self):
         adjacency = np.array([[0, 1], [1, 0]])
-        adjacency = csr_matrix(adjacency)
+        adjacency = csr_array(adjacency)
 
         # remove the actual connecting edges. this is now a disconnected graph
         # with two nodes. however, scipy still stores the entry that now has a 0 in it

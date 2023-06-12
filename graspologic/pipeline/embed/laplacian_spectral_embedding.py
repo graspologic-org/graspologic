@@ -17,6 +17,7 @@ from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
 from ...utils import LaplacianFormType
 from . import __SVD_SOLVER_TYPES  # from the module init
 from ._elbow import _index_of_elbow
+from ._types import NxGraphType
 from .embeddings import Embeddings
 
 __FORMS = ["DAD", "I-DAD", "R-DAD"]
@@ -24,7 +25,7 @@ __FORMS = ["DAD", "I-DAD", "R-DAD"]
 
 @beartype
 def laplacian_spectral_embedding(
-    graph: Union[nx.Graph, nx.OrderedGraph, nx.DiGraph, nx.OrderedDiGraph],
+    graph: NxGraphType,
     form: LaplacianFormType = "R-DAD",
     dimensions: int = 100,
     elbow_cut: Optional[int] = None,
@@ -87,7 +88,7 @@ def laplacian_spectral_embedding(
                 :func:`sklearn.utils.extmath.randomized_svd`
             - 'full'
                 Computes full svd using :func:`scipy.linalg.svd`
-                Does not support ``graph`` input of type scipy.sparse.csr_matrix
+                Does not support ``graph`` input of type scipy.sparse.csr_array
             - 'truncated'
                 Computes truncated svd using :func:`scipy.sparse.linalg.svds`
     svd_solver_iterations : int (default=5)
@@ -192,11 +193,11 @@ def laplacian_spectral_embedding(
         )
         used_weight_attribute = None  # this supercedes what the user said, because
         # not all of the weights are real numbers, if they exist at all
-        # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_matrix()
+        # this weight=1.0 treatment actually happens in nx.to_scipy_sparse_array()
 
     node_labels = np.array(list(graph.nodes()))
 
-    graph_as_csr = nx.to_scipy_sparse_matrix(
+    graph_as_csr = nx.to_scipy_sparse_array(
         graph, weight=used_weight_attribute, nodelist=node_labels
     )
 
