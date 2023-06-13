@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inference &mdash; graspologic 3.2.0dev5060585921 documentation</title>
+  <title>Inference &mdash; graspologic 3.2.0dev5259514161 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -36,7 +36,7 @@
             graspologic
           </a>
               <div class="version">
-                3.2.0dev5060585921
+                3.2.0dev5259514161
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -759,7 +759,7 @@ Expected variable type and shape depends on input_graph attribute</p>
 <dt><strong>test</strong><span class="classifier">str (default=&quot;dcorr&quot;)</span></dt><dd><p>Backend hypothesis test to use, one of [&quot;cca&quot;, &quot;dcorr&quot;, &quot;hhg&quot;, &quot;rv&quot;, &quot;hsic&quot;, &quot;mgc&quot;].
 These tests are typically used for independence testing, but here they
 are used for a two-sample hypothesis test on the latent positions of
-two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>metric</strong><span class="classifier">str or function (default=&quot;euclidean&quot;)</span></dt><dd><p>Distance or a kernel metric to use, either a callable or a valid string.
 Kernel metrics (e.g. &quot;gaussian&quot;) must be used with kernel-based HSIC test
@@ -798,7 +798,7 @@ See <a class="reference internal" href="embed.html#graspologic.embed.select_svd"
 This argument is ignored if <code class="docutils literal notranslate"><span class="pre">input_graph</span></code> is False.</p>
 </dd>
 <dt><strong>n_bootstraps</strong><span class="classifier">int (default=200)</span></dt><dd><p>Number of bootstrap iterations for the backend hypothesis test.
-See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.3.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>random_state</strong><span class="classifier">{None, int, <cite>~np.random.RandomState</cite>, <cite>~np.random.Generator</cite>}</span></dt><dd><p>This parameter defines the object to use for drawing random
 variates.
