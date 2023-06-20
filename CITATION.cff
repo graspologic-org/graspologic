@@ -1,0 +1,64 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'GraSPy: Graph Statistics in Python'
+message: >-
+  If you find graspologic useful in your work, please cite
+  the package via the GraSPy paper
+type: software
+authors:
+  - given-names: 'Jaewon '
+    family-names: Chung
+    email: j1c@jhu.edu
+    affiliation: >-
+      Department of Biomedical Engineering, Johns Hopkins
+      University
+  - given-names: Benjamin D.
+    family-names: Pedigo
+    email: bpedigo@jhu.edu
+    affiliation: >-
+      Department of Biomedical Engineering, Johns Hopkins
+      University
+  - given-names: Eric W.
+    family-names: Bridgeford
+    email: ebridge2@jhu.edu
+    affiliation: 'Department of Biostatistics, Johns Hopkins University'
+  - given-names: Bijan K.
+    family-names: Varjavand
+    email: bvarjav1@jhu.edu
+    affiliation: >-
+      Department of Biomedical Engineering, Johns Hopkins
+      University
+  - given-names: Hayden S.
+    family-names: Helm
+    email: hh@jhu.edu
+    affiliation: 'Center for Imaging Science, Johns Hopkins University'
+  - given-names: Joshua T.
+    family-names: Vogelstein
+    email: jovo@jhu.edu
+    affiliation: >-
+      Department of Biomedical Engineering, Center for
+      Imaging Science, Kavli Neuroscience Discovery
+      Institute
+repository-code: 'https://github.com/microsoft/graspologic'
+url: 'https://microsoft.github.io/graspologic/latest/'
+abstract: >-
+  We introduce GraSPy, a Python library devoted to
+  statistical inference, machine learning, and visualization
+  of random graphs and graph populations. This package
+  provides exible and easy-to-use algorithms for analyzing
+  and understanding graphs with a scikit-learn compliant
+  API. GraSPy can be downloaded from Python Package Index
+  (PyPi), and is released under the Apache 2.0 open-source
+  license. The documentation and all releases are available
+  at https://neurodata.io/graspy.
+keywords:
+  - Python
+  - graph analysis
+  - network analysis
+  - statistical inference
+  - machine learning
+license: CC-BY-4.0
+version: 0.1.1
+date-released: '2019-09-19'
