@@ -81,6 +81,7 @@ class _GraphMatchSolver:
         transport_regularizer: Scalar = 100,
         transport_tol: Scalar = 5e-2,
         transport_max_iter: Int = 1000,
+        fast: bool = True,
     ):
         # TODO check if init is doubly stochastic
         self.init = init
@@ -111,6 +112,8 @@ class _GraphMatchSolver:
             transport_max_iter, name="transport_max_iter", target_type=int, min_val=1
         )
         self.transport_max_iter = transport_max_iter
+
+        self.fast = fast
 
         if maximize:
             self.obj_func_scalar = -1
@@ -260,7 +263,7 @@ class _GraphMatchSolver:
 
                 gradient = self.compute_gradient(P)
                 Q = self.compute_step_direction(gradient, rng)
-                alpha = self.compute_step_size(P, Q, fast=True)
+                alpha = self.compute_step_size(P, Q)
 
                 # take a step in this direction
                 P_new = alpha * P + (1 - alpha) * Q
@@ -388,9 +391,7 @@ class _GraphMatchSolver:
         return P_eps
 
     @write_status("Computing step size", 2)
-    def compute_step_size(
-        self, P: np.ndarray, Q: np.ndarray, fast: bool = False
-    ) -> float:
+    def compute_step_size(self, P: np.ndarray, Q: np.ndarray) -> float:
         a, b = _compute_coefficients(
             P,
             Q,
@@ -407,7 +408,7 @@ class _GraphMatchSolver:
             self.BA_ns,
             self.BA_sn,
             self.S_nn,
-            fast=fast,
+            fast=self.fast,
         )
         if a * self.obj_func_scalar > 0 and 0 <= -b / (2 * a) <= 1:
             alpha = -b / (2 * a)
@@ -540,11 +541,11 @@ def _compute_gradient(
     return grad
 
 
-def __fast_trace(X, Y):
+def _fast_trace(X, Y):
     return (X * Y.T).sum()
 
 
-def __fast_traceT(X, Y):
+def _fast_traceT(X, Y):
     return (X * Y).sum()
 
 
@@ -582,17 +583,17 @@ def _compute_coefficients(
             AiR = A[i] @ R
             RBi = R @ B[i]
 
-            a_cross += __fast_trace(ABiTR, BAiR)
-            b_cross += __fast_trace(ABiTR, BA[i] @ Q)
-            b_cross += __fast_trace(AB[i].T @ Q, BAiR)
-            b_cross += __fast_trace(AB_ns[i].T @ R, BA_ns[i])
-            b_cross += __fast_trace(AB_sn[i].T @ BA_sn[i], R)
+            a_cross += _fast_trace(ABiTR, BAiR)
+            b_cross += _fast_trace(ABiTR, BA[i] @ Q)
+            b_cross += _fast_trace(AB[i].T @ Q, BAiR)
+            b_cross += _fast_trace(AB_ns[i].T @ R, BA_ns[i])
+            b_cross += _fast_trace(AB_sn[i].T @ BA_sn[i], R)
 
-            a_intra += __fast_traceT(AiR, RBi)
-            b_intra += __fast_traceT(A[i] @ Q, RBi)
-            b_intra += __fast_traceT(AiR, Q @ B[i])
-            b_intra += __fast_trace(A_ns[i].T @ R, B_ns[i])
-            b_intra += __fast_traceT(A_sn[i] @ R, B_sn[i])
+            a_intra += _fast_traceT(AiR, RBi)
+            b_intra += _fast_traceT(A[i] @ Q, RBi)
+            b_intra += _fast_traceT(AiR, Q @ B[i])
+            b_intra += _fast_trace(A_ns[i].T @ R, B_ns[i])
+            b_intra += _fast_traceT(A_sn[i] @ R, B_sn[i])
         else:
             a_cross += np.trace(AB[i].T @ R @ BA[i] @ R)
             b_cross += np.trace(AB[i].T @ R @ BA[i] @ Q) + np.trace(
