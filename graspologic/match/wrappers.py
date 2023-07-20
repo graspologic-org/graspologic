@@ -194,7 +194,7 @@ def graph_match(
         longer computation time.
 
     fast: bool, default=True
-        Whether to use numerical shortcuts to speed up the computation. Typically will 
+        Whether to use numerical shortcuts to speed up the computation. Typically will
         be faster for most applications, although requires storing intermediate
         computations in memory which may be undesirable for very large inputs or when
         memory is a bottleneck.
@@ -288,7 +288,6 @@ def graph_match(
         partial_match=partial_match,
         init=init,
         init_perturbation=init_perturbation,
-        verbose=solver_verbose,
         shuffle_input=shuffle_input,
         padding=padding,
         maximize=maximize,
