@@ -389,7 +389,9 @@ class _GraphMatchSolver:
         return P_eps
 
     @write_status("Computing step size", 2)
-    def compute_step_size(self, P: np.ndarray, Q: np.ndarray, fast: bool = False) -> float:
+    def compute_step_size(
+        self, P: np.ndarray, Q: np.ndarray, fast: bool = False
+    ) -> float:
         a, b = _compute_coefficients(
             P,
             Q,
@@ -406,7 +408,7 @@ class _GraphMatchSolver:
             self.BA_ns,
             self.BA_sn,
             self.S_nn,
-            fast=fast
+            fast=fast,
         )
         if a * self.obj_func_scalar > 0 and 0 <= -b / (2 * a) <= 1:
             alpha = -b / (2 * a)
@@ -542,8 +544,10 @@ def _compute_gradient(
 def __fast_trace(X, Y):
     return (X * Y.T).sum()
 
+
 def __fast_traceT(X, Y):
     return (X * Y).sum()
+
 
 def _compute_coefficients(
     P: np.ndarray,
@@ -561,7 +565,7 @@ def _compute_coefficients(
     BA_ns: MultilayerAdjacency,
     BA_sn: MultilayerAdjacency,
     S: AdjacencyMatrix,
-    fast: bool
+    fast: bool,
 ) -> Tuple[float, float]:
     R = P - Q
 
@@ -575,28 +579,36 @@ def _compute_coefficients(
         if fast:
             # could maybe be even faster if we do `opt_einsum` or something
             ABiTR = AB[i].T @ R
-            BAiR  = BA[i] @ R
-            AiR   = A[i] @ R
-            RBi   = R @ B[i]
+            BAiR = BA[i] @ R
+            AiR = A[i] @ R
+            RBi = R @ B[i]
 
-            a_cross += __fast_trace(ABiTR                 , BAiR)
-            b_cross += __fast_trace(ABiTR                 , BA[i] @ Q)
-            b_cross += __fast_trace(AB[i].T @ Q           , BAiR)
-            b_cross += __fast_trace(AB_ns[i].T @ R        , BA_ns[i])
-            b_cross += __fast_trace(AB_sn[i].T @ BA_sn[i] , R)
+            a_cross += __fast_trace(ABiTR, BAiR)
+            b_cross += __fast_trace(ABiTR, BA[i] @ Q)
+            b_cross += __fast_trace(AB[i].T @ Q, BAiR)
+            b_cross += __fast_trace(AB_ns[i].T @ R, BA_ns[i])
+            b_cross += __fast_trace(AB_sn[i].T @ BA_sn[i], R)
 
-            a_intra += __fast_traceT(AiR                  , RBi)
-            b_intra += __fast_traceT(A[i] @ Q             , RBi)
-            b_intra += __fast_traceT(AiR                  , Q @ B[i])
-            b_intra += __fast_trace(A_ns[i].T @ R         , B_ns[i])
-            b_intra += __fast_traceT(A_sn[i] @ R          , B_sn[i])
+            a_intra += __fast_traceT(AiR, RBi)
+            b_intra += __fast_traceT(A[i] @ Q, RBi)
+            b_intra += __fast_traceT(AiR, Q @ B[i])
+            b_intra += __fast_trace(A_ns[i].T @ R, B_ns[i])
+            b_intra += __fast_traceT(A_sn[i] @ R, B_sn[i])
         else:
             a_cross += np.trace(AB[i].T @ R @ BA[i] @ R)
-            b_cross += np.trace(AB[i].T @ R @ BA[i] @ Q)   + np.trace(AB[i].T @ Q @ BA[i] @ R)
-            b_cross += np.trace(AB_ns[i].T @ R @ BA_ns[i]) + np.trace(AB_sn[i].T @ BA_sn[i] @ R)
+            b_cross += np.trace(AB[i].T @ R @ BA[i] @ Q) + np.trace(
+                AB[i].T @ Q @ BA[i] @ R
+            )
+            b_cross += np.trace(AB_ns[i].T @ R @ BA_ns[i]) + np.trace(
+                AB_sn[i].T @ BA_sn[i] @ R
+            )
             a_intra += np.trace(A[i] @ R @ B[i].T @ R.T)
-            b_intra += np.trace(A[i] @ Q @ B[i].T @ R.T) + np.trace(A[i] @ R @ B[i].T @ Q.T)
-            b_intra += np.trace(A_ns[i].T @ R @ B_ns[i]) + np.trace(A_sn[i] @ R @ B_sn[i].T)
+            b_intra += np.trace(A[i] @ Q @ B[i].T @ R.T) + np.trace(
+                A[i] @ R @ B[i].T @ Q.T
+            )
+            b_intra += np.trace(A_ns[i].T @ R @ B_ns[i]) + np.trace(
+                A_sn[i] @ R @ B_sn[i].T
+            )
 
     a = a_cross + a_intra
     b = b_cross + b_intra
