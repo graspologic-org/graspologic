@@ -10,7 +10,6 @@ import numpy as np
 from beartype import beartype
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_array
 from sklearn.utils import check_scalar
 
 from graspologic.types import List, RngType, Tuple
