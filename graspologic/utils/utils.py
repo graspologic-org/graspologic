@@ -275,11 +275,11 @@ def is_almost_symmetric(
     Raises
     ------
     TypeError
-        If the provided graph is not a numpy.ndarray or scipy.sparse.spmatrix
+        If the provided graph is not a numpy.ndarray or scipy.sparse.csr_array
     """
     if (x.ndim != 2) or (x.shape[0] != x.shape[1]):
         return False
-    if isinstance(x, (np.ndarray, scipy.sparse.spmatrix)):
+    if isinstance(x, (np.ndarray, csr_array)):
         return abs(x - x.T).max() <= atol
     else:
         raise TypeError("input a correct matrix type.")
