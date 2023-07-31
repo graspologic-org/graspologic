@@ -541,11 +541,11 @@ def _compute_gradient(
     return grad
 
 
-def _fast_trace(X, Y):
+def _fast_trace(X: np.ndarray, Y: np.ndarray):
     return (X * Y.T).sum()
 
 
-def _fast_traceT(X, Y):
+def _fast_traceT(X: np.ndarray, Y: np.ndarray):
     return (X * Y).sum()
 
 
