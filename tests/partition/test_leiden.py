@@ -193,7 +193,9 @@ class TestLeiden(unittest.TestCase):
         node_ids = partitions.keys()
         for node_id in node_ids:
             self.assertTrue(
-                isinstance(node_id, np.integer), # this is the preferred numpy typecheck
+                isinstance(
+                    node_id, np.integer
+                ),  # this is the preferred numpy typecheck
                 f"{node_id} has {type(node_id)} should be an int",
             )
 
