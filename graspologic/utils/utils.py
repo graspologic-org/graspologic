@@ -12,7 +12,7 @@ import pandas as pd
 import scipy.sparse
 from beartype import beartype
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csgraph, csr_array, diags, isspmatrix_csr
+from scipy.sparse import csgraph, csr_array, diags
 from scipy.sparse.csgraph import connected_components
 from sklearn.metrics import confusion_matrix
 from sklearn.utils import check_array, check_consistent_length, column_or_1d
@@ -43,7 +43,7 @@ def average_matrices(
     """
     if isinstance(matrices[0], np.ndarray):
         return np.mean(matrices, axis=0)  # type: ignore
-    elif isspmatrix_csr(matrices[0]):
+    elif isinstance(matrices[0], csr_array):
         return np.sum(matrices) / len(matrices)
 
     raise TypeError(f"Unexpected type {matrices}")
@@ -275,11 +275,11 @@ def is_almost_symmetric(
     Raises
     ------
     TypeError
-        If the provided graph is not a numpy.ndarray or scipy.sparse.spmatrix
+        If the provided graph is not a numpy.ndarray or scipy.sparse.csr_array
     """
     if (x.ndim != 2) or (x.shape[0] != x.shape[1]):
         return False
-    if isinstance(x, (np.ndarray, scipy.sparse.spmatrix)):
+    if isinstance(x, (np.ndarray, csr_array)):
         return abs(x - x.T).max() <= atol
     else:
         raise TypeError("input a correct matrix type.")
@@ -836,7 +836,7 @@ def augment_diagonal(
     degrees = (in_degrees + out_degrees) / 2
     diag = weight * degrees / divisor
 
-    graph += diags(diag) if isspmatrix_csr(graph) else np.diag(diag)
+    graph += diags(diag) if isinstance(graph, csr_array) else np.diag(diag)
 
     return graph
 

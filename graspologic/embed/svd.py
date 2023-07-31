@@ -7,11 +7,11 @@ import numpy as np
 import scipy
 import scipy.sparse as sp
 import sklearn
+from scipy.sparse import csr_array
 from scipy.stats import norm
 from typing_extensions import Literal
 
 from graspologic.types import List, Tuple
-from graspologic.utils import is_almost_symmetric
 
 SvdAlgorithmType = Literal["full", "truncated", "randomized", "eigsh"]
 
@@ -107,7 +107,7 @@ def select_dimension(
         pp.918-930.
     """
     # Handle input data
-    if not isinstance(X, np.ndarray) and not sp.isspmatrix_csr(X):
+    if not isinstance(X, (np.ndarray, csr_array)):
         msg = "X must be a numpy array or scipy.sparse.csr_array, not {}.".format(
             type(X)
         )
