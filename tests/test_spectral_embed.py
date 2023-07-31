@@ -164,6 +164,7 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
     def test_directed_correct_latent_positions(self):
         # setup
         ase = AdjacencySpectralEmbed(n_components=3)
+        np.random.seed(8888)
         P = np.array([[0.9, 0.1, 0.1], [0.3, 0.6, 0.1], [0.1, 0.5, 0.6]])
         M, labels = sbm([200, 200, 200], P, directed=True, return_labels=True)
 
