@@ -541,11 +541,11 @@ def _compute_gradient(
     return grad
 
 
-def _fast_trace(X: np.ndarray, Y: np.ndarray):
+def _fast_trace(X: np.ndarray, Y: np.ndarray) -> float:
     return (X * Y.T).sum()
 
 
-def _fast_traceT(X: np.ndarray, Y: np.ndarray):
+def _fast_traceT(X: np.ndarray, Y: np.ndarray) -> float:
     return (X * Y).sum()
 
 
@@ -570,10 +570,10 @@ def _compute_coefficients(
     R = P - Q
 
     n_layers = len(A)
-    a_cross = 0
-    b_cross = 0
-    a_intra = 0
-    b_intra = 0
+    a_cross = 0.0
+    b_cross = 0.0
+    a_intra = 0.0
+    b_intra = 0.0
 
     for i in range(n_layers):
         if fast:
