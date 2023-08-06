@@ -1425,7 +1425,7 @@ def screeplot(
     cumulative: bool = True,
     show_first: Optional[int] = None,
     show_elbow: Optional[Union[bool, int]] = False,
-) -> None:
+) -> matplotlib.pyplot.Axes:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
     raw distribution or an empirical CDF (depending on ``cumulative``)
@@ -1454,8 +1454,8 @@ def screeplot(
 
     Returns
     -------
-    None
-
+    ax : matplotlib axis object
+        Output plot
 
     References
     ----------
@@ -1496,6 +1496,7 @@ def screeplot(
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
+    return ax
 
 
 def _sort_inds(
