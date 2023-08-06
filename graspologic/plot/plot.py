@@ -1421,10 +1421,11 @@ def screeplot(
     context: str = "talk",
     font_scale: float = 1,
     figsize: Tuple[int, int] = (10, 5),
+    ax: matplotlib.axes.Axes = plt.gca(),
     cumulative: bool = True,
     show_first: Optional[int] = None,
     show_elbow: Optional[Union[bool, int]] = False,
-) -> matplotlib.pyplot.Axes:
+) -> None:
     r"""
     Plots the distribution of singular values for a matrix, either showing the
     raw distribution or an empirical CDF (depending on ``cumulative``)
@@ -1453,8 +1454,8 @@ def screeplot(
 
     Returns
     -------
-    ax : matplotlib axis object
-        Output plot
+    None
+
 
     References
     ----------
@@ -1481,7 +1482,6 @@ def screeplot(
     else:
         y = D[:show_first]
     _ = plt.figure(figsize=figsize)
-    ax = plt.gca()
     xlabel = "Component"
     ylabel = "Variance explained"
     with sns.plotting_context(context=context, font_scale=font_scale):
@@ -1496,7 +1496,6 @@ def screeplot(
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-    return ax
 
 
 def _sort_inds(
