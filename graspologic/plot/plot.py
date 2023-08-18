@@ -1421,7 +1421,7 @@ def screeplot(
     context: str = "talk",
     font_scale: float = 1,
     figsize: Tuple[int, int] = (10, 5),
-    ax: matplotlib.axes.Axes = plt.gca(),
+    ax: Optional[matplotlib.axes.Axes] = None,
     cumulative: bool = True,
     show_first: Optional[int] = None,
     show_elbow: Optional[Union[bool, int]] = False,
@@ -1481,6 +1481,10 @@ def screeplot(
         y = np.cumsum(D[:show_first])
     else:
         y = D[:show_first]
+
+    if ax is None:
+        ax = plt.gca()
+
     _ = plt.figure(figsize=figsize)
     xlabel = "Component"
     ylabel = "Variance explained"
