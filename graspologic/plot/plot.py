@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Collection, Optional, Union, Literal
+from typing import Any, Collection, Literal, Optional, Union
 
 import matplotlib as mpl
 import matplotlib.axes
