@@ -1648,7 +1648,7 @@ def _plot_groups(
 
     # top inner curves
     ax_x = divider.new_vertical(size="5%", pad=0.0, pack_start=False)
-    ax.figure.add_axes(ax_x) # type: ignore
+    ax.figure.add_axes(ax_x)  # type: ignore
     _plot_brackets(
         ax_x,
         np.tile(inner_unique, len(outer_unique)),
@@ -1662,7 +1662,7 @@ def _plot_groups(
     )
     # side inner curves
     ax_y = divider.new_horizontal(size="5%", pad=0.0, pack_start=True)
-    ax.figure.add_axes(ax_y) # type: ignore
+    ax.figure.add_axes(ax_y)  # type: ignore
     _plot_brackets(
         ax_y,
         np.tile(inner_unique, len(outer_unique)),
@@ -1679,7 +1679,7 @@ def _plot_groups(
         # top outer curves
         pad_scalar = 0.35 / 30 * fontsize
         ax_x2 = divider.new_vertical(size="5%", pad=pad_scalar, pack_start=False)
-        ax.figure.add_axes(ax_x2) # type: ignore
+        ax.figure.add_axes(ax_x2)  # type: ignore
         _plot_brackets(
             ax_x2,
             outer_unique,
@@ -1693,7 +1693,7 @@ def _plot_groups(
         )
         # side outer curves
         ax_y2 = divider.new_horizontal(size="5%", pad=pad_scalar, pack_start=True)
-        ax.figure.add_axes(ax_y2) # type: ignore
+        ax.figure.add_axes(ax_y2)  # type: ignore
         _plot_brackets(
             ax_y2,
             outer_unique,
