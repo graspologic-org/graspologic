@@ -127,9 +127,9 @@ def _draw_graph(
     for source, target in graph.edges():
         edge_color_list.append(node_colors[source])
 
-    ax.set_xbound(x_domain)
+    ax.set_xbound(*x_domain)
     ax.set_xlim(x_domain)
-    ax.set_ybound(y_domain)
+    ax.set_ybound(*y_domain)
     ax.set_ylim(y_domain)
 
     nx.draw_networkx_edges(

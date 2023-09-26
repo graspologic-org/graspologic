@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Any, Collection, Optional, Union
+from typing import Any, Collection, Optional, Union, Literal
 
 import matplotlib as mpl
 import matplotlib.axes
@@ -984,7 +984,7 @@ def pairplot_with_gmm(
             handles, labels = axes[1].get_legend_handles_labels()
         fig.legend(
             handles,
-            labels,
+            labels,  # type: ignore
             loc="center right",
             title=legend_name,
         )
@@ -1620,17 +1620,17 @@ def _plot_groups(
     axline_kws = dict(linestyle="dashed", lw=0.9, alpha=0.3, zorder=3, color="grey")
     # draw lines
     for x in inner_freq_cumsum[1:-1]:
-        ax.vlines(x, 0, n_verts + 1, **axline_kws)
-        ax.hlines(x, 0, n_verts + 1, **axline_kws)
+        ax.vlines(x, 0, n_verts + 1, **axline_kws)  # type: ignore
+        ax.hlines(x, 0, n_verts + 1, **axline_kws)  # type: ignore
 
     # add specific lines for the borders of the plot
     pad = 0.001
     low = pad
     high = 1 - pad
-    ax.plot((low, low), (low, high), transform=ax.transAxes, **axline_kws)
-    ax.plot((low, high), (low, low), transform=ax.transAxes, **axline_kws)
-    ax.plot((high, high), (low, high), transform=ax.transAxes, **axline_kws)
-    ax.plot((low, high), (high, high), transform=ax.transAxes, **axline_kws)
+    ax.plot((low, low), (low, high), transform=ax.transAxes, **axline_kws)  # type: ignore
+    ax.plot((low, high), (low, low), transform=ax.transAxes, **axline_kws)  # type: ignore
+    ax.plot((high, high), (low, high), transform=ax.transAxes, **axline_kws)  # type: ignore
+    ax.plot((low, high), (high, high), transform=ax.transAxes, **axline_kws)  # type: ignore
 
     # generic curve that we will use for everything
     lx = np.linspace(-np.pi / 2.0 + 0.05, np.pi / 2.0 - 0.05, 500)
@@ -1648,7 +1648,7 @@ def _plot_groups(
 
     # top inner curves
     ax_x = divider.new_vertical(size="5%", pad=0.0, pack_start=False)
-    ax.figure.add_axes(ax_x)
+    ax.figure.add_axes(ax_x) # type: ignore
     _plot_brackets(
         ax_x,
         np.tile(inner_unique, len(outer_unique)),
@@ -1662,7 +1662,7 @@ def _plot_groups(
     )
     # side inner curves
     ax_y = divider.new_horizontal(size="5%", pad=0.0, pack_start=True)
-    ax.figure.add_axes(ax_y)
+    ax.figure.add_axes(ax_y) # type: ignore
     _plot_brackets(
         ax_y,
         np.tile(inner_unique, len(outer_unique)),
@@ -1679,7 +1679,7 @@ def _plot_groups(
         # top outer curves
         pad_scalar = 0.35 / 30 * fontsize
         ax_x2 = divider.new_vertical(size="5%", pad=pad_scalar, pack_start=False)
-        ax.figure.add_axes(ax_x2)
+        ax.figure.add_axes(ax_x2) # type: ignore
         _plot_brackets(
             ax_x2,
             outer_unique,
@@ -1693,7 +1693,7 @@ def _plot_groups(
         )
         # side outer curves
         ax_y2 = divider.new_horizontal(size="5%", pad=pad_scalar, pack_start=True)
-        ax.figure.add_axes(ax_y2)
+        ax.figure.add_axes(ax_y2) # type: ignore
         _plot_brackets(
             ax_y2,
             outer_unique,
@@ -1715,7 +1715,7 @@ def _plot_brackets(
     tick_width: np.ndarray,
     curve: np.ndarray,
     level: str,
-    axis: str,
+    axis: Literal["both", "x", "y"],
     max_size: int,
     fontsize: int,
 ) -> None:
