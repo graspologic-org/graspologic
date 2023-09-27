@@ -442,7 +442,7 @@ def gridplot(
         Set of colors for mapping the ``hue`` variable. If a dict, keys should
         be values in the ``hue`` variable.
         For acceptable string arguments, see the palette options at
-        :doc:`Choosing Colormaps in Matplotlib <explain/colors/colormaps>`
+        :doc:`Choosing Colormaps in Matplotlib <users/explain/colors/colormaps>`
     alpha : float [0, 1], default : 0.7
         Alpha value of plotted gridplot points
     sizes : length 2 tuple, default: (10, 200)
