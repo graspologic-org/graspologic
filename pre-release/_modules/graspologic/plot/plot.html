@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.plot.plot &mdash; graspologic 3.2.0dev5788287388 documentation</title>
+  <title>graspologic.plot.plot &mdash; graspologic 3.2.0dev6342187107 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=10f9fa54"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.2.0dev5788287388
+                3.2.0dev6342187107
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -291,7 +291,7 @@
 <span class="c1"># Licensed under the MIT License.</span>
 
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.axes</span>
@@ -731,7 +731,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;users/explain/colors/colormaps&gt;`</span>
 <span class="sd">    alpha : float [0, 1], default : 0.7</span>
 <span class="sd">        Alpha value of plotted gridplot points</span>
 <span class="sd">    sizes : length 2 tuple, default: (10, 200)</span>
@@ -896,7 +896,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;users/explain/colors/colormaps&gt;`.</span>
 <span class="sd">    alpha : float, optional, default: 0.7</span>
 <span class="sd">        Opacity value of plotter markers between 0 and 1</span>
 <span class="sd">    size : float or int, optional, default: 50</span>
@@ -1052,10 +1052,10 @@
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="mf">180.0</span> <span class="o">*</span> <span class="n">angle</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="n">ell</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">patches</span><span class="o">.</span><span class="n">Ellipse</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">mean</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">]],</span>
+            <span class="p">(</span><span class="n">mean</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">mean</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span>
             <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="mf">180.0</span> <span class="o">+</span> <span class="n">angle</span><span class="p">,</span>
+            <span class="n">angle</span><span class="o">=</span><span class="mf">180.0</span> <span class="o">+</span> <span class="n">angle</span><span class="p">,</span>
             <span class="n">color</span><span class="o">=</span><span class="n">cluster_palette</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="n">ell</span><span class="o">.</span><span class="n">set_clip_box</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">bbox</span><span class="p">)</span>
@@ -1273,7 +1273,7 @@
             <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
             <span class="n">handles</span><span class="p">,</span>
-            <span class="n">labels</span><span class="p">,</span>
+            <span class="n">labels</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
             <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;center right&quot;</span><span class="p">,</span>
             <span class="n">title</span><span class="o">=</span><span class="n">legend_name</span><span class="p">,</span>
         <span class="p">)</span>
@@ -1358,7 +1358,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;users/explain/colors/colormaps&gt;`.</span>
 <span class="sd">    figsize : tuple of length 2, default (10, 5)</span>
 <span class="sd">        Size of the figure (width, height)</span>
 
@@ -1427,7 +1427,7 @@
 <span class="sd">        Set of colors for mapping the ``hue`` variable. If a dict, keys should</span>
 <span class="sd">        be values in the ``hue`` variable.</span>
 <span class="sd">        For acceptable string arguments, see the palette options at</span>
-<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;tutorials/colors/colormaps&gt;`.</span>
+<span class="sd">        :doc:`Choosing Colormaps in Matplotlib &lt;users/explain/colors/colormaps&gt;`.</span>
 <span class="sd">    figsize : tuple of length 2, default (10, 5)</span>
 <span class="sd">        Size of the figure (width, height)</span>
 
@@ -1710,6 +1710,7 @@
     <span class="n">context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;talk&quot;</span><span class="p">,</span>
     <span class="n">font_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">figsize</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">ax</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cumulative</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">show_first</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">show_elbow</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1769,8 +1770,11 @@
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">D</span><span class="p">[:</span><span class="n">show_first</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">D</span><span class="p">[:</span><span class="n">show_first</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
     <span class="n">_</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;Component&quot;</span>
     <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Variance explained&quot;</span>
     <span class="k">with</span> <span class="n">sns</span><span class="o">.</span><span class="n">plotting_context</span><span class="p">(</span><span class="n">context</span><span class="o">=</span><span class="n">context</span><span class="p">,</span> <span class="n">font_scale</span><span class="o">=</span><span class="n">font_scale</span><span class="p">):</span>
@@ -1905,17 +1909,17 @@
     <span class="n">axline_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">)</span>
     <span class="c1"># draw lines</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inner_freq_cumsum</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_verts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_verts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_verts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_verts</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># add specific lines for the borders of the plot</span>
     <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.001</span>
     <span class="n">low</span> <span class="o">=</span> <span class="n">pad</span>
     <span class="n">high</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pad</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">low</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">low</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">high</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">low</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">low</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">high</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">((</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="p">(</span><span class="n">high</span><span class="p">,</span> <span class="n">high</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="o">**</span><span class="n">axline_kws</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 
     <span class="c1"># generic curve that we will use for everything</span>
     <span class="n">lx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
@@ -1933,7 +1937,7 @@
 
     <span class="c1"># top inner curves</span>
     <span class="n">ax_x</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">new_vertical</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pack_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_x</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_x</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="n">_plot_brackets</span><span class="p">(</span>
         <span class="n">ax_x</span><span class="p">,</span>
         <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">inner_unique</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">outer_unique</span><span class="p">)),</span>
@@ -1947,7 +1951,7 @@
     <span class="p">)</span>
     <span class="c1"># side inner curves</span>
     <span class="n">ax_y</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">new_horizontal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">pack_start</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_y</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_y</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="n">_plot_brackets</span><span class="p">(</span>
         <span class="n">ax_y</span><span class="p">,</span>
         <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">inner_unique</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">outer_unique</span><span class="p">)),</span>
@@ -1964,7 +1968,7 @@
         <span class="c1"># top outer curves</span>
         <span class="n">pad_scalar</span> <span class="o">=</span> <span class="mf">0.35</span> <span class="o">/</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">fontsize</span>
         <span class="n">ax_x2</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">new_vertical</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">pad_scalar</span><span class="p">,</span> <span class="n">pack_start</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_x2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_x2</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="n">_plot_brackets</span><span class="p">(</span>
             <span class="n">ax_x2</span><span class="p">,</span>
             <span class="n">outer_unique</span><span class="p">,</span>
@@ -1978,7 +1982,7 @@
         <span class="p">)</span>
         <span class="c1"># side outer curves</span>
         <span class="n">ax_y2</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">new_horizontal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s2">&quot;5%&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">pad_scalar</span><span class="p">,</span> <span class="n">pack_start</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_y2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">ax_y2</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="n">_plot_brackets</span><span class="p">(</span>
             <span class="n">ax_y2</span><span class="p">,</span>
             <span class="n">outer_unique</span><span class="p">,</span>
@@ -2000,7 +2004,7 @@
     <span class="n">tick_width</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">curve</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">axis</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">],</span>
     <span class="n">max_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">fontsize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

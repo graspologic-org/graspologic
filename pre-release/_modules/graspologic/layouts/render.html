@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.render &mdash; graspologic 3.2.0dev5788287388 documentation</title>
+  <title>graspologic.layouts.render &mdash; graspologic 3.2.0dev6342187107 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=10f9fa54"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.2.0dev5788287388
+                3.2.0dev6342187107
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -416,9 +416,9 @@
     <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
         <span class="n">edge_color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_colors</span><span class="p">[</span><span class="n">source</span><span class="p">])</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xbound</span><span class="p">(</span><span class="n">x_domain</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xbound</span><span class="p">(</span><span class="o">*</span><span class="n">x_domain</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_domain</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ybound</span><span class="p">(</span><span class="n">y_domain</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ybound</span><span class="p">(</span><span class="o">*</span><span class="n">y_domain</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">y_domain</span><span class="p">)</span>
 
     <span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edges</span><span class="p">(</span>
