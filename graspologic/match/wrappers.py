@@ -69,6 +69,7 @@ def graph_match(
     transport_regularizer: Scalar = 100,
     transport_tol: Scalar = 5e-2,
     transport_max_iter: Int = 1000,
+    fast: bool = True,
 ) -> MatchResult:
     """
     Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem
@@ -192,6 +193,12 @@ def graph_match(
         Setting this value higher may provide more precise solutions at the cost of
         longer computation time.
 
+    fast: bool, default=True
+        Whether to use numerical shortcuts to speed up the computation. Typically will
+        be faster for most applications, although requires storing intermediate
+        computations in memory which may be undesirable for very large inputs or when
+        memory is a bottleneck.
+
     Returns
     -------
     res: MatchResult
@@ -281,7 +288,6 @@ def graph_match(
         partial_match=partial_match,
         init=init,
         init_perturbation=init_perturbation,
-        verbose=solver_verbose,
         shuffle_input=shuffle_input,
         padding=padding,
         maximize=maximize,
@@ -291,6 +297,7 @@ def graph_match(
         transport_regularizer=transport_regularizer,
         transport_tol=transport_tol,
         transport_max_iter=transport_max_iter,
+        fast=fast,
     )
 
     def run_single_graph_matching(seed: RngType) -> MatchResult:
