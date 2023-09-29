@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.match.wrappers &mdash; graspologic 3.2.0 documentation</title>
+  <title>graspologic.match.wrappers &mdash; graspologic 3.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/sphinx_highlight.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=1cc24756"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +31,7 @@
             graspologic
           </a>
               <div class="version">
-                3.2.0
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -61,6 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-3-0">graspologic 3.3.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-2-0">graspologic 3.2.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../reference/release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
@@ -358,6 +359,7 @@
     <span class="n">transport_regularizer</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
     <span class="n">transport_tol</span><span class="p">:</span> <span class="n">Scalar</span> <span class="o">=</span> <span class="mf">5e-2</span><span class="p">,</span>
     <span class="n">transport_max_iter</span><span class="p">:</span> <span class="n">Int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="n">fast</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchResult</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem</span>
@@ -481,6 +483,12 @@
 <span class="sd">        Setting this value higher may provide more precise solutions at the cost of</span>
 <span class="sd">        longer computation time.</span>
 
+<span class="sd">    fast: bool, default=True</span>
+<span class="sd">        Whether to use numerical shortcuts to speed up the computation. Typically will</span>
+<span class="sd">        be faster for most applications, although requires storing intermediate</span>
+<span class="sd">        computations in memory which may be undesirable for very large inputs or when</span>
+<span class="sd">        memory is a bottleneck.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    res: MatchResult</span>
@@ -570,7 +578,6 @@
         <span class="n">partial_match</span><span class="o">=</span><span class="n">partial_match</span><span class="p">,</span>
         <span class="n">init</span><span class="o">=</span><span class="n">init</span><span class="p">,</span>
         <span class="n">init_perturbation</span><span class="o">=</span><span class="n">init_perturbation</span><span class="p">,</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="n">solver_verbose</span><span class="p">,</span>
         <span class="n">shuffle_input</span><span class="o">=</span><span class="n">shuffle_input</span><span class="p">,</span>
         <span class="n">padding</span><span class="o">=</span><span class="n">padding</span><span class="p">,</span>
         <span class="n">maximize</span><span class="o">=</span><span class="n">maximize</span><span class="p">,</span>
@@ -580,6 +587,7 @@
         <span class="n">transport_regularizer</span><span class="o">=</span><span class="n">transport_regularizer</span><span class="p">,</span>
         <span class="n">transport_tol</span><span class="o">=</span><span class="n">transport_tol</span><span class="p">,</span>
         <span class="n">transport_max_iter</span><span class="o">=</span><span class="n">transport_max_iter</span><span class="p">,</span>
+        <span class="n">fast</span><span class="o">=</span><span class="n">fast</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">run_single_graph_matching</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="n">RngType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatchResult</span><span class="p">:</span>
