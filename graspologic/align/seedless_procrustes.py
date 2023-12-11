@@ -4,7 +4,6 @@
 from typing import Optional, Union
 
 import numpy as np
-import ot
 from sklearn.utils import check_array
 
 from graspologic.types import Tuple
@@ -287,6 +286,7 @@ class SeedlessProcrustes(BaseAlign):
         )
         # Note: the type info on ot.sinkhorn can support a return type of Tuple[np.ndarray, Dict[str, Any]], but only
         # if this function is called with log=True, which we aren't doing.
+        import ot
         P: np.ndarray = ot.sinkhorn(
             a=probability_mass_X,
             b=probability_mass_Y,
