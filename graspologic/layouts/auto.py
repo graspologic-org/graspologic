@@ -8,7 +8,6 @@ from typing import Any, Optional, Sequence
 
 import networkx as nx
 import numpy as np
-import umap
 from sklearn.manifold import TSNE
 
 from graspologic.types import Dict, List, Tuple
@@ -198,9 +197,9 @@ def layout_umap(
         on Neighbor Embeddings along the Attraction-Repulsion Spectrum. ArXiv e-prints
         2007.08902v1, 17 Jul 2020.
     """
-
+    from umap import UMAP
     lcc_graph, tensors, labels = _node2vec_for_layout(graph, max_edges, random_seed)
-    points = umap.UMAP(
+    points = UMAP(
         min_dist=min_dist, n_neighbors=n_neighbors, random_state=random_seed
     ).fit_transform(tensors)
     positions = _node_positions_from(

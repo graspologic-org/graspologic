@@ -8,7 +8,6 @@ from typing import Callable, Optional, Union
 
 import numpy as np
 from beartype import beartype
-from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
 from sklearn.utils import check_scalar
 
@@ -363,6 +362,7 @@ class _GraphMatchSolver:
         self,
         P: np.ndarray,
     ) -> np.ndarray:
+        from ot import sinkhorn
         maximize = self.maximize
         reg = self.transport_regularizer
 

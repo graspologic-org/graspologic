@@ -284,6 +284,7 @@ class SeedlessProcrustes(BaseAlign):
         cost_matrix = (
             np.linalg.norm((X @ Q).reshape(n, 1, d) - Y.reshape(1, m, d), axis=2) ** 2
         )
+        from ot import sinkhorn
         # Note: the type info on ot.sinkhorn can support a return type of Tuple[np.ndarray, Dict[str, Any]], but only
         # if this function is called with log=True, which we aren't doing.
         import ot
