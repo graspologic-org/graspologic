@@ -159,7 +159,7 @@ def sequential_colors(
     keys, values = zip(*node_and_value.items())
 
     if use_log_scale:
-        values = map(math.log, values)
+        values = map(math.log, values)  # type: ignore
 
     np_values = np.array(values).reshape(1, -1)
     new_values = minmax_scale(np_values, feature_range=(0, num_colors - 1), axis=1)
