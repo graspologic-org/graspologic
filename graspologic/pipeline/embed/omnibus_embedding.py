@@ -165,9 +165,9 @@ def omnibus_embedding_pairwise(
     for graph in graphs[1:]:
         union_graph.add_edges_from(graph.edges())
 
-    union_graph_lcc: Union[
-        nx.Graph, nx.Digraph, nx.OrderedGraph, nx.OrderedDiGraph
-    ] = largest_connected_component(union_graph)
+    union_graph_lcc: Union[nx.Graph, nx.Digraph, nx.OrderedGraph, nx.OrderedDiGraph] = (
+        largest_connected_component(union_graph)
+    )
     union_graph_lcc_nodes: Set[Any] = set(list(union_graph_lcc.nodes()))
 
     union_node_ids = np.array(list(union_graph_lcc_nodes))
