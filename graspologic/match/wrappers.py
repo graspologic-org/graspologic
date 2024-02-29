@@ -298,6 +298,7 @@ def graph_match(
         transport_tol=transport_tol,
         transport_max_iter=transport_max_iter,
         fast=fast,
+        verbose=solver_verbose,
     )
 
     def run_single_graph_matching(seed: RngType) -> MatchResult:
@@ -311,6 +312,7 @@ def graph_match(
         misc["n_iter"] = solver.n_iter_
         misc["convex_solution"] = solver.convex_solution_
         misc["converged"] = solver.converged_
+        misc['changes'] = solver.changes_
         return MatchResult(indices_A, indices_B, score, [misc])
 
     seeds = rng.integers(max_seed, size=n_init)

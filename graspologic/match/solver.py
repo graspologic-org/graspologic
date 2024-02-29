@@ -36,7 +36,9 @@ def parameterized(dec: Callable) -> Callable:
 
 
 @parameterized
-def write_status(f: Callable, msg: str, level: int) -> Callable:
+def write_status(
+    f: Callable, msg: str, level: int, print_out: bool = False
+) -> Callable:
     @wraps(f)
     def wrap(*args, **kw):  # type: ignore
         obj = args[0]
@@ -52,6 +54,10 @@ def write_status(f: Callable, msg: str, level: int) -> Callable:
             sec = te - ts
             output = total_msg + f" took {sec:.3f} seconds."
             print(output)
+        if print_out:
+            total_msg = (level - 1) * "   "
+            total_msg += obj.status() + " Result:" + str(result)
+            print(total_msg)
         else:
             result = f(*args, **kw)
         return result
@@ -251,6 +257,7 @@ class _GraphMatchSolver:
     def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
 
+        self.changes_ = []
         self.n_iter_ = 0
         if self.n_seeds == self.n:  # all seeded, break
             P = np.empty((0, 0))
@@ -268,7 +275,9 @@ class _GraphMatchSolver:
                 # take a step in this direction
                 P_new = alpha * P + (1 - alpha) * Q
 
-                if self.check_converged(P, P_new):
+                change = self.compute_change(P, P_new)
+                self.changes_.append(change)
+                if self.check_converged(change):
                     self.converged_ = True
                     P = P_new
                     break
@@ -416,8 +425,12 @@ class _GraphMatchSolver:
             alpha = float(np.argmin([0, (b + a) * self.obj_func_scalar]))
         return alpha
 
-    def check_converged(self, P: np.ndarray, P_new: np.ndarray) -> bool:
-        return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed) < self.tol
+    @write_status("Computing relative change from previous", 2, print_out=True)
+    def compute_change(self, P: np.ndarray, P_new: np.ndarray) -> float:
+        return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed)
+
+    def check_converged(self, change: float) -> bool:
+        return change < self.tol
 
     @write_status("Finalizing assignment", 1)
     def finalize(self, P: np.ndarray, rng: np.random.Generator) -> None:
