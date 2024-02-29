@@ -54,7 +54,7 @@ def write_status(
             sec = te - ts
             output = total_msg + f" took {sec:.3f} seconds."
             print(output)
-        if print_out:
+        if print_out and (level <= verbose):
             total_msg = (level - 1) * "   "
             total_msg += obj.status() + " Result:" + str(result)
             print(total_msg)
