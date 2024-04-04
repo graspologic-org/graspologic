@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple, Optional, Union
 
 import numpy as np
 from beartype import beartype
@@ -18,6 +18,7 @@ from .types import (
     PaddingType,
     PartialMatchType,
     Scalar,
+    csr_array,
 )
 
 
@@ -54,7 +55,7 @@ def graph_match(
     BA: Optional[MultilayerAdjacency] = None,
     S: Optional[AdjacencyMatrix] = None,
     partial_match: Optional[PartialMatchType] = None,
-    init: Optional[np.ndarray] = None,
+    init: Optional[AdjacencyMatrix] = None,
     init_perturbation: Scalar = 0.0,
     n_init: Int = 1,
     shuffle_input: bool = True,
@@ -70,6 +71,7 @@ def graph_match(
     transport_tol: Scalar = 5e-2,
     transport_max_iter: Int = 1000,
     fast: bool = True,
+    sparse_position: bool = False,
 ) -> MatchResult:
     """
     Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem
@@ -299,6 +301,7 @@ def graph_match(
         transport_max_iter=transport_max_iter,
         fast=fast,
         verbose=solver_verbose,
+        sparse_position=sparse_position,
     )
 
     def run_single_graph_matching(seed: RngType) -> MatchResult:
@@ -312,7 +315,7 @@ def graph_match(
         misc["n_iter"] = solver.n_iter_
         misc["convex_solution"] = solver.convex_solution_
         misc["converged"] = solver.converged_
-        misc['changes'] = solver.changes_
+        misc["changes"] = solver.changes_
         return MatchResult(indices_A, indices_B, score, [misc])
 
     seeds = rng.integers(max_seed, size=n_init)

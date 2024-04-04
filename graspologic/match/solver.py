@@ -10,6 +10,8 @@ import numpy as np
 from beartype import beartype
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
+from scipy.sparse import csr_array
+from scipy.sparse import linalg as sparse_linalg
 from sklearn.utils import check_scalar
 
 from graspologic.types import List, RngType, Tuple
@@ -75,7 +77,7 @@ class _GraphMatchSolver:
         BA: Optional[MultilayerAdjacency] = None,
         S: Optional[AdjacencyMatrix] = None,
         partial_match: Optional[PartialMatchType] = None,
-        init: Optional[np.ndarray] = None,
+        init: Optional[AdjacencyMatrix] = None,
         init_perturbation: Scalar = 0.0,
         verbose: Int = False,
         shuffle_input: bool = True,
@@ -88,6 +90,7 @@ class _GraphMatchSolver:
         transport_tol: Scalar = 5e-2,
         transport_max_iter: Int = 1000,
         fast: bool = True,
+        sparse_position: bool = False,
     ):
         # TODO check if init is doubly stochastic
         self.init = init
@@ -120,6 +123,7 @@ class _GraphMatchSolver:
         self.transport_max_iter = transport_max_iter
 
         self.fast = fast
+        self.sparse_position = sparse_position
 
         if maximize:
             self.obj_func_scalar = -1
@@ -269,11 +273,19 @@ class _GraphMatchSolver:
                 self.n_iter_ = n_iter + 1
 
                 gradient = self.compute_gradient(P)
+                if self.sparse_position:
+                    assert isinstance(gradient, csr_array)
+
                 Q = self.compute_step_direction(gradient, rng)
+                if self.sparse_position:
+                    assert isinstance(Q, csr_array)
+
                 alpha = self.compute_step_size(P, Q)
 
                 # take a step in this direction
                 P_new = alpha * P + (1 - alpha) * Q
+                if self.sparse_position:
+                    assert isinstance(P_new, csr_array)
 
                 change = self.compute_change(P, P_new)
                 self.changes_.append(change)
@@ -288,7 +300,7 @@ class _GraphMatchSolver:
     @write_status("Initializing", 1)
     def initialize(self, rng: np.random.Generator) -> np.ndarray:
         # user custom initialization
-        if isinstance(self.init, np.ndarray):
+        if isinstance(self.init, (np.ndarray, csr_array)):
             _check_init_input(self.init, self.n_unseed)
             J = self.init
         # else, just a flat, uninformative initializaiton, also called the barycenter
@@ -313,12 +325,18 @@ class _GraphMatchSolver:
         else:
             P = J
 
+        if self.sparse_position:
+            P = csr_array(P)
+
         self.converged_ = False
         return P
 
     @write_status("Computing constant terms", 2)
     def compute_constant_terms(self) -> None:
-        self.constant_sum = np.zeros((self.n_unseed, self.n_unseed))
+        if self.sparse_position:
+            self.constant_sum = csr_array((self.n_unseed, self.n_unseed))
+        else:
+            self.constant_sum = np.zeros((self.n_unseed, self.n_unseed))
         if self._seeded:
             n_layers = len(self.A_nn)
             for i in range(n_layers):
@@ -347,6 +365,9 @@ class _GraphMatchSolver:
         else:
             permutation = self.linear_sum_assignment(gradient, rng)
             Q = np.eye(self.n_unseed)[permutation]
+            # TODO make this less janky, just start from a sparse array
+            if self.sparse_position:
+                Q = csr_array(Q)
         return Q
 
     def linear_sum_assignment(
@@ -362,6 +383,8 @@ class _GraphMatchSolver:
         else:
             row_perm = np.arange(P.shape[0])
         undo_row_perm = np.argsort(row_perm)
+        if self.sparse_position:
+            P = P.toarray()
         P_perm = P[row_perm]
         if maximize is None:
             maximize = self.maximize
@@ -427,7 +450,13 @@ class _GraphMatchSolver:
 
     @write_status("Computing relative change from previous", 2, print_out=True)
     def compute_change(self, P: np.ndarray, P_new: np.ndarray) -> float:
-        return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed)
+        if not self.sparse_position:
+            return np.linalg.norm(P - P_new) / np.sqrt(self.n_unseed)
+        else:
+            return sparse_linalg.norm(P - P_new) / np.sqrt(self.n_unseed)
+            # return np.linalg.norm(P.toarray() - P_new.toarray()) / np.sqrt(
+            #     self.n_unseed
+            # )
 
     def check_converged(self, change: float) -> bool:
         return change < self.tol
@@ -788,7 +817,7 @@ def _check_init_input(init: np.ndarray, n: int) -> None:
     msg = ""
     if init.shape != (n, n):
         msg = "`init` matrix must be n x n, where n is the number of non-seeded nodes"
-    elif (
+    elif ( # TODO make this work for sparse case
         (~np.isclose(row_sum, 1, atol=tol)).any()
         or (~np.isclose(col_sum, 1, atol=tol)).any()
         or (init < 0).any()
