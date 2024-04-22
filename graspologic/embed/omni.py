@@ -2,13 +2,11 @@
 # Licensed under the MIT License.
 
 import warnings
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
 from beartype import beartype
-from scipy.sparse import csr_array, hstack, isspmatrix_csr, vstack
-
-from graspologic.types import List
+from scipy.sparse import csr_matrix, hstack, isspmatrix_csr, vstack
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import average_matrices, is_fully_connected, to_laplacian
@@ -17,7 +15,7 @@ from .svd import SvdAlgorithmType
 
 
 @beartype
-def _get_omnibus_matrix_sparse(matrices: List[csr_array]) -> csr_array:
+def _get_omnibus_matrix_sparse(matrices: List[csr_matrix]) -> csr_matrix:
     """
     Generate the omnibus matrix from a list of sparse adjacency matrices as described by 'A central limit theorem
     for an omnibus embedding of random dot product graphs.'
@@ -52,7 +50,7 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_array]) -> csr_array:
         # row
         rows.append(hstack(current_row))
 
-    return csr_array(vstack(rows, format="csr"))
+    return vstack(rows, format="csr")
 
 
 def _get_laplacian_matrices(
@@ -97,7 +95,7 @@ def _get_omni_matrix(
     out : 2d-array
         Array of shape (n_vertices * n_graphs, n_vertices * n_graphs)
     """
-    if isinstance(graphs[0], csr_array):
+    if isspmatrix_csr(graphs[0]):
         return _get_omnibus_matrix_sparse(graphs)  # type: ignore
 
     shape = graphs[0].shape
@@ -244,7 +242,7 @@ class OmnibusEmbed(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph or ndarray, or csr_array
+        graphs : list of nx.Graph or ndarray, or csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
             If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
@@ -293,6 +291,8 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):  # type: ignore
         """
+        not implemented
+
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
@@ -312,4 +312,7 @@ class OmnibusEmbed(BaseEmbedMulti):
             If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.
             In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.
         """
+        raise NotImplementedError(
+            "out of sample transform does not work for multiple graph embeddings"
+        )
         return self._fit_transform(graphs)

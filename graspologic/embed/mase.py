@@ -212,9 +212,9 @@ class MultipleASE(BaseEmbedMulti):
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_array
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_array, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -247,14 +247,16 @@ class MultipleASE(BaseEmbedMulti):
 
     def fit_transform(self, graphs, y=None):  # type: ignore
         """
+        not implemented
+
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_array
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_array, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -265,4 +267,7 @@ class MultipleASE(BaseEmbedMulti):
             The first corresponds to the left latent positions, and the second to the right latent positions.
             When ``concat`` is True left and right (out and in) latent positions are concatenated along axis 1.
         """
+        raise NotImplementedError(
+            "out of sample transform does not work for multiple graph embeddings"
+        )
         return self._fit_transform(graphs)
