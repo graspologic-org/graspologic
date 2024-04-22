@@ -2,12 +2,13 @@
 # Licensed under the MIT License.
 
 from typing import Optional
-
 import numpy as np
 
 from ..utils import is_almost_symmetric
 from .base import BaseEmbedMulti
-from .svd import SvdAlgorithmType, select_dimension, select_svd
+from .svd import select_dimension, select_svd
+
+from joblib import delayed, Parallel
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -58,6 +59,13 @@ class MultipleASE(BaseEmbedMulti):
         Number of iterations for randomized SVD solver. Not used by 'full' or
         'truncated'. The default is larger than the default in randomized_svd
         to handle sparse matrices that may have large slowly decaying spectrum.
+
+    n_jobs: int, default: None
+        The maximum number of concurrently running jobs, such as the number of
+        Python worker processes when backend=”multiprocessing” or the size of
+        the thread-pool when backend=”threading”. If -1 all CPUs are used. If
+        1 is given, no parallel computing code is used at all, which is
+        useful for debugging.
 
     scaled : bool, optional (default=True)
         Whether to scale individual eigenvectors with eigenvalues in first embedding
@@ -111,14 +119,16 @@ class MultipleASE(BaseEmbedMulti):
 
     def __init__(
         self,
-        n_components: Optional[int] = None,
-        n_elbows: Optional[int] = 2,
-        algorithm: SvdAlgorithmType = "randomized",
-        n_iter: int = 5,
-        scaled: bool = True,
-        diag_aug: bool = True,
-        concat: bool = False,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        scaled=True,
+        diag_aug=True,
+        concat=False,
+        n_jobs=-1,
         svd_seed: Optional[int] = None,
+
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -134,8 +144,9 @@ class MultipleASE(BaseEmbedMulti):
             svd_seed=svd_seed,
         )
         self.scaled = scaled
+        self.n_jobs = n_jobs
 
-    def _reduce_dim(self, graphs):  # type: ignore
+    def _reduce_dim(self, graphs):
         if self.n_components is None:
             # first embed into log2(n_vertices) for each graph
             n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
@@ -143,8 +154,9 @@ class MultipleASE(BaseEmbedMulti):
             n_components = self.n_components
 
         # embed individual graphs
-        embeddings = [
-            select_svd(
+
+        embeddings = Parallel(n_jobs=self.n_jobs)(
+            delayed(selectSVD)(
                 graph,
                 n_components=n_components,
                 algorithm=self.algorithm,
@@ -152,7 +164,7 @@ class MultipleASE(BaseEmbedMulti):
                 svd_seed=self.svd_seed,
             )
             for graph in graphs
-        ]
+        )
         Us, Ds, Vs = zip(*embeddings)
 
         # Choose the best embedding dimension for each graphs
@@ -206,15 +218,15 @@ class MultipleASE(BaseEmbedMulti):
         )
         return Uhat, Vhat, sing_vals_left, sing_vals_right
 
-    def fit(self, graphs, y=None):  # type: ignore
+    def fit(self, graphs, y=None):
         """
         Fit the model with graphs.
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_array
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_array, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -245,16 +257,16 @@ class MultipleASE(BaseEmbedMulti):
 
         return self
 
-    def fit_transform(self, graphs, y=None):  # type: ignore
+    def fit_transform(self, graphs, y=None):
         """
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_array
+        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_array, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
