@@ -1,13 +1,12 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Optional
-
 import numpy as np
+from sklearn.utils.validation import check_is_fitted
 
-from ..utils import is_almost_symmetric
+from ..utils import import_graph, import_multigraphs, is_almost_symmetric
 from .base import BaseEmbedMulti
-from .svd import SvdAlgorithmType, select_dimension, select_svd
+from .svd import select_dimension, selectSVD
 
 
 class MultipleASE(BaseEmbedMulti):
@@ -28,19 +27,16 @@ class MultipleASE(BaseEmbedMulti):
     :math:`R^{(i)}` can be assymetric and non-square, but all graphs still share a
     common latent position matrices :math:`U` and :math:`V`.
 
-    Read more in the `Multiple Adjacency Spectral Embedding (MASE) Tutorial
-    <https://microsoft.github.io/graspologic/tutorials/embedding/MASE.html>`_
-
     Parameters
     ----------
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
-        ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
-        ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
+        n_components must be <= min(X.shape). Otherwise, n_components must be
+        < min(X.shape). If None, then optimal dimensions will be chosen by
         :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
-        If ``n_components`` is None, then compute the optimal embedding dimension using
+        If ``n_components=None``, then compute the optimal embedding dimension using
         :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
@@ -72,10 +68,6 @@ class MultipleASE(BaseEmbedMulti):
         If graph(s) are directed, whether to concatenate each graph's left and right (out and in) latent positions
         along axis 1.
 
-    svd_seed : int or None (default ``None``)
-        Only applicable for ``algorithm="randomized"``; allows you to seed the
-        randomized svd solver for deterministic, albeit pseudo-randomized behavior.
-
 
     Attributes
     ----------
@@ -95,30 +87,22 @@ class MultipleASE(BaseEmbedMulti):
     scores_ : array, shape (n_samples, n_components, n_components)
         Estimated :math:`\hat{R}` matrices for each input graph.
 
-    singular_values_ : array, shape (n_components) OR length 2 tuple of arrays
-        If input graph is undirected, equal to the singular values of the concatenated
-        adjacency spectral embeddings. If input graph is directed, :attr:`singular_values_`
-        is a tuple of length 2, where :attr:`singular_values_[0]` corresponds to
-        the singular values of the concatenated left adjacency spectral embeddings,
-        and :attr:`singular_values_[1]` corresponds to
-        the singular values of the concatenated right adjacency spectral embeddings.
 
     Notes
     -----
-    When an input graph is directed, ``n_components`` of :attr:`latent_left_` may not be equal
-    to ``n_components`` of :attr:`latent_right_`.
+    When an input graph is directed, `n_components` of `latent_left_` may not be equal
+    to `n_components` of `latent_right_`.
     """
 
     def __init__(
         self,
-        n_components: Optional[int] = None,
-        n_elbows: Optional[int] = 2,
-        algorithm: SvdAlgorithmType = "randomized",
-        n_iter: int = 5,
-        scaled: bool = True,
-        diag_aug: bool = True,
-        concat: bool = False,
-        svd_seed: Optional[int] = None,
+        n_components=None,
+        n_elbows=2,
+        algorithm="randomized",
+        n_iter=5,
+        scaled=True,
+        diag_aug=True,
+        concat=False,
     ):
         if not isinstance(scaled, bool):
             msg = "scaled must be a boolean, not {}".format(scaled)
@@ -131,25 +115,20 @@ class MultipleASE(BaseEmbedMulti):
             n_iter=n_iter,
             diag_aug=diag_aug,
             concat=concat,
-            svd_seed=svd_seed,
         )
         self.scaled = scaled
 
-    def _reduce_dim(self, graphs):  # type: ignore
-        if self.n_components is None:
-            # first embed into log2(n_vertices) for each graph
-            n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
-        else:
-            n_components = self.n_components
+    def _reduce_dim(self, graphs):
+        # first embed into log2(n_vertices) for each graph
+        n_components = int(np.ceil(np.log2(np.min(self.n_vertices_))))
 
         # embed individual graphs
         embeddings = [
-            select_svd(
+            selectSVD(
                 graph,
                 n_components=n_components,
                 algorithm=self.algorithm,
                 n_iter=self.n_iter,
-                svd_seed=self.svd_seed,
             )
             for graph in graphs
         ]
@@ -187,34 +166,32 @@ class MultipleASE(BaseEmbedMulti):
 
         # Second SVD for vertices
         # The notation is slightly different than the paper
-        Uhat, sing_vals_left, _ = select_svd(
+        Uhat, _, _ = selectSVD(
             Us,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
-            svd_seed=self.svd_seed,
         )
 
-        Vhat, sing_vals_right, _ = select_svd(
+        Vhat, _, _ = selectSVD(
             Vs,
             n_components=self.n_components,
             n_elbows=self.n_elbows,
             algorithm=self.algorithm,
             n_iter=self.n_iter,
-            svd_seed=self.svd_seed,
         )
-        return Uhat, Vhat, sing_vals_left, sing_vals_right
+        return Uhat, Vhat
 
-    def fit(self, graphs, y=None):  # type: ignore
+    def fit(self, graphs, y=None):
         """
         Fit the model with graphs.
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
+        graphs : list of nx.Graph or ndarray, or ndarray
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -222,7 +199,9 @@ class MultipleASE(BaseEmbedMulti):
         self : object
             Returns an instance of self.
         """
-        graphs = self._check_input_graphs(graphs)
+        graphs = import_multigraphs(graphs)
+        self.n_graphs_ = len(graphs)
+        self.n_vertices_ = graphs[0].shape[0]
 
         # Check if undirected
         undirected = all(is_almost_symmetric(g) for g in graphs)
@@ -232,31 +211,27 @@ class MultipleASE(BaseEmbedMulti):
             graphs = self._diag_aug(graphs)
 
         # embed
-        Uhat, Vhat, sing_vals_left, sing_vals_right = self._reduce_dim(graphs)
+        Uhat, Vhat = self._reduce_dim(graphs)
         self.latent_left_ = Uhat
         if not undirected:
             self.latent_right_ = Vhat
-            self.scores_ = np.asarray([Uhat.T @ graph @ Vhat for graph in graphs])
-            self.singular_values_ = (sing_vals_left, sing_vals_right)
+            self.scores_ = Uhat.T @ graphs @ Vhat
         else:
             self.latent_right_ = None
-            self.scores_ = np.asarray([Uhat.T @ graph @ Uhat for graph in graphs])
-            self.singular_values_ = sing_vals_left
+            self.scores_ = Uhat.T @ graphs @ Uhat
 
         return self
 
-    def fit_transform(self, graphs, y=None):  # type: ignore
+    def fit_transform(self, graphs, y=None):
         """
-        not implemented
-
         Fit the model with graphs and apply the embedding on graphs.
         n_components is either automatically determined or based on user input.
 
         Parameters
         ----------
-        graphs : list of nx.Graph, ndarray or scipy.sparse.csr_matrix
+        graphs : list of nx.Graph or ndarray, or ndarray
             If list of nx.Graph, each Graph must contain same number of nodes.
-            If list of ndarray or csr_matrix, each array must have shape (n_vertices, n_vertices).
+            If list of ndarray, each array must have shape (n_vertices, n_vertices).
             If ndarray, then array must have shape (n_graphs, n_vertices, n_vertices).
 
         Returns
@@ -267,7 +242,4 @@ class MultipleASE(BaseEmbedMulti):
             The first corresponds to the left latent positions, and the second to the right latent positions.
             When ``concat`` is True left and right (out and in) latent positions are concatenated along axis 1.
         """
-        raise NotImplementedError(
-            "out of sample transform does not work for multiple graph embeddings"
-        )
         return self._fit_transform(graphs)
