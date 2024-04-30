@@ -10,7 +10,7 @@ import numpy as np
 from beartype import beartype
 from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
-from scipy.sparse import csr_array
+from scipy.sparse import csr_array, lil_array
 from scipy.sparse import linalg as sparse_linalg
 from sklearn.utils import check_scalar
 
@@ -91,6 +91,9 @@ class _GraphMatchSolver:
         transport_max_iter: Int = 1000,
         fast: bool = True,
         sparse_position: bool = False,
+        damping_factor: Optional[Union[Scalar, Callable]] = None,
+        gradient_mask: Optional[AdjacencyMatrix] = None,
+        labels: Optional[np.ndarray] = None,
     ):
         # TODO check if init is doubly stochastic
         self.init = init
@@ -123,7 +126,11 @@ class _GraphMatchSolver:
         self.transport_max_iter = transport_max_iter
 
         self.fast = fast
+
         self.sparse_position = sparse_position
+        self.damping_factor = damping_factor
+        self.gradient_mask = gradient_mask
+        self.labels = labels
 
         if maximize:
             self.obj_func_scalar = -1
@@ -258,6 +265,13 @@ class _GraphMatchSolver:
 
         self.S_ss, self.S_sn, self.S_ns, self.S_nn = _split_matrix(S, n_seeds)
 
+    @property
+    def damping_factor_at_iter(self):
+        if callable(self.damping_factor):
+            return self.damping_factor(self.n_iter_)
+        else:
+            return self.damping_factor
+
     def solve(self, rng: RngType = None) -> None:
         rng = np.random.default_rng(rng)
 
@@ -277,10 +291,19 @@ class _GraphMatchSolver:
                     assert isinstance(gradient, csr_array)
 
                 Q = self.compute_step_direction(gradient, rng)
+
+                Q = self.mask_gradient(Q)
+
                 if self.sparse_position:
                     assert isinstance(Q, csr_array)
 
                 alpha = self.compute_step_size(P, Q)
+
+                beta = 1 - alpha
+                damping_factor = self.damping_factor_at_iter
+                if damping_factor is not None:
+                    beta *= damping_factor
+                alpha = 1 - beta
 
                 # take a step in this direction
                 P_new = alpha * P + (1 - alpha) * Q
@@ -355,6 +378,25 @@ class _GraphMatchSolver:
         )
         return gradient
 
+    @write_status("Masking gradient", 2)
+    def mask_gradient(self, gradient: np.ndarray) -> np.ndarray:
+        mask = self.gradient_mask
+        labels = self.labels
+        if mask is not None:
+            raise NotImplementedError(
+                "Arbitrary masking of gradient not implemented yet"
+            )
+        if labels is None:
+            return gradient
+        if isinstance(gradient, csr_array):
+            gradient = lil_array(gradient)
+            gradient[labels[:, None] != labels[None, :]] = 0
+            gradient.eliminate_zeros()
+            gradient = csr_array(gradient)
+        else: 
+            gradient[labels[:, None] != labels[None, :]] = 0
+        return gradient
+
     @write_status("Solving assignment problem", 2)
     def compute_step_direction(
         self, gradient: np.ndarray, rng: np.random.Generator
@@ -422,7 +464,7 @@ class _GraphMatchSolver:
             )
         return P_eps
 
-    @write_status("Computing step size", 2)
+    @write_status("Computing step size", 2, print_out=True)
     def compute_step_size(self, P: np.ndarray, Q: np.ndarray) -> float:
         a, b = _compute_coefficients(
             P,
@@ -562,7 +604,7 @@ def _check_input_matrix(
         raise ValueError(msg)
     return A
 
-
+# TODO implement gradient masking here? 
 def _compute_gradient(
     P: np.ndarray,
     A: MultilayerAdjacency,
@@ -817,7 +859,7 @@ def _check_init_input(init: np.ndarray, n: int) -> None:
     msg = ""
     if init.shape != (n, n):
         msg = "`init` matrix must be n x n, where n is the number of non-seeded nodes"
-    elif ( # TODO make this work for sparse case
+    elif (  # TODO make this work for sparse case
         (~np.isclose(row_sum, 1, atol=tol)).any()
         or (~np.isclose(col_sum, 1, atol=tol)).any()
         or (init < 0).any()

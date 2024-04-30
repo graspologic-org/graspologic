@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, NamedTuple, Optional, Union
+from typing import Any, NamedTuple, Optional, Union, Callable
 
 import numpy as np
 from beartype import beartype
@@ -72,6 +72,9 @@ def graph_match(
     transport_max_iter: Int = 1000,
     fast: bool = True,
     sparse_position: bool = False,
+    damping_factor: Optional[Union[Callable, Scalar]] = None,
+    gradient_mask: Optional[np.ndarray] = None,
+    labels: Optional[np.ndarray] = None,
 ) -> MatchResult:
     """
     Attempts to solve the Graph Matching Problem or the Quadratic Assignment Problem
@@ -302,6 +305,9 @@ def graph_match(
         fast=fast,
         verbose=solver_verbose,
         sparse_position=sparse_position,
+        damping_factor=damping_factor,
+        gradient_mask=gradient_mask,
+        labels=labels,
     )
 
     def run_single_graph_matching(seed: RngType) -> MatchResult:
