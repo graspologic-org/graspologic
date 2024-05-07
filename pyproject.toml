@@ -31,7 +31,7 @@ exclude = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9,<3.12"
+python = "^3.9,<3.13"
 anytree = "^2.12.1"
 beartype = "^0.10.4"
 gensim = "^4.3.2"
