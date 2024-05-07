@@ -68,8 +68,14 @@ poethepoet = "^0.26.1"
 black = "^24.4.2"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+style = "semver"
+vcs = "git"
+bump = true
 
 [tool.poe.tasks]
 _black = "black ./graspologic ./tests"
