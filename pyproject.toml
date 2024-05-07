@@ -47,7 +47,7 @@ scikit-learn = "^1.0.2"
 scipy = "1.12.0"
 statsmodels = "^0.13.2"
 typing-extensions = "^4.4.0"
-umap-learn = "^0.4.6"
+umap-learn = "^0.5.6"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^5.1.0"

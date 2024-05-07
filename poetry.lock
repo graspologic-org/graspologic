@@ -2036,6 +2036,24 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
+name = "pynndescent"
+version = "0.5.12"
+description = "Nearest Neighbor Descent"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pynndescent-0.5.12-py3-none-any.whl", hash = "sha256:9023dc5fea520a4e84d0633ae735db97d2509da927bfa86c897e61f3315473c7"},
+    {file = "pynndescent-0.5.12.tar.gz", hash = "sha256:0736291fcbbedfd5e0a3a280f71a63f8eb2f8bd9670d4c0b51ac1b4d081adf70"},
+]
+
+[package.dependencies]
+joblib = ">=0.11"
+llvmlite = ">=0.30"
+numba = ">=0.51.2"
+scikit-learn = ">=0.18"
+scipy = ">=1.0"
+
+[[package]]
 name = "pyparsing"
 version = "3.1.2"
 description = "pyparsing module - Classes and methods to define and execute parsing grammars"
@@ -2923,6 +2941,26 @@ files = [
 ]
 
 [[package]]
+name = "tqdm"
+version = "4.66.4"
+description = "Fast, Extensible Progress Meter"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "tqdm-4.66.4-py3-none-any.whl", hash = "sha256:b75ca56b413b030bc3f00af51fd2c1a1a5eac6a0c1cca83cbb37a5c52abce644"},
+    {file = "tqdm-4.66.4.tar.gz", hash = "sha256:e4d936c9de8727928f3be6079590e97d9abfe8d39a590be678eb5919ffc186bb"},
+]
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[package.extras]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout", "pytest-xdist"]
+notebook = ["ipywidgets (>=6)"]
+slack = ["slack-sdk"]
+telegram = ["requests"]
+
+[[package]]
 name = "traitlets"
 version = "5.14.3"
 description = "Traitlets Python configuration system"
@@ -2961,23 +2999,27 @@ files = [
 
 [[package]]
 name = "umap-learn"
-version = "0.4.6"
+version = "0.5.6"
 description = "Uniform Manifold Approximation and Projection"
 optional = false
 python-versions = "*"
 files = [
-    {file = "umap-learn-0.4.6.tar.gz", hash = "sha256:4276da9a039c79fa5b4f8d3515a8ccaaccf11a2f59ce8d15baf9d2015a5e82b3"},
+    {file = "umap-learn-0.5.6.tar.gz", hash = "sha256:5b3917a862c23ba0fc83bfcd67a7b719dec85b3d9c01fdc7d894cce455df4e03"},
+    {file = "umap_learn-0.5.6-py3-none-any.whl", hash = "sha256:881cc0c2ee845b790bf0455aa1664f9f68b838d9d0fe12a1291b85c5a559c913"},
 ]
 
 [package.dependencies]
-numba = ">=0.46,<0.47 || >0.47"
+numba = ">=0.51.2"
 numpy = ">=1.17"
-scikit-learn = ">=0.20"
+pynndescent = ">=0.5"
+scikit-learn = ">=0.22"
 scipy = ">=1.3.1"
+tqdm = "*"
 
 [package.extras]
-performance = ["pynndescent (>=0.4)", "tbb (>=2019.5)"]
-plot = ["bokeh", "colorcet", "datashader", "holoviews", "matplotlib", "pandas"]
+parametric-umap = ["tensorflow (>=2.1)"]
+plot = ["bokeh", "colorcet", "datashader", "holoviews", "matplotlib", "pandas", "scikit-image", "seaborn"]
+tbb = ["tbb (>=2019.0)"]
 
 [[package]]
 name = "urllib3"
@@ -3115,4 +3157,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9,<3.13"
-content-hash = "ef0640e1d196dee513abeaccb3455da744fe147e91a2d650716355c880ba628a"
+content-hash = "e2aaa0f23667eac37138095c65c2500b9ac6a8a07e682016352cdcbb90ed0a7a"
