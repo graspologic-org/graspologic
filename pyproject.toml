@@ -53,7 +53,7 @@ umap-learn = "^0.5.6"
 ipykernel = "^5.1.0"
 ipython = "^7.4.0,!=8.7.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
 isort = "^5.9.3"
-mypy = "^0.910"
+mypy = "^1.10.0"
 nbsphinx = "^0.8.7"
 numpydoc = "^1.1.0"
 pandoc = "^2.3.0"
