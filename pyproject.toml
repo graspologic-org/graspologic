@@ -37,13 +37,13 @@ beartype = "^0.10.4"
 gensim = "^4.3.2"
 graspologic-native = "^1.2.1"
 hyppo = "^0.3.2"
-joblib = "^0.17.0"
+joblib = "^1.4.2"
 matplotlib = "^3.8.4"
 networkx = "^2.8.8"
 numpy = "^1.26.4"
 POT = "^0.7.0"
 seaborn = "^0.13.2"
-scikit-learn = "^1.0.2"
+scikit-learn = "^1.4.2"
 scipy = "1.12.0"
 statsmodels = "^0.13.2"
 typing-extensions = "^4.4.0"
@@ -89,6 +89,7 @@ docsWithTutorials = "sphinx-build -W -t build_tutorials -a docs/ docs/_build/htm
 
 # Testing Tasks
 tests = "pytest tests"
+test_only = "pytest -s -k"
 coverage = "python -m pytest --co --cov=graspologic graspologic tests"
 fast_test = "pytest tests --ignore=tests/test_latentdistributiontest.py --ignore=tests/test_latentpositiontest.py"
 
