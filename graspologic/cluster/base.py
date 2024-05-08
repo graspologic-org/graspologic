@@ -6,12 +6,11 @@ from typing import Any, Optional
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClusterMixin
-from sklearn.cluster import AffinityPropagation
 from sklearn.metrics import adjusted_rand_score
 from sklearn.utils.validation import check_is_fitted
 
 
-class BaseCluster(ABC, AffinityPropagation):
+class BaseCluster(ABC, BaseEstimator, ClusterMixin):
     """
     Base clustering class.
     """

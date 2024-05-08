@@ -570,9 +570,9 @@ class AutoGMMCluster(BaseCluster):
             for p_ag in param_grid_ag:
                 if p_ag["affinity"] != "none":
                     p_ag_without_affinity = p_ag.copy()
-                    p_ag_without_affinity.pop("affinity", None)
+                    affinity = p_ag_without_affinity.pop("affinity", None)
                     agg = AgglomerativeClustering(
-                        n_clusters=self.min_components, **p_ag_without_affinity
+                        n_clusters=self.min_components, metric=affinity, **p_ag_without_affinity
                     )
                     agg.fit(X_subset)
                     hierarchical_labels = _hierarchical_labels(
