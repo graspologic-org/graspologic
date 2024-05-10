@@ -3,7 +3,7 @@
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
 [![Downloads shield](https://pepy.tech/badge/graspologic)](https://pepy.tech/project/graspologic)
-![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
+[![graspologic Build](https://github.com/microsoft/graspologic/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/graspologic/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## `graspologic` is a package for graph statistical algorithms.
@@ -40,9 +40,10 @@ Please visit the [tutorial section](https://microsoft.github.io/graspologic/late
 - Windows 10 x64
 
 And across the following **x86_64** versions of Python:
-- 3.8
 - 3.9
 - 3.10
+- 3.11
+- 3.12
 
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
 please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users

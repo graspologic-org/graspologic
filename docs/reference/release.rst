@@ -3,6 +3,31 @@
 Release Log
 ===========
 
+graspologic 3.3.0
+-----------------
+- Added features and bugfixes to ``heatmap``
+  `#750 <https://github.com/microsoft/graspologic/pull/750>`
+- Fixed type specification bugs related to Numpy 1.25 release
+  `#1047 <https://github.com/microsoft/graspologic/pull/1047>`
+- Added option for more efficient graph matching matrix operations
+  `#1046 <https://github.com/microsoft/graspologic/pull/1046>`
+- Added an axis argument to ``screeplot``
+  `#1048 <https://github.com/microsoft/graspologic/pull/1048>`
+- Fixed compatibility issues related to matplotlib 3.8 release 
+  `#1049 <https://github.com/microsoft/graspologic/pull/1049>`
+
+graspologic 3.2.0
+-----------------
+- Added Python 3.11 support
+  `#1039 <https://github.com/microsoft/graspologic/pull/1039>`
+
+graspologic 3.1.0
+-----------------
+- Added density and group connection tests
+  `#1032 <https://github.com/microsoft/graspologic/pull/1032>`
+- Fixed NetworkX 3 compatibility and switched to sparse arrays
+  `#1018 <https://github.com/microsoft/graspologic/commit/13d0d466fd1f28c6504b83ae63c16e53c4445997>`
+
 graspologic 3.0.0
 -----------------
 - Corrected contributing guidelines

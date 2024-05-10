@@ -156,10 +156,14 @@ def sequential_colors(
     color_list = color_scheme["sequential"]
     num_colors = len(color_list)
 
-    keys, values = zip(*node_and_value.items())
+    keys = []
+    values = []
+    for k, v in node_and_value.items():
+        keys.append(k)
+        values.append(v)
 
     if use_log_scale:
-        values = map(math.log, values)
+        values = [math.log(v) for v in values]
 
     np_values = np.array(values).reshape(1, -1)
     new_values = minmax_scale(np_values, feature_range=(0, num_colors - 1), axis=1)

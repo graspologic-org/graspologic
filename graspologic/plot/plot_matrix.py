@@ -156,11 +156,11 @@ def _remove_shared_ax(ax):
     """
     Remove ax from its sharex and sharey
     """
-    # Remove ax from the Grouper object
-    shax = ax.get_shared_x_axes()
-    shay = ax.get_shared_y_axes()
-    shax.remove(ax)
-    shay.remove(ax)
+    # # Remove ax from the Grouper object
+    # shax = ax.get_shared_x_axes()
+    # shay = ax.get_shared_y_axes()
+    # shax.remove(ax)
+    # shay.remove(ax)
 
     # Set a new ticker with the respective new locator and formatter
     for axis in [ax.xaxis, ax.yaxis]:
