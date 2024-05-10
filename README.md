@@ -3,7 +3,7 @@
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
 [![Downloads shield](https://pepy.tech/badge/graspologic)](https://pepy.tech/project/graspologic)
-![graspologic CI](https://github.com/microsoft/graspologic/workflows/graspologic%20CI/badge.svg)
+[![graspologic Build](https://github.com/microsoft/graspologic/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/graspologic/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## `graspologic` is a package for graph statistical algorithms.
