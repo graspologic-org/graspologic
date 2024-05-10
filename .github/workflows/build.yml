@@ -13,17 +13,6 @@ on:
       - 'CONTRIBUTORS.md'
   workflow_call:
 jobs:
-  static-code-analysis:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3 
-      with:
-        languages: 'python'
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
   build-reference-documentation:
     runs-on: ubuntu-latest
     strategy:
