@@ -82,6 +82,8 @@ _format_code = "ruff format  . --preview"
 static_checks = 'ruff check . --preview'
 clean = "rm -rf docs/_build"
 type_check = "mypy ./graspologic"
+fix = "ruff  --preview check --fix ."
+fix_unsafe = "ruff check --preview --fix --unsafe-fixes ."
 
 # Formatting 
 format = ['_sort_imports', '_format_code']
@@ -127,20 +129,20 @@ select = [
     # "S",
     # "G",
     # "ERA",
-    # "ASYNC",
+    "ASYNC",
     # "TID",
     # "UP",
     # "SLF",
     # "BLE",
     # "C4",
-    # "I",
+    "I",
     # "F",
     # "A",
     # "ARG",
     # "PTH",
     # "RUF",
     # "B",
-    # "TCH",
+    "TCH",
     # "DTZ",
     # "PYI",
     #"PT",
@@ -170,7 +172,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S", "D", "ANN", "T201", "ASYNC", "ARG", "PTH", "TRY"]
+"tests/*" = ["S", "D", "ANN", "T201", "ASYNC", "ARG", "PTH", "TRY", "SLF"]
 "docs/*" = ["INP001"]
 "*.ipynb" = ["T201"]
 
