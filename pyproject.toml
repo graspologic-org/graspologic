@@ -51,7 +51,7 @@ umap-learn = "^0.5.6"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^5.1.0"
-ipython = "^7.4.0,!=8.7.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
+ipython = "^8.10.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
 isort = "^5.9.3"
 mypy = "^1.10.0"
 nbsphinx = "^0.8.7"
