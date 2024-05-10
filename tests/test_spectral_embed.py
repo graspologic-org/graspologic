@@ -181,14 +181,12 @@ class TestAdjacencySpectralEmbed(unittest.TestCase):
         # separate into communities
         for i, latent in enumerate([latent_left, latent_right]):
             left = i == 0
-            df = pd.DataFrame(
-                {
-                    "Type": labels,
-                    "Dimension 1": latent[:, 0],
-                    "Dimension 2": latent[:, 1],
-                    "Dimension 3": latent[:, 2],
-                }
-            )
+            df = pd.DataFrame({
+                "Type": labels,
+                "Dimension 1": latent[:, 0],
+                "Dimension 2": latent[:, 1],
+                "Dimension 3": latent[:, 2],
+            })
             # make sure that oos vertices are closer to their true community averages than other community averages
             means = df.groupby("Type").mean()
             if left:

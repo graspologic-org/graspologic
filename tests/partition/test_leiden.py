@@ -35,18 +35,16 @@ class TestHierarchicalCluster(unittest.TestCase):
         # test from_native indirectly through calling graspologic.partition.hierarchical_leiden()
 
     def test_final_hierarchical_clustering(self):
-        hierarchical_clusters = HierarchicalClusters(
-            [
-                HierarchicalCluster("1", 0, None, 0, False),
-                HierarchicalCluster("2", 0, None, 0, False),
-                HierarchicalCluster("3", 0, None, 0, False),
-                HierarchicalCluster("4", 1, None, 0, True),
-                HierarchicalCluster("5", 1, None, 0, True),
-                HierarchicalCluster("1", 2, 0, 1, True),
-                HierarchicalCluster("2", 2, 0, 1, True),
-                HierarchicalCluster("3", 3, 0, 1, True),
-            ]
-        )
+        hierarchical_clusters = HierarchicalClusters([
+            HierarchicalCluster("1", 0, None, 0, False),
+            HierarchicalCluster("2", 0, None, 0, False),
+            HierarchicalCluster("3", 0, None, 0, False),
+            HierarchicalCluster("4", 1, None, 0, True),
+            HierarchicalCluster("5", 1, None, 0, True),
+            HierarchicalCluster("1", 2, 0, 1, True),
+            HierarchicalCluster("2", 2, 0, 1, True),
+            HierarchicalCluster("3", 3, 0, 1, True),
+        ])
 
         expected = {
             "1": 2,

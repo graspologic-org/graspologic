@@ -148,7 +148,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> "LaplacianSpectralEmbed":
         """
         Fit LSE model to input graph

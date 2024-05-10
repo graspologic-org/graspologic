@@ -23,7 +23,7 @@ def remove_overlaps(node_positions: List[NodePosition]) -> List[NodePosition]:
     qt = _QuadTree(local_nodes, 50)
     qt.layout_dense_first(first_color=None)
     stop = time.time()
-    logger.info(f"removed overlap in {stop-start} seconds")
+    logger.info(f"removed overlap in {stop - start} seconds")
 
     new_positions = [
         NodePosition(

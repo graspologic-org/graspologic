@@ -212,14 +212,12 @@ class TestSBM(unittest.TestCase):
 
     def test_SBM_fit_supervised(self):
         np.random.seed(888)
-        B = np.array(
-            [
-                [0.9, 0.2, 0.05, 0.1],
-                [0.1, 0.7, 0.1, 0.1],
-                [0.2, 0.4, 0.8, 0.5],
-                [0.1, 0.2, 0.1, 0.7],
-            ]
-        )
+        B = np.array([
+            [0.9, 0.2, 0.05, 0.1],
+            [0.1, 0.7, 0.1, 0.1],
+            [0.2, 0.4, 0.8, 0.5],
+            [0.1, 0.2, 0.1, 0.7],
+        ])
         n = np.array([500, 500, 250, 250])
         g = sbm(n, B, directed=True, loops=False)
         sbe = SBMEstimator(directed=True, loops=False)
@@ -288,14 +286,12 @@ class TestDCSBM(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         np.random.seed(8888)
-        B = np.array(
-            [
-                [0.9, 0.05, 0.05, 0.05],
-                [0.05, 0.75, 0.05, 0.05],
-                [0.05, 0.05, 0.8, 0.5],
-                [0.05, 0.05, 0.05, 0.7],
-            ]
-        )
+        B = np.array([
+            [0.9, 0.05, 0.05, 0.05],
+            [0.05, 0.75, 0.05, 0.05],
+            [0.05, 0.05, 0.8, 0.5],
+            [0.05, 0.05, 0.05, 0.7],
+        ])
         n = np.array([100, 100, 50, 50])
         dc = np.random.beta(2, 5, size=n.sum())
         labels = _n_to_labels(n)

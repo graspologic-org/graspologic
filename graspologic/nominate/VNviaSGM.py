@@ -259,9 +259,7 @@ class VNviaSGM(BaseEstimator):
         if len(close_seeds) <= 0:
             warnings.warn(
                 'Voi {} was not a member of the induced subgraph A[{}], \
-                Try increasing "order_voi_subgraph"'.format(
-                    voi, seedsA
-                )
+                Try increasing "order_voi_subgraph"'.format(voi, seedsA)
             )
             self.n_seeds_ = None
             self.nomination_list_ = None

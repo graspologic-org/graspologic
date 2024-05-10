@@ -144,7 +144,7 @@ class BaseSpectralEmbed(BaseEstimator):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> "BaseSpectralEmbed":
         """
         A method for embedding.
@@ -221,7 +221,7 @@ class BaseSpectralEmbed(BaseEstimator):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """
         Fit the model with graphs and apply the transformation.
