@@ -352,8 +352,8 @@ class HierarchicalCluster(NamedTuple):
     """Only used when level != 0, but will indicate the previous cluster id that this node was in"""
     level: int
     """
-    Each time a community has a higher population than we would like, we create a subnetwork 
-    of that community and process it again to break it into smaller chunks. Each time we 
+    Each time a community has a higher population than we would like, we create a subnetwork
+    of that community and process it again to break it into smaller chunks. Each time we
     detect this, the level increases by 1
     """
     is_final_cluster: bool

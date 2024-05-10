@@ -102,21 +102,21 @@ validate = ["lint", "coverage", "docs", "tests"]
 
 [tool.ruff.lint]
 select = [
-    # "E4",
+    "E4",
     # "E7",
-    # "E9",
-    # "W291",
-    # "YTT",
-    # "T10",
-    # "ICN",
-    # "INP",
-    # "Q",
-    # "RSE",
-    # "SLOT",
-    # "INT",
-    # "FLY",
-    # "LOG",
-    # "C90",
+    "E9",
+    "W291",
+    "YTT",
+    "T10",
+    "ICN",
+    "INP",
+    "Q",
+    "RSE",
+    "SLOT",
+    "INT",
+    "FLY",
+    "LOG",
+    "C90",
     # "T20",
     # "D",
     # "RET",
@@ -171,6 +171,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S", "D", "ANN", "T201", "ASYNC", "ARG", "PTH", "TRY"]
+"docs/*" = ["INP001"]
 "*.ipynb" = ["T201"]
 
 [tool.ruff.lint.pydocstyle]

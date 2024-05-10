@@ -79,6 +79,6 @@ def binom_2samp(
             value=null_ratio,
         )
     else:
-        raise ValueError()
+        raise ValueError
 
     return BinomialResult(stat, pvalue)

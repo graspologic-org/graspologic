@@ -30,7 +30,7 @@ class MatchResult(NamedTuple):
     indices_B: np.ndarray
     """
     Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched
-    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a 
+    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a
     permutation of the nodes of ``B`` with respect to ``A``.
     """
 
