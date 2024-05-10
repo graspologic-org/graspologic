@@ -62,6 +62,10 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
 # Contributing code
 
+## Prerequisites
+* [Python 3.9+](https://www.python.org/)
+* [Poetry 1.8.2+](https://python-poetry.org/docs/)
+
 ## Setting up for development
 
 The preferred workflow for contributing to `graspologic` is to fork the main repository on GitHub, clone, and develop on a
@@ -87,44 +91,7 @@ branch using a virtual environment. Steps:
    Always use a `feature` branch. Pull requests directly to either `dev` or `main` will be rejected
    until you create a feature branch based on `dev`.
 
-4. From the project root, create a [virtual environment](https://docs.python.org/3/library/venv.html) and install all development dependencies. Examples using various terminals are provided below. These examples use Python 3.8 but you may use any Python version supported by graspologic. If using Python 3.8 does not work feel free to type the same command simply using "Python" instead of "Python 3.8".These commands should install `graspologic` in editable mode, as well as all of its dependencies and several tools you need for developing `graspologic`. These commands assume that your operating system has already activated virtual environments which will allow virtual environments to be created. 
-
-   **Bash**
-    ```bash
-   # Create virtual environment
-   python3.8 -m venv venv
-   
-   # Activate the virtual environment
-   source venv/bin/activate
-   
-   # Install development dependencies
-   pip install -U pip setuptools
-   pip install -r requirements.txt
-   ```
-   **CMD (Windows)**
-    ```cmd
-   rem Create virtual environment.  Depending on your installation you might need "py -3 -m venv venv" instead
-   python3.8 -m venv venv
-   
-   rem Activate the virtual environment
-   .\venv\Scripts\activate.bat
-   
-   rem Install development dependencies
-   pip install -U pip setuptools
-   pip install -r requirements.txt
-   ```
-   **PowerShell**
-    ```powershell
-   # Create virtual environment
-   python3.8 -m venv venv
-   
-   # Activate the virtual environment
-   .\venv\Scripts\Activate.ps1
-   
-   # Install development dependencies
-   pip install -U pip setuptools
-   pip install -r requirements.txt
-   ```
+4. From the project root, run `poetry install`, which will create a virtual environment and install necessary dependencies.
 
 ## Code Changes
 
@@ -155,44 +122,25 @@ tools to help make sure your changes meet the standards for our repository.
 #### Code formatting
 Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
 ```bash
-# Run "black" and "isort" using Make
-make format
-```
-OR
-```bash
-# Run "black" and "isort"
-black graspologic/ tests/
-isort graspologic/ tests/
+poetry run poe format
 ```
 
 #### Type checking
 Validate your typehinting by running:
 ```bash
-make type-check
-```
-OR
-```bash
-mypy ./graspologic
+poetry run poe type_check
 ```
 
 #### Unit testing 
 To check if your code runs correctly, we recommend using unit testing that locally tests your code by implementing test cases. Execute these unit tests by running:
 ```bash
-make test
-```
-OR
-```bash
-pytest tests
+poetry run poe tests
 ```
 
 #### Creating documentation
 Build the documentation with the use of [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html) by running:
 ```bash
-make docs
-```
-OR
-```bash
-sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
+poetry run poe docs
 ```
 Please verify that the built documentation looks appropriate. You can view the `html`
 from the `docs/_build/html` folder; click on `index.html` to see what the homepage would
@@ -202,11 +150,7 @@ If you have made any changes that could affect the tutorials, please also build 
 This can take a bit longer because the code in each notebook actually needs to execute.
 You can build the documentation and tutorials by running:
 ```bash
-make docsWithTutorials
-```
-OR
-```bash
-sphinx-build -W -t build_tutorials -a docs/ docs/_build/html
+poetry run poe docsWithTutorials
 ```
 
 ## Publishing Changes

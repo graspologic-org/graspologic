@@ -1,6 +1,106 @@
+[tool.poetry]
+name = "graspologic"
+version = "3.3.0"
+description = "A set of Python modules for graph statistics"
+repository = "https://github.com/microsoft/graspologic"
+authors = [
+    "Eric Bridgeford", 
+    "Jaewon Chung <j1c@jhu.edu>", 
+    "Benjamin Pedigo", 
+    "Bijan Varjavand",
+]
+maintainers = [
+    "Dax Pryce <daxpryce@microsoft.com>"
+]
+license = "MIT"
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+include = [
+    "graspologic",
+    "graspologic/**/*.typed",
+    "graspologic/datasets/**/*.edgelist",
+    "graspologic/datasets/**/*.csv",
+    "graspologic/layouts/include/**/colors-100.json"
+]
+exclude = [
+    "tests"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9,<3.13"
+anytree = "^2.12.1"
+beartype = "^0.10.4"
+gensim = "^4.3.2"
+graspologic-native = "^1.2.1"
+hyppo = "^0.3.2"
+joblib = "^1.4.2"
+matplotlib = "^3.8.4"
+networkx = "^2.8.8"
+numpy = "^1.26.4"
+POT = "^0.7.0"
+seaborn = "^0.13.2"
+scikit-learn = "^1.4.2"
+scipy = "1.12.0"
+statsmodels = "^0.14.2"
+typing-extensions = "^4.4.0"
+umap-learn = "^0.5.6"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^5.1.0"
+ipython = "^7.4.0,!=8.7.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
+isort = "^5.9.3"
+mypy = "^1.10.0"
+nbsphinx = "^0.8.7"
+numpydoc = "^1.1.0"
+pandoc = "^2.3.0"
+pytest = "^8.2.0"
+pytest-cov = "^5.0.0"
+sphinx = "^7.3.7"
+sphinxcontrib-rawfiles = "^0.1.1"
+sphinx-rtd-theme = "^2.0.0"
+testfixtures = "^6.18.3"
+pipdeptree = "^2.20.0"
+poethepoet = "^0.26.1"
+black = "^24.4.2"
+
 [build-system]
-requires = ["setuptools >= 24.2.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+style = "semver"
+vcs = "git"
+bump = true
+
+[tool.poe.tasks]
+_black = "black ./graspologic ./tests"
+_isort = "isort ./graspologic ./tests"
+_black_check = "black --check --diff ./graspologic ./tests"
+_isort_check = "isort --check-only ./graspologic ./tests"
+clean = "rm -rf docs/_build"
+type_check = "mypy ./graspologic"
+
+# Formatting 
+format = ["_black", "_isort"]
+format_check = ["_black_check", "_isort_check"]
+
+# Docs Tasks
+docs = "sphinx-build -W -a docs/ docs/_build/html"
+docsWithTutorials = "sphinx-build -W -t build_tutorials -a docs/ docs/_build/html"
+
+# Testing Tasks
+tests = "pytest tests"
+test_only = "pytest -s -k"
+coverage = "python -m pytest --co --cov=graspologic graspologic tests"
+fast_test = "pytest tests --ignore=tests/test_latentdistributiontest.py --ignore=tests/test_latentpositiontest.py"
+
+lint = ["format_check", "type_check"]
+validate = ["lint", "coverage", "docs", "tests"]
 
 [tool.isort]
 profile = "black"
