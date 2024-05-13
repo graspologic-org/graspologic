@@ -430,9 +430,10 @@ class _GraphMatchSolver:
             permutation = np.array([], dtype=int)
 
         # deal with seed-nonseed sorting from the initialization
-        permutation = np.concatenate(
-            (np.arange(self.n_seeds), permutation + self.n_seeds)
-        )
+        permutation = np.concatenate((
+            np.arange(self.n_seeds),
+            permutation + self.n_seeds,
+        ))
         final_permutation = np.empty(self.n, dtype=int)
         final_permutation[self.perm_A] = self.perm_B[permutation]
 

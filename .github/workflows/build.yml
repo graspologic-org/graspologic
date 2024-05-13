@@ -68,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run Format Check
-        run: poetry run poe format_check
+        run: poetry run poe static_checks
   test-coverage:
     runs-on: ubuntu-latest
     strategy:

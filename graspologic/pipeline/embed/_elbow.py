@@ -38,7 +38,7 @@ def _compute_likelihood(arr: np.ndarray) -> np.ndarray:
             mu2 = -np.inf
 
         # compute pooled variance
-        variance = ((np.sum((s1 - mu1) ** 2) + np.sum((s2 - mu2) ** 2))) / (
+        variance = (np.sum((s1 - mu1) ** 2) + np.sum((s2 - mu2) ** 2)) / (
             n_elements - 1 - (idx < n_elements)
         )
         std = np.sqrt(variance)

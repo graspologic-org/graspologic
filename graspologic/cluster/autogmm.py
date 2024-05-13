@@ -574,7 +574,7 @@ class AutoGMMCluster(BaseCluster):
                     agg = AgglomerativeClustering(
                         n_clusters=self.min_components,
                         metric=affinity,
-                        **p_ag_without_affinity
+                        **p_ag_without_affinity,
                     )
                     agg.fit(X_subset)
                     hierarchical_labels = _hierarchical_labels(
@@ -762,9 +762,10 @@ def _hierarchical_labels(
         inds = np.where(np.isin(hierarchical_labels[:, n], children[n, :]))[0]
         hierarchical_labels[inds, -1] = n_samples + n
         if n < merge_end:
-            hierarchical_labels = np.hstack(
-                (hierarchical_labels, hierarchical_labels[:, -1].reshape((-1, 1)))
-            )
+            hierarchical_labels = np.hstack((
+                hierarchical_labels,
+                hierarchical_labels[:, -1].reshape((-1, 1)),
+            ))
 
     hierarchical_labels = hierarchical_labels[:, merge_start:]
     for i in range(hierarchical_labels.shape[1]):

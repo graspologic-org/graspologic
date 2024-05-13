@@ -142,7 +142,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> "AdjacencySpectralEmbed":
         """
         Fit ASE model to input graph

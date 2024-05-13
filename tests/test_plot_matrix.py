@@ -14,13 +14,11 @@ from graspologic.simulations.simulations import er_np
 class TestPlotMatrix(unittest.TestCase):
     def test_adjplot_inputs(self):
         X = er_np(100, 0.5)
-        meta = pd.DataFrame(
-            {
-                "hemisphere": np.random.randint(2, size=100),
-                "region": np.random.randint(2, size=100),
-                "cell_size": np.random.randint(10, size=100),
-            }
-        )
+        meta = pd.DataFrame({
+            "hemisphere": np.random.randint(2, size=100),
+            "region": np.random.randint(2, size=100),
+            "cell_size": np.random.randint(10, size=100),
+        })
 
         # test matrix
         with self.assertRaises(TypeError):
@@ -30,13 +28,11 @@ class TestPlotMatrix(unittest.TestCase):
 
         # test meta
         with self.assertRaises(ValueError):
-            bad_meta = pd.DataFrame(
-                {
-                    "hemisphere": np.random.randint(2, size=1),
-                    "region": np.random.randint(2, size=1),
-                    "cell_size": np.random.randint(10, size=1),
-                }
-            )
+            bad_meta = pd.DataFrame({
+                "hemisphere": np.random.randint(2, size=1),
+                "region": np.random.randint(2, size=1),
+                "cell_size": np.random.randint(10, size=1),
+            })
             adjplot(X, meta=bad_meta)
 
         # test plot type
@@ -66,13 +62,11 @@ class TestPlotMatrix(unittest.TestCase):
         simple function to see if plot is made without errors
         """
         X = er_np(10, 0.5)
-        meta = pd.DataFrame(
-            {
-                "hemisphere": np.random.randint(2, size=10),
-                "region": np.random.randint(2, size=10),
-                "cell_size": np.random.randint(10, size=10),
-            }
-        )
+        meta = pd.DataFrame({
+            "hemisphere": np.random.randint(2, size=10),
+            "region": np.random.randint(2, size=10),
+            "cell_size": np.random.randint(10, size=10),
+        })
         ax = adjplot(X, meta=meta)
         ax = adjplot(X, meta=meta, group="hemisphere")
         ax = adjplot(X, meta=meta, group="hemisphere", group_order="size")
@@ -84,13 +78,11 @@ class TestPlotMatrix(unittest.TestCase):
 
     def test_matrix_inputs(self):
         X = er_np(100, 0.5)
-        meta = pd.DataFrame(
-            {
-                "hemisphere": np.random.randint(2, size=100),
-                "region": np.random.randint(2, size=100),
-                "cell_size": np.random.randint(10, size=100),
-            }
-        )
+        meta = pd.DataFrame({
+            "hemisphere": np.random.randint(2, size=100),
+            "region": np.random.randint(2, size=100),
+            "cell_size": np.random.randint(10, size=100),
+        })
 
         # test matrix
         with self.assertRaises(TypeError):
@@ -100,13 +92,11 @@ class TestPlotMatrix(unittest.TestCase):
 
         # test meta
         with self.assertRaises(ValueError):
-            bad_meta = pd.DataFrame(
-                {
-                    "hemisphere": np.random.randint(2, size=1),
-                    "region": np.random.randint(2, size=1),
-                    "cell_size": np.random.randint(10, size=1),
-                }
-            )
+            bad_meta = pd.DataFrame({
+                "hemisphere": np.random.randint(2, size=1),
+                "region": np.random.randint(2, size=1),
+                "cell_size": np.random.randint(10, size=1),
+            })
             matrixplot(X, col_meta=bad_meta, row_meta=bad_meta)
 
         # test plot type
@@ -168,13 +158,11 @@ class TestPlotMatrix(unittest.TestCase):
         simple function to see if plot is made without errors
         """
         X = er_np(10, 0.5)
-        meta = pd.DataFrame(
-            {
-                "hemisphere": np.random.randint(2, size=10),
-                "region": np.random.randint(2, size=10),
-                "cell_size": np.random.randint(10, size=10),
-            }
-        )
+        meta = pd.DataFrame({
+            "hemisphere": np.random.randint(2, size=10),
+            "region": np.random.randint(2, size=10),
+            "cell_size": np.random.randint(10, size=10),
+        })
         ax = matrixplot(X, col_meta=meta, row_meta=meta)
         ax = matrixplot(X, col_meta=meta, row_meta=meta, row_group="hemisphere")
         ax = matrixplot(
