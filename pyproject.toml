@@ -52,7 +52,6 @@ umap-learn = "^0.5.6"
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^5.1.0"
 ipython = "^7.4.0,!=8.7.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
-isort = "^5.9.3"
 mypy = "^1.10.0"
 nbsphinx = "^0.8.7"
 numpydoc = "^1.1.0"
@@ -65,7 +64,7 @@ sphinx-rtd-theme = "^2.0.0"
 testfixtures = "^6.18.3"
 pipdeptree = "^2.20.0"
 poethepoet = "^0.26.1"
-black = "^24.4.2"
+ruff = "^0.4.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
@@ -78,16 +77,16 @@ vcs = "git"
 bump = true
 
 [tool.poe.tasks]
-_black = "black ./graspologic ./tests"
-_isort = "isort ./graspologic ./tests"
-_black_check = "black --check --diff ./graspologic ./tests"
-_isort_check = "isort --check-only ./graspologic ./tests"
+_sort_imports = "ruff check --select I --fix . --preview"
+_format_code = "ruff format  . --preview"
+static_checks = 'ruff check . --preview'
 clean = "rm -rf docs/_build"
 type_check = "mypy ./graspologic"
+fix = "ruff  --preview check --fix ."
+fix_unsafe = "ruff check --preview --fix --unsafe-fixes ."
 
 # Formatting 
-format = ["_black", "_isort"]
-format_check = ["_black_check", "_isort_check"]
+format = ['_sort_imports', '_format_code']
 
 # Docs Tasks
 docs = "sphinx-build -W -a docs/ docs/_build/html"
@@ -99,9 +98,83 @@ test_only = "pytest -s -k"
 coverage = "python -m pytest --co --cov=graspologic graspologic tests"
 fast_test = "pytest tests --ignore=tests/test_latentdistributiontest.py --ignore=tests/test_latentpositiontest.py"
 
-lint = ["format_check", "type_check"]
+lint = ["static_checks", "type_check"]
 validate = ["lint", "coverage", "docs", "tests"]
 
-[tool.isort]
-profile = "black"
-multi_line_output = 3
+
+[tool.ruff.lint]
+select = [
+    "E4",
+    # "E7",
+    "E9",
+    "W291",
+    "YTT",
+    "T10",
+    "ICN",
+    "INP",
+    "Q",
+    "RSE",
+    "SLOT",
+    "INT",
+    "FLY",
+    "LOG",
+    "C90",
+    # "T20",
+    # "D",
+    # "RET",
+    # "PD",
+    # "N",
+    # "PIE",
+    # "SIM",
+    # "S",
+    # "G",
+    # "ERA",
+    "ASYNC",
+    # "TID",
+    # "UP",
+    # "SLF",
+    # "BLE",
+    # "C4",
+    "I",
+    # "F",
+    # "A",
+    # "ARG",
+    # "PTH",
+    # "RUF",
+    # "B",
+    "TCH",
+    # "DTZ",
+    # "PYI",
+    #"PT",
+    # "EM",
+    # "TRY",
+    # "PERF",
+    # "CPY",
+
+    # "FBT", # use named arguments for boolean flags
+    # "TD", # todos
+    # "FIX", # fixme
+    # "FURB" # preview rules
+    # ANN # Type annotations, re-enable when we get bandwidth
+]
+ignore = [
+    # Deprecated Rules
+    "ANN101",
+    "ANN102",
+    # Conflicts with interface argument checking
+    "ARG002",
+    "ANN204",
+    # TODO: Inspect these pandas rules for validity
+    "PD002", # prevents inplace=True
+    # TODO RE-Enable when we get bandwidth
+    "PERF203", # Needs restructuring of errors, we should bail-out on first error
+    "C901",    # needs refactoring to remove cyclomatic complexity
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S", "D", "ANN", "T201", "ASYNC", "ARG", "PTH", "TRY", "SLF"]
+"docs/*" = ["INP001"]
+"*.ipynb" = ["T201"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"

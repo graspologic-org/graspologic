@@ -144,7 +144,7 @@ class BaseSpectralEmbed(BaseEstimator):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> "BaseSpectralEmbed":
         """
         A method for embedding.
@@ -221,7 +221,7 @@ class BaseSpectralEmbed(BaseEstimator):
         graph: GraphRepresentation,
         y: Optional[Any] = None,
         *args: Any,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """
         Fit the model with graphs and apply the transformation.
@@ -312,8 +312,8 @@ class BaseSpectralEmbed(BaseEstimator):
         # correct types?
         if directed and not isinstance(X, tuple):
             if X.shape[0] == X.shape[1]:  # in case original matrix was passed
-                msg = """A square matrix A was passed to ``transform`` in the directed case. 
-                If this was the original in-sample matrix, either use ``fit_transform`` 
+                msg = """A square matrix A was passed to ``transform`` in the directed case.
+                If this was the original in-sample matrix, either use ``fit_transform``
                 or pass a tuple (A.T, A). If this was an out-of-sample matrix, directed
                 graphs require a tuple (X_out, X_in)."""
                 raise TypeError(msg)

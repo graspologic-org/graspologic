@@ -1,17 +1,18 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 from typing_extensions import Literal
 
-from graspologic.types import Tuple
-
 from ..utils import is_symmetric
 from .svd import SvdAlgorithmType, select_svd
+
+if TYPE_CHECKING:
+    from graspologic.types import Tuple
 
 
 def _get_centering_matrix(n: int) -> np.ndarray:

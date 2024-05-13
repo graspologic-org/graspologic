@@ -1,4 +1,4 @@
-﻿# Copyright (c) Microsoft Corporation and contributors.
+# Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
 import warnings
@@ -72,9 +72,7 @@ def _check_common_inputs(
             raise TypeError(msg)
         elif context not in ["paper", "notebook", "talk", "poster"]:
             msg = "context must be one of (paper, notebook, talk, poster), \
-                not {}.".format(
-                context
-            )
+                not {}.".format(context)
             raise ValueError(msg)
 
     # Handle font_scale
@@ -876,16 +874,14 @@ def pairplot_with_gmm(
             gmm.covariances_[np.newaxis, :, :], n_components, axis=0
         )
     elif gmm.covariance_type == "diag":
-        covariances = np.array(
-            [np.diag(gmm.covariances_[i]) for i in range(n_components)]
-        )
+        covariances = np.array([
+            np.diag(gmm.covariances_[i]) for i in range(n_components)
+        ])
     elif gmm.covariance_type == "spherical":
-        covariances = np.array(
-            [
-                np.diag(np.repeat(gmm.covariances_[i], X.shape[1]))
-                for i in range(n_components)
-            ]
-        )
+        covariances = np.array([
+            np.diag(np.repeat(gmm.covariances_[i], X.shape[1]))
+            for i in range(n_components)
+        ])
 
     # setting up the data DataFrame
     if labels is None:

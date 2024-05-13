@@ -56,7 +56,7 @@ def _get_omnibus_matrix_sparse(matrices: List[csr_array]) -> csr_array:
 
 
 def _get_laplacian_matrices(
-    graphs: Union[np.ndarray, List[GraphRepresentation]]
+    graphs: Union[np.ndarray, List[GraphRepresentation]],
 ) -> Union[np.ndarray, List[np.ndarray]]:
     """
     Helper function to convert graph adjacency matrices to graph Laplacian
@@ -82,7 +82,7 @@ def _get_laplacian_matrices(
 
 
 def _get_omni_matrix(
-    graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]]
+    graphs: Union[AdjacencyMatrix, List[AdjacencyMatrix]],
 ) -> np.ndarray:
     """
     Helper function for creating the omnibus matrix.

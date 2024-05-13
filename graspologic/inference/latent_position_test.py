@@ -124,9 +124,9 @@ def latent_position_test(
     if type(embedding) is not str:
         raise TypeError("embedding must be str")
     if type(n_bootstraps) is not int:
-        raise TypeError()
+        raise TypeError
     if type(test_case) is not str:
-        raise TypeError()
+        raise TypeError
     if n_bootstraps < 1:
         raise ValueError(
             "{} is invalid number of bootstraps, must be greater than 1".format(
@@ -148,7 +148,7 @@ def latent_position_test(
     A1 = import_graph(A1)
     A2 = import_graph(A2)
     if not is_symmetric(A1) or not is_symmetric(A2):
-        raise NotImplementedError()  # TODO asymmetric case
+        raise NotImplementedError  # TODO asymmetric case
     if A1.shape != A2.shape:
         raise ValueError("Input matrices do not have matching dimensions")
     num_components: int

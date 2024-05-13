@@ -15,6 +15,11 @@
 import os
 import sys
 
+# Use RTD Theme
+import sphinx_rtd_theme
+
+import graspologic
+
 sys.path.append(os.path.abspath("./sphinx-ext/"))
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -28,7 +33,6 @@ realpath = os.path.realpath(__file__)
 dir_realpath = os.path.dirname(realpath)
 sys.path.append(dir_realpath)
 
-import graspologic
 
 version = graspologic.__version__
 # Append "dev" and the github run to the version when on the dev branch
@@ -116,9 +120,6 @@ modindex_common_prefix = ["graspologic."]
 
 pygments_style = "sphinx"
 smartquotes = False
-
-# Use RTD Theme
-import sphinx_rtd_theme
 
 html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
