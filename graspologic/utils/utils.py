@@ -26,7 +26,7 @@ from ..types import GraphRepresentation
 
 @beartype
 def average_matrices(
-    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_array]]]
+    matrices: Union[np.ndarray, Union[List[np.ndarray], List[csr_array]]],
 ) -> Union[np.ndarray, csr_array]:
     """
     Helper method to encapsulate calculating the average of matrices represented either as a
@@ -104,9 +104,7 @@ def import_graph(
         )
     else:
         msg = "Input must be networkx.Graph, np.array, or scipy.sparse.csr_array,\
-        not {}.".format(
-            type(graph)
-        )
+        not {}.".format(type(graph))
         raise TypeError(msg)
     return out
 
@@ -1160,9 +1158,9 @@ def remap_node_ids(
 
         graph_remapped.add_edge(node_id_dict[source], node_id_dict[target])
 
-        graph_remapped[node_id_dict[source]][node_id_dict[target]][
-            weight_attribute
-        ] = weight
+        graph_remapped[node_id_dict[source]][node_id_dict[target]][weight_attribute] = (
+            weight
+        )
 
     return graph_remapped, node_id_dict
 

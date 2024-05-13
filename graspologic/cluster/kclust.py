@@ -88,9 +88,7 @@ class KMeansCluster(BaseCluster):
         # Deal with number of clusters
         if self.max_clusters > X.shape[0]:
             msg = "n_components must be >= n_samples, but got \
-                n_components = {}, n_samples = {}".format(
-                self.max_clusters, X.shape[0]
-            )
+                n_components = {}, n_samples = {}".format(self.max_clusters, X.shape[0])
             raise ValueError(msg)
         else:
             max_clusters = self.max_clusters

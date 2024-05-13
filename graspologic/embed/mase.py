@@ -172,18 +172,14 @@ class MultipleASE(BaseEmbedMulti):
             Vs = np.hstack([V.T[:, :best_dimension] for V in Vs])
         else:
             # Equivalent to ASE
-            Us = np.hstack(
-                [
-                    U[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
-                    for U, D in zip(Us, Ds)
-                ]
-            )
-            Vs = np.hstack(
-                [
-                    V.T[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
-                    for V, D in zip(Vs, Ds)
-                ]
-            )
+            Us = np.hstack([
+                U[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
+                for U, D in zip(Us, Ds)
+            ])
+            Vs = np.hstack([
+                V.T[:, :best_dimension] @ np.diag(np.sqrt(D[:best_dimension]))
+                for V, D in zip(Vs, Ds)
+            ])
 
         # Second SVD for vertices
         # The notation is slightly different than the paper

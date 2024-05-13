@@ -113,12 +113,10 @@ class SignalSubgraph:
 
         self.__construct_contingency()
         verts = np.shape(self.graphs)[0]
-        sigmat = np.array(
-            [
-                [fisher_exact(self.contmat_[i, j, :, :])[1] for j in range(verts)]
-                for i in range(verts)
-            ]
-        )
+        sigmat = np.array([
+            [fisher_exact(self.contmat_[i, j, :, :])[1] for j in range(verts)]
+            for i in range(verts)
+        ])
 
         if isinstance(constraints, (int)):  # incoherent
             nedges = constraints

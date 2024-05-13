@@ -180,7 +180,7 @@ class _GridBuckets:
 
     def print_stats(self) -> None:
         print(
-            f"cell size: {self.cell_size}, area: {self.cell_size*self.cell_size}, "
+            f"cell size: {self.cell_size}, area: {self.cell_size * self.cell_size}, "
             f"rows: {self._get_y_cells()}, cols: {self._get_x_cells()}"
         )
 

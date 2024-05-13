@@ -439,21 +439,18 @@ class TestWSBM(unittest.TestCase):
 
     def test_sbm_multiwt_directed_loopless(self):
         np.random.seed(12345)
-        Wt = np.vstack(
-            (
-                [np.random.normal, np.random.poisson],
-                [np.random.exponential, np.random.uniform],
-            )
-        )
-        Wtargs = np.vstack(
-            (
-                [{"loc": 2, "scale": 2}, {"lam": 5}],
-                [{"scale": 2}, {"low": 5, "high": 10}],
-            )
-        )
-        check = np.vstack(
-            ([self.exp_normal, self.exp_poisson], [self.exp_exp, self.exp_unif])
-        )
+        Wt = np.vstack((
+            [np.random.normal, np.random.poisson],
+            [np.random.exponential, np.random.uniform],
+        ))
+        Wtargs = np.vstack((
+            [{"loc": 2, "scale": 2}, {"lam": 5}],
+            [{"scale": 2}, {"low": 5, "high": 10}],
+        ))
+        check = np.vstack((
+            [self.exp_normal, self.exp_poisson],
+            [self.exp_exp, self.exp_unif],
+        ))
         A = sbm(self.n, self.Psy, wt=Wt, directed=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
@@ -480,18 +477,18 @@ class TestWSBM(unittest.TestCase):
 
     def test_sbm_multiwt_undirected_loopless(self):
         np.random.seed(12345)
-        Wt = np.vstack(
-            (
-                [np.random.normal, np.random.poisson],
-                [np.random.poisson, np.random.uniform],
-            )
-        )
-        Wtargs = np.vstack(
-            ([{"loc": 2, "scale": 2}, {"lam": 5}], [{"lam": 5}, {"low": 5, "high": 10}])
-        )
-        check = np.vstack(
-            ([self.exp_normal, self.exp_poisson], [self.exp_poisson, self.exp_unif])
-        )
+        Wt = np.vstack((
+            [np.random.normal, np.random.poisson],
+            [np.random.poisson, np.random.uniform],
+        ))
+        Wtargs = np.vstack((
+            [{"loc": 2, "scale": 2}, {"lam": 5}],
+            [{"lam": 5}, {"low": 5, "high": 10}],
+        ))
+        check = np.vstack((
+            [self.exp_normal, self.exp_poisson],
+            [self.exp_poisson, self.exp_unif],
+        ))
         A = sbm(self.n, self.Psy, wt=Wt, directed=False, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
@@ -518,21 +515,18 @@ class TestWSBM(unittest.TestCase):
 
     def test_sbm_multiwt_directed_loopy(self):
         np.random.seed(12345)
-        Wt = np.vstack(
-            (
-                [np.random.normal, np.random.poisson],
-                [np.random.exponential, np.random.uniform],
-            )
-        )
-        Wtargs = np.vstack(
-            (
-                [{"loc": 2, "scale": 2}, {"lam": 5}],
-                [{"scale": 2}, {"low": 5, "high": 10}],
-            )
-        )
-        check = np.vstack(
-            ([self.exp_normal, self.exp_poisson], [self.exp_exp, self.exp_unif])
-        )
+        Wt = np.vstack((
+            [np.random.normal, np.random.poisson],
+            [np.random.exponential, np.random.uniform],
+        ))
+        Wtargs = np.vstack((
+            [{"loc": 2, "scale": 2}, {"lam": 5}],
+            [{"scale": 2}, {"low": 5, "high": 10}],
+        ))
+        check = np.vstack((
+            [self.exp_normal, self.exp_poisson],
+            [self.exp_exp, self.exp_unif],
+        ))
         A = sbm(self.n, self.Psy, wt=Wt, directed=True, loops=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
@@ -557,18 +551,18 @@ class TestWSBM(unittest.TestCase):
 
     def test_sbm_multiwt_undirected_loopy(self):
         np.random.seed(12345)
-        Wt = np.vstack(
-            (
-                [np.random.normal, np.random.poisson],
-                [np.random.poisson, np.random.uniform],
-            )
-        )
-        Wtargs = np.vstack(
-            ([{"loc": 2, "scale": 2}, {"lam": 5}], [{"lam": 5}, {"low": 5, "high": 10}])
-        )
-        check = np.vstack(
-            ([self.exp_normal, self.exp_poisson], [self.exp_poisson, self.exp_unif])
-        )
+        Wt = np.vstack((
+            [np.random.normal, np.random.poisson],
+            [np.random.poisson, np.random.uniform],
+        ))
+        Wtargs = np.vstack((
+            [{"loc": 2, "scale": 2}, {"lam": 5}],
+            [{"lam": 5}, {"low": 5, "high": 10}],
+        ))
+        check = np.vstack((
+            [self.exp_normal, self.exp_poisson],
+            [self.exp_poisson, self.exp_unif],
+        ))
         A = sbm(self.n, self.Psy, wt=Wt, directed=False, loops=True, wtargs=Wtargs)
         for i in range(0, len(self.n)):
             for j in range(0, len(self.n)):
@@ -595,14 +589,10 @@ class TestWSBM(unittest.TestCase):
         np.random.seed(self.seed)
         funcs = [np.random.power, np.random.uniform]
         dc_kwss = [{"a": 3}, {"low": 5, "high": 10}]
-        dc = np.hstack(
-            (
-                [
-                    [funcs[i](**dc_kwss[i]) for _ in range(self.n[i])]
-                    for i in range(len(self.n))
-                ]
-            )
-        )
+        dc = np.hstack(([
+            [funcs[i](**dc_kwss[i]) for _ in range(self.n[i])]
+            for i in range(len(self.n))
+        ]))
         for i in range(0, len(self.n)):
             dc[self.vcount[i] - self.n[i] : self.vcount[i]] /= sum(
                 dc[self.vcount[i] - self.n[i] : self.vcount[i]]
@@ -611,12 +601,9 @@ class TestWSBM(unittest.TestCase):
         communities = np.hstack([[comm] * self.n[comm] for comm in range(len(self.n))])
         for i, ki in zip(range(sum(self.n)), communities):
             degree = sum([A[i][j] for j in range(sum(self.n))])
-            theta_hat = degree / sum(
-                [
-                    self.Psy[ki][kj] * self.n[ki] * self.n[kj]
-                    for kj in range(len(self.n))
-                ]
-            )
+            theta_hat = degree / sum([
+                self.Psy[ki][kj] * self.n[ki] * self.n[kj] for kj in range(len(self.n))
+            ])
             self.assertTrue(np.isclose(theta_hat, dc[i], atol=0.01))
         # check dimensions
         self.assertTrue(A.shape == (np.sum(self.n), np.sum(self.n)))

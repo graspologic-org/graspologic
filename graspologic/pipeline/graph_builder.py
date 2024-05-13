@@ -43,7 +43,7 @@ class GraphBuilder:
         target: Any,
         weight: Union[int, float] = 1.0,
         sum_weight: bool = True,
-        **attributes: Any
+        **attributes: Any,
     ) -> None:
         """
         Adds a weighted edge between the provided source and target. The source

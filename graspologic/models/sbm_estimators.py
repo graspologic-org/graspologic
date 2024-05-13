@@ -166,7 +166,7 @@ class SBMEstimator(BaseGraphEstimator):
         gc = GaussianCluster(
             min_components=self.min_comm,
             max_components=self.max_comm,
-            **self.cluster_kws
+            **self.cluster_kws,
         )
         vertex_assignments = gc.fit_predict(latent)  # type: ignore
         self.vertex_assignments_ = vertex_assignments
@@ -374,7 +374,7 @@ class DCSBMEstimator(BaseGraphEstimator):
         gc = GaussianCluster(
             min_components=self.min_comm,
             max_components=self.max_comm,
-            **self.cluster_kws
+            **self.cluster_kws,
         )
         self.vertex_assignments_ = gc.fit_predict(latent)  # type: ignore
 

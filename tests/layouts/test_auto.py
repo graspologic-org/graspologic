@@ -5,14 +5,14 @@ import random
 import unittest
 
 import networkx as nx
-import numpy
+import numpy as np
 
 from graspologic.layouts.auto import _get_bounds, layout_umap
 
 
 class TestAuto(unittest.TestCase):
     def test_get_bounds(self):
-        y = numpy.array([(1, 2), (4, 5), (-1, -2), (10, -20)])
+        y = np.array([(1, 2), (4, 5), (-1, -2), (10, -20)])
         minx, miny, maxx, maxy = _get_bounds(y)
         self.assertEqual(-1, minx)
         self.assertEqual(-20, miny)
@@ -51,7 +51,7 @@ class TestAuto(unittest.TestCase):
         graph = nx.erdos_renyi_graph(10, 0.7, directed=True)
 
         for s, t in graph.edges():
-            graph.edges[s, t]["weight"] = numpy.random.randint(1, 10)
+            graph.edges[s, t]["weight"] = np.random.randint(1, 10)
 
         _, node_positions = layout_umap(graph=graph)
 

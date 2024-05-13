@@ -220,12 +220,10 @@ def omnibus_embedding_pairwise(
             elbow_cut, graph.is_directed(), model.singular_values_, current_embedding
         )
 
-        graph_embeddings.append(
-            (
-                Embeddings(union_node_ids, previous_embedding_cut),
-                Embeddings(union_node_ids, current_embedding_cut),
-            )
-        )
+        graph_embeddings.append((
+            Embeddings(union_node_ids, previous_embedding_cut),
+            Embeddings(union_node_ids, current_embedding_cut),
+        ))
 
     return graph_embeddings
 
