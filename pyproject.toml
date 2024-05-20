@@ -72,7 +72,7 @@ build-backend = "poetry_dynamic_versioning.backend"
 
 [tool.poetry-dynamic-versioning]
 enable = true
-style = "semver"
+style = "pep440"
 vcs = "git"
 bump = true
 
