@@ -1,6 +1,6 @@
 <!--
 Thanks for contributing a pull request! Please ensure you have taken a look at
-the contribution guidelines: https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md
+the contribution guidelines: https://github.com/graspologic-org/graspologic/blob/dev/CONTRIBUTING.md
 -->
 - [ ] Does this PR have a descriptive title that could go in our release notes?
 - [ ] Does this PR add any new dependencies?

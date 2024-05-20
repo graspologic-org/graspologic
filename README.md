@@ -3,7 +3,7 @@
 [![Paper shield](https://img.shields.io/badge/JMLR-Paper-red)](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)
 [![PyPI version](https://img.shields.io/pypi/v/graspologic.svg)](https://pypi.org/project/graspologic/)
 [![Downloads shield](https://pepy.tech/badge/graspologic)](https://pepy.tech/project/graspologic)
-[![graspologic Build](https://github.com/microsoft/graspologic/actions/workflows/build.yml/badge.svg)](https://github.com/microsoft/graspologic/actions/workflows/build.yml)
+[![graspologic Build](https://github.com/graspologic-org/graspologic/actions/workflows/build.yml/badge.svg)](https://github.com/graspologic-org/graspologic/actions/workflows/build.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## `graspologic` is a package for graph statistical algorithms.
@@ -46,7 +46,7 @@ And across the following **x86_64** versions of Python:
 - 3.12
 
 If you try to use `graspologic` for a different platform than the ones listed and notice any unexpected behavior,
-please feel free to [raise an issue](https://github.com/microsoft/graspologic/issues/new).  It's better for ourselves and our users
+please feel free to [raise an issue](https://github.com/graspologic-org/graspologic/issues/new).  It's better for ourselves and our users
 if we have concrete examples of things not working!
 
 # Installation Guide
@@ -59,7 +59,7 @@ pip install graspologic
 <!-- omit in toc -->
 ## Install from Github
 ```
-git clone https://github.com/microsoft/graspologic
+git clone https://github.com/graspologic-org/graspologic
 cd graspologic
 python3 -m venv venv
 source venv/bin/activate
@@ -67,16 +67,16 @@ python3 setup.py install
 ```
 
 # Contributing
-We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md) before making a pull request. Our
-[issues](https://github.com/microsoft/graspologic/issues) page is full of places we could use help!
+We welcome contributions from anyone. Please see our [contribution guidelines](https://github.com/graspologic-org/graspologic/blob/dev/CONTRIBUTING.md) before making a pull request. Our
+[issues](https://github.com/graspologic-org/graspologic/issues) page is full of places we could use help!
 If you have an idea for an improvement not listed there, please
-[make an issue](https://github.com/microsoft/graspologic/issues/new) first so you can discuss with the developers.
+[make an issue](https://github.com/graspologic-org/graspologic/issues/new) first so you can discuss with the developers.
 
 # License
 This project is covered under the MIT License.
 
 # Issues
-We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/microsoft/graspologic/issues) page if you have questions or ideas.
+We appreciate detailed bug reports and feature requests (though we appreciate pull requests even more!). Please visit our [issues](https://github.com/graspologic-org/graspologic/issues) page if you have questions or ideas.
 
 # Citing `graspologic`
 If you find `graspologic` useful in your work, please cite the package via the [GraSPy paper](http://www.jmlr.org/papers/volume20/19-490/19-490.pdf)

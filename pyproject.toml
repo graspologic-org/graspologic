@@ -2,7 +2,7 @@
 name = "graspologic"
 version = "3.3.0"
 description = "A set of Python modules for graph statistics"
-repository = "https://github.com/microsoft/graspologic"
+repository = "https://github.com/graspologic-org/graspologic"
 authors = [
     "Eric Bridgeford", 
     "Jaewon Chung <j1c@jhu.edu>", 

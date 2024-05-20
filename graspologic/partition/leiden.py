@@ -284,7 +284,7 @@ def leiden(
     ----------
     .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. "From Louvain to Leiden:
          guaranteeing well-connected communities", Scientific Reports, Vol. 9, 2019
-    .. [2] https://github.com/microsoft/graspologic-native
+    .. [2] https://github.com/graspologic-org/graspologic-native
 
     Notes
     -----
@@ -548,7 +548,7 @@ def hierarchical_leiden(
     ----------
     .. [1] Traag, V.A.; Waltman, L.; Van, Eck N.J. "From Louvain to Leiden:
         guaranteeing well-connected communities",Scientific Reports, Vol. 9, 2019
-    .. [2] https://github.com/microsoft/graspologic-native
+    .. [2] https://github.com/graspologic-org/graspologic-native
 
     Notes
     -----

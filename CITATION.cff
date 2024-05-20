@@ -15,7 +15,7 @@ authors:
     given-names: "Joshua T."
 title: "GraSPy: Graph Statistics in Python"
 version: 3.0.0
-url: "https://github.com/microsoft/graspologic"
+url: "https://github.com/graspologic-org/graspologic"
 preferred-citation:
   type: software
   issue: 158
