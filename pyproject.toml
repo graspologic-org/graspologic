@@ -75,6 +75,13 @@ enable = true
 style = "pep440"
 vcs = "git"
 bump = true
+format-jinja = """
+    {%- if distance == 0 -%}
+        {{ serialize_pep440(base, stage, revision) }}
+    {%- else -%}
+        {{ serialize_pep440(base, stage, revision, dev=distance) }}
+    {%- endif -%}
+"""
 
 [tool.poe.tasks]
 _sort_imports = "ruff check --select I --fix . --preview"
