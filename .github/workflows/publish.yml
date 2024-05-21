@@ -41,57 +41,17 @@ jobs:
         uses: abatilo/actions-poetry@v3.0.0
         with:
           poetry-version: ${{ matrix.poetry-version }}
-      #
-      # This plugin will append version hashes unless we're on a release tag
-      #
       - name: Add poetry-dynamic-versioning plugin
         run: poetry self add "poetry-dynamic-versioning[plugin]"
       - name: Install dependencies
         run: poetry install
-      - name: Create version environment variable
-        run: |
-          echo "GRASPOLOGIC_VERSION=`poetry version --short`" >> $GITHUB_ENV
-          echo "GRASPOLOGIC_TAG=v`poetry version --short`" >> $GITHUB_ENV
+      - name: Export Publication Version
+        run: echo "version=`poetry version --short`" >> $GITHUB_OUTPUT
       - name: Build Artifacts
         run: poetry build
-      # Note: need to set up a Trusted Publisher on PyPi
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist
           skip-existing: true
           verbose: true
-      - name: Download documentation artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: documentation-site
-          path: docs/documentation-site
-      - name: Publish reference docs (dev branch)
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref=='refs/heads/dev'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/documentation-site
-          destination_dir: pre-release
-      - name: Publish reference docs (main branch)
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref=='refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/documentation-site
-          destination_dir: ${{ env.GRASPOLOGIC_VERSION }}
-      - name: Publish latest reference docs (main branch)
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref=='refs/heads/main'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/documentation-site
-          destination_dir: latest
-      - name: Create tag and GitHub release
-        uses: ncipollo/release-action@v1
-        if: github.ref=='refs/heads/main'
-        with:
-          tag: ${{ env.GRASPOLOGIC_TAG }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: versions_at_release.txt
-
