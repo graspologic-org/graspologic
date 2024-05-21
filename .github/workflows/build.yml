@@ -122,6 +122,6 @@ jobs:
       - name: Archive dependency tree
         uses: actions/upload-artifact@v4
         with:
-          name: dependencies
+          name: dependencies-${{matrix.python_version}}-${{matrix.os}}
           path: |
             dependencies_${{matrix.python_version}}_${{matrix.os}}.txt
