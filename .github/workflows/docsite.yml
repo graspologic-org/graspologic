@@ -1,0 +1,61 @@
+name: graspologic Docsite Build
+on:
+  #
+  # When a release tag is created (e.g. v1.0.0), this workflow will be triggered. The `poetry dynamic-version` plugin will use the correct version tag.
+  #
+  release:
+    types: [created]
+  #
+  #  On pushes to main and dev, a prerelease version will be cut for the branch. e.g. v1.0.0-pre.10+<hash>
+  #
+  push:
+    paths-ignore:
+      - '.all-contributorsrc'
+      - 'CONTRIBUTORS.md'
+    branches:
+      - 'main'
+      - 'dev'
+jobs:
+  publish:
+    uses: ./.github/workflows/publish.yml
+  build:
+    uses: ./.github/workflows/build.yml
+  docs:
+    runs-on: ubuntu-latest
+    needs: [publish, build]
+    if: github.ref=='refs/heads/main' || github.ref=='refs/heads/dev'
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+        poetry-version: ["1.8.2"]
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Download documentation artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: documentation-site
+          path: docs/documentation-site
+      - name: Publish reference docs (dev branch)
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref=='refs/heads/dev'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/documentation-site
+          destination_dir: pre-release
+      - name: Publish reference docs (main branch)
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref=='refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/documentation-site
+          destination_dir: ${{ needs.publish.outputs.version }}
+      - name: Publish latest reference docs (main branch)
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref=='refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/documentation-site
+          destination_dir: latest
+
