@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aligning &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>Aligning &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
         <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -36,7 +38,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -263,9 +265,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -294,13 +296,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="aligning">
-<h1>Aligning<a class="headerlink" href="#aligning" title="Permalink to this heading">¶</a></h1>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="aligning">
+<h1>Aligning<a class="headerlink" href="#aligning" title="Link to this heading">¶</a></h1>
 <section id="sign-flips">
-<h2>Sign flips<a class="headerlink" href="#sign-flips" title="Permalink to this heading">¶</a></h2>
+<h2>Sign flips<a class="headerlink" href="#sign-flips" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SignFlips</span></span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SignFlips</span></span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips" title="Link to this definition">¶</a></dt>
 <dd><p>Flips the signs of all entries in one dataset, <code class="docutils literal notranslate"><span class="pre">X</span></code> along some of the
 dimensions. In particular, it does so in a way that brings this dataset to
 the same orthant as the second dataset, <code class="docutils literal notranslate"><span class="pre">Y</span></code>, according to some criterion,
@@ -338,17 +364,17 @@ Two options are currently supported:</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'median'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'median'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.__init__" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>criterion</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p>
+<dd class="field-odd"><p><strong>criterion</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.set_criterion_function">
-<span class="sig-name descname"><span class="pre">set_criterion_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.set_criterion_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.set_criterion_function" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_criterion_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.set_criterion_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.set_criterion_function" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
@@ -358,7 +384,7 @@ Two options are currently supported:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/sign_flips.html#SignFlips.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SignFlips.fit" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second.</p>
 <p>In sign flips, <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> is an diagonal orthogonal matrices (i.e. a
@@ -382,8 +408,8 @@ and <code class="docutils literal notranslate"><span class="pre">Y</span></code>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -394,7 +420,7 @@ and <code class="docutils literal notranslate"><span class="pre">Y</span></code>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.fit_transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.fit_transform" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
@@ -417,8 +443,8 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -429,14 +455,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_metadata_routing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_metadata_routing" title="Link to this definition">¶</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -446,7 +472,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.get_params" title="Link to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -467,10 +493,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.set_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.set_params" title="Link to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -491,7 +517,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SignFlips.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SignFlips.transform" title="Link to this definition">¶</a></dt>
 <dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
@@ -511,7 +537,7 @@ For example, additional samples from the same dataset.</p>
 </dl>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
@@ -523,10 +549,10 @@ For example, additional samples from the same dataset.</p>
 
 </section>
 <section id="orthogonal-procrustes">
-<h2>Orthogonal Procrustes<a class="headerlink" href="#orthogonal-procrustes" title="Permalink to this heading">¶</a></h2>
+<h2>Orthogonal Procrustes<a class="headerlink" href="#orthogonal-procrustes" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">OrthogonalProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">OrthogonalProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes" title="Link to this definition">¶</a></dt>
 <dd><p>Computes the matrix solution of the classical orthogonal Procrustes <a class="reference internal" href="#r70b5933f300f-1" id="id1">[1]</a>
 problem, which is that given two matrices <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> of equal shape
 (n, d), find an orthogonal matrix that most closely maps <code class="docutils literal notranslate"><span class="pre">X</span></code> to
@@ -555,7 +581,7 @@ solution, whenever <span class="math notranslate nohighlight">\(Q\)</span> is co
 that is a matrix that satisfies <span class="math notranslate nohighlight">\(Q^T Q = Q Q^T = I\)</span>. For the more
 details, including the proof of the closed-form solution see <a class="reference internal" href="#r70b5933f300f-1" id="id2">[1]</a>.</p>
 <p>Implementation-wise, this class is a wrapper of the
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.orthogonal_procrustes.html#scipy.linalg.orthogonal_procrustes" title="(in SciPy v1.11.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.orthogonal_procrustes()</span></code></a>, which itself uses an algorithm
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.orthogonal_procrustes.html#scipy.linalg.orthogonal_procrustes" title="(in SciPy v1.13.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.linalg.orthogonal_procrustes()</span></code></a>, which itself uses an algorithm
 described in find the optimal solution algorithm <a class="reference internal" href="#r70b5933f300f-2" id="id3">[2]</a>.</p>
 <p class="rubric">References</p>
 <div role="list" class="citation-list">
@@ -572,7 +598,7 @@ Procrustes problem&quot;, Psychometrica -- Vol. 31, No. 1, March, 1996.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.__init__" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
@@ -582,7 +608,7 @@ Procrustes problem&quot;, Psychometrica -- Vol. 31, No. 1, March, 1996.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second.</p>
 <dl class="field-list simple">
@@ -601,8 +627,8 @@ first dataset with the second.</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -613,7 +639,7 @@ first dataset with the second.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit_transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/orthogonal_procrustes.html#OrthogonalProcrustes.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.fit_transform" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
@@ -635,8 +661,8 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -647,14 +673,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_metadata_routing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_metadata_routing" title="Link to this definition">¶</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -664,7 +690,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.get_params" title="Link to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -685,10 +711,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.set_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.set_params" title="Link to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -709,7 +735,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.OrthogonalProcrustes.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.OrthogonalProcrustes.transform" title="Link to this definition">¶</a></dt>
 <dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
@@ -729,7 +755,7 @@ For example, additional samples from the same dataset.</p>
 </dl>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>
@@ -741,10 +767,10 @@ For example, additional samples from the same dataset.</p>
 
 </section>
 <section id="seedless-procrustes">
-<h2>Seedless Procrustes<a class="headerlink" href="#seedless-procrustes" title="Permalink to this heading">¶</a></h2>
+<h2>Seedless Procrustes<a class="headerlink" href="#seedless-procrustes" title="Link to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SeedlessProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">graspologic.align.</span></span><span class="sig-name descname"><span class="pre">SeedlessProcrustes</span></span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes" title="Link to this definition">¶</a></dt>
 <dd><p>Matches two datasets using an orthogonal matrix. Unlike
 <a class="reference internal" href="#graspologic.align.OrthogonalProcrustes" title="graspologic.align.OrthogonalProcrustes"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrthogonalProcrustes</span></code></a>, this does not require a
 matching between entries. It can even be used in the settings where the two
@@ -885,17 +911,17 @@ arXiv:2003.14250</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimal_transport_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.__init__" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimal_transport_lambda</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimal_transport_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterative_num_reps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2d'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_Q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.__init__" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>optimal_transport_lambda</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
-<li><p><strong>optimal_transport_eps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) -- </p></li>
-<li><p><strong>optimal_transport_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>iterative_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) -- </p></li>
-<li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) -- </p></li>
-<li><p><strong>initial_Q</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
-<li><p><strong>initial_P</strong> (<em>ndarray</em><em> | </em><em>None</em>) -- </p></li>
+<li><p><strong>optimal_transport_lambda</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>optimal_transport_eps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>optimal_transport_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>iterative_num_reps</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>init</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>initial_Q</strong> (<em>ndarray</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>initial_P</strong> (<em>ndarray</em><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -903,7 +929,7 @@ arXiv:2003.14250</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/align/seedless_procrustes.html#SeedlessProcrustes.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <cite>self.Q_</cite> that aligns the
 first dataset with the second.</p>
 <dl class="field-list simple">
@@ -923,8 +949,8 @@ first dataset with the second.</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -935,7 +961,7 @@ first dataset with the second.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit_transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.fit_transform" title="Link to this definition">¶</a></dt>
 <dd><p>Uses the two datasets to learn the matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code> that aligns the
 first dataset with the second. Then, transforms the first dataset <code class="docutils literal notranslate"><span class="pre">X</span></code>
 using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>.</p>
@@ -958,8 +984,8 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>ndarray</em>) -- </p></li>
-<li><p><strong>Y</strong> (<em>ndarray</em>) -- </p></li>
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>Y</strong> (<em>ndarray</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -970,14 +996,14 @@ using the learned matrix <code class="xref py py-attr docutils literal notransla
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_metadata_routing" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_metadata_routing" title="Link to this definition">¶</a></dt>
 <dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+<p>Please check <a class="reference external" href="https://scikit-learn.org/dev/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.6)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
 routing information.</p>
 </dd>
 </dl>
@@ -987,7 +1013,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.get_params" title="Link to this definition">¶</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1008,10 +1034,10 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.set_params" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.set_params" title="Link to this definition">¶</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it's
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -1032,7 +1058,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="graspologic.align.SeedlessProcrustes.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#graspologic.align.SeedlessProcrustes.transform" title="Link to this definition">¶</a></dt>
 <dd><p>Transforms the dataset <code class="docutils literal notranslate"><span class="pre">X</span></code> using the learned matrix <code class="xref py py-attr docutils literal notranslate"><span class="pre">Q_</span></code>. This may
 be the same as the first dataset as in <code class="xref py py-func docutils literal notranslate"><span class="pre">fit()</span></code>, or a new dataset.
 For example, additional samples from the same dataset.</p>
@@ -1052,7 +1078,7 @@ For example, additional samples from the same dataset.</p>
 </dl>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>) -- </p>
+<dd class="field-odd"><p><strong>X</strong> (<em>ndarray</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>ndarray</em></p>

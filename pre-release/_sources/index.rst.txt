@@ -37,7 +37,7 @@ Free software
 
 graspologic is free software; you can redistribute it and/or modify it under the
 terms of the :doc:`MIT </license>` license.  We welcome contributions.
-Join us on `GitHub <https://github.com/microsoft/graspologic>`_.
+Join us on `GitHub <https://github.com/graspologic-org/graspologic>`_.
 
 History
 -------
@@ -64,9 +64,9 @@ Topologic was originally designed and written by Patrick Bourke, Jonathan McLean
    :maxdepth: 1
    :caption: Useful Links
 
-   graspologic @ GitHub <http://www.github.com/microsoft/graspologic/>
+   graspologic @ GitHub <http://www.github.com/graspologic-org/graspologic/>
    graspologic @ PyPI <https://pypi.org/project/graspologic/>
-   Issue Tracker <https://github.com/microsoft/graspologic/issues>
+   Issue Tracker <https://github.com/graspologic-org/graspologic/issues>
 
 Indices and tables
 ==================

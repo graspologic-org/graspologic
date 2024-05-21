@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.preprocessing.graph_cuts &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>graspologic.preprocessing.graph_cuts &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,9 +260,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -321,7 +323,9 @@
     <span class="k">return</span> <span class="n">filter_functions</span><span class="p">[</span><span class="n">cut_process</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="DefinedHistogram"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.DefinedHistogram">[docs]</a><span class="k">class</span> <span class="nc">DefinedHistogram</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<div class="viewcode-block" id="DefinedHistogram">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.DefinedHistogram">[docs]</a>
+<span class="k">class</span> <span class="nc">DefinedHistogram</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Contains the histogram and the edges of the bins in the histogram.</span>
 <span class="sd">    The bin_edges will have a length 1 greater than the histogram, as it defines the</span>
@@ -332,7 +336,10 @@
     <span class="n">bin_edges</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span></div>
 
 
-<div class="viewcode-block" id="histogram_edge_weight"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_edge_weight">[docs]</a><span class="k">def</span> <span class="nf">histogram_edge_weight</span><span class="p">(</span>
+
+<div class="viewcode-block" id="histogram_edge_weight">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_edge_weight">[docs]</a>
+<span class="k">def</span> <span class="nf">histogram_edge_weight</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span>
@@ -395,7 +402,10 @@
     <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cut_edges_by_weight"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_edges_by_weight">[docs]</a><span class="k">def</span> <span class="nf">cut_edges_by_weight</span><span class="p">(</span>
+
+<div class="viewcode-block" id="cut_edges_by_weight">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_edges_by_weight">[docs]</a>
+<span class="k">def</span> <span class="nf">cut_edges_by_weight</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -480,7 +490,10 @@
     <span class="k">return</span> <span class="n">graph_copy</span></div>
 
 
-<div class="viewcode-block" id="histogram_degree_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_degree_centrality">[docs]</a><span class="k">def</span> <span class="nf">histogram_degree_centrality</span><span class="p">(</span>
+
+<div class="viewcode-block" id="histogram_degree_centrality">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_degree_centrality">[docs]</a>
+<span class="k">def</span> <span class="nf">histogram_degree_centrality</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DefinedHistogram</span><span class="p">:</span>
@@ -523,7 +536,10 @@
     <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cut_vertices_by_degree_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_degree_centrality">[docs]</a><span class="k">def</span> <span class="nf">cut_vertices_by_degree_centrality</span><span class="p">(</span>
+
+<div class="viewcode-block" id="cut_vertices_by_degree_centrality">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_degree_centrality">[docs]</a>
+<span class="k">def</span> <span class="nf">cut_vertices_by_degree_centrality</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -562,7 +578,10 @@
     <span class="k">return</span> <span class="n">graph_copy</span></div>
 
 
-<div class="viewcode-block" id="histogram_betweenness_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_betweenness_centrality">[docs]</a><span class="k">def</span> <span class="nf">histogram_betweenness_centrality</span><span class="p">(</span>
+
+<div class="viewcode-block" id="histogram_betweenness_centrality">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.histogram_betweenness_centrality">[docs]</a>
+<span class="k">def</span> <span class="nf">histogram_betweenness_centrality</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">bin_directive</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">num_random_samples</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -642,7 +661,10 @@
     <span class="k">return</span> <span class="n">DefinedHistogram</span><span class="p">(</span><span class="n">histogram</span><span class="o">=</span><span class="n">histogram</span><span class="p">,</span> <span class="n">bin_edges</span><span class="o">=</span><span class="n">bin_edges</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cut_vertices_by_betweenness_centrality"><a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_betweenness_centrality">[docs]</a><span class="k">def</span> <span class="nf">cut_vertices_by_betweenness_centrality</span><span class="p">(</span>
+
+<div class="viewcode-block" id="cut_vertices_by_betweenness_centrality">
+<a class="viewcode-back" href="../../../reference/reference/preprocessing.html#graspologic.preprocessing.cut_vertices_by_betweenness_centrality">[docs]</a>
+<span class="k">def</span> <span class="nf">cut_vertices_by_betweenness_centrality</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">cut_threshold</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">cut_process</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -717,6 +739,7 @@
         <span class="n">graph_copy</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">graph_copy</span></div>
+
 </pre></div>
 
            </div>

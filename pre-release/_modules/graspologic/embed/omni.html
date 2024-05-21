@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.omni &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>graspologic.embed.omni &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,9 +260,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -346,7 +348,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_laplacian_matrices</span><span class="p">(</span>
-    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">]]</span>
+    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function to convert graph adjacency matrices to graph Laplacian</span>
@@ -372,7 +374,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_omni_matrix</span><span class="p">(</span>
-    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">]]</span>
+    <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">AdjacencyMatrix</span><span class="p">]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function for creating the omnibus matrix.</span>
@@ -407,7 +409,9 @@
     <span class="k">return</span> <span class="n">out</span>
 
 
-<div class="viewcode-block" id="OmnibusEmbed"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed">[docs]</a><span class="k">class</span> <span class="nc">OmnibusEmbed</span><span class="p">(</span><span class="n">BaseEmbedMulti</span><span class="p">):</span>
+<div class="viewcode-block" id="OmnibusEmbed">
+<a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed">[docs]</a>
+<span class="k">class</span> <span class="nc">OmnibusEmbed</span><span class="p">(</span><span class="n">BaseEmbedMulti</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Omnibus embedding of arbitrary number of input graphs with matched vertex</span>
 <span class="sd">    sets.</span>
@@ -504,7 +508,9 @@
 <span class="sd">       Conference on (pp. 964-967). IEEE.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="OmnibusEmbed.__init__"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="OmnibusEmbed.__init__">
+<a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_elbows</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
@@ -528,7 +534,10 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lse</span> <span class="o">=</span> <span class="n">lse</span></div>
 
-<div class="viewcode-block" id="OmnibusEmbed.fit"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+
+<div class="viewcode-block" id="OmnibusEmbed.fit">
+<a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs.</span>
 
@@ -581,7 +590,10 @@
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="OmnibusEmbed.fit_transform"><a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit_transform">[docs]</a>    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
+
+<div class="viewcode-block" id="OmnibusEmbed.fit_transform">
+<a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.OmnibusEmbed.fit_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graphs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fit the model with graphs and apply the embedding on graphs.</span>
 <span class="sd">        n_components is either automatically determined or based on user input.</span>
@@ -602,7 +614,9 @@
 <span class="sd">            If graphs were directed and ``concat`` is True, left and right (out and in) latent positions are concatenated.</span>
 <span class="sd">            In this case one tensor of shape (n_graphs, n_vertices, 2*n_components) is returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_transform</span><span class="p">(</span><span class="n">graphs</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>

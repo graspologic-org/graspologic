@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Install &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>Install &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -34,7 +36,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -261,9 +263,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -291,8 +293,32 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="install">
-<h1>Install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h1>
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="install">
+<h1>Install<a class="headerlink" href="#install" title="Link to this heading">¶</a></h1>
 <p>Below we assume you have the default Python environment already configured on
 your computer and you intend to install <code class="docutils literal notranslate"><span class="pre">graspologic</span></code> inside of it.  If you want
 to create and work with Python virtual environments, please follow instructions
@@ -301,7 +327,7 @@ environments</a>.</p>
 <p>First, make sure you have the latest version of <code class="docutils literal notranslate"><span class="pre">pip</span></code> (the Python package manager)
 installed. If you do not, refer to the <a class="reference external" href="https://pip.pypa.io/en/stable/installing/">Pip documentation</a> and install <code class="docutils literal notranslate"><span class="pre">pip</span></code> first.</p>
 <section id="install-the-released-version">
-<h2>Install the released version<a class="headerlink" href="#install-the-released-version" title="Permalink to this heading">¶</a></h2>
+<h2>Install the released version<a class="headerlink" href="#install-the-released-version" title="Link to this heading">¶</a></h2>
 <p>Install the current release of <code class="docutils literal notranslate"><span class="pre">graspologic</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install graspologic
 </pre></div>
@@ -321,7 +347,7 @@ To install in this way, navigate to the download folder in your terminal and run
 <cite>pip install graspologic-VERSION.tar.gz</cite></p>
 </section>
 <section id="python-package-dependencies">
-<h2>Python package dependencies<a class="headerlink" href="#python-package-dependencies" title="Permalink to this heading">¶</a></h2>
+<h2>Python package dependencies<a class="headerlink" href="#python-package-dependencies" title="Link to this heading">¶</a></h2>
 <p>graspologic requires the following packages:</p>
 <ul class="simple">
 <li><p>networkx</p></li>
@@ -333,11 +359,11 @@ To install in this way, navigate to the download folder in your terminal and run
 </ul>
 </section>
 <section id="hardware-requirements">
-<h2>Hardware requirements<a class="headerlink" href="#hardware-requirements" title="Permalink to this heading">¶</a></h2>
+<h2>Hardware requirements<a class="headerlink" href="#hardware-requirements" title="Link to this heading">¶</a></h2>
 <p><cite>graspologic</cite> package requires only a standard computer with enough RAM to support the in-memory operations.</p>
 </section>
 <section id="os-requirements">
-<h2>OS Requirements<a class="headerlink" href="#os-requirements" title="Permalink to this heading">¶</a></h2>
+<h2>OS Requirements<a class="headerlink" href="#os-requirements" title="Link to this heading">¶</a></h2>
 <p>This package is supported for <em>Linux</em> and <em>macOS</em>. However, the package has been tested on the following systems:</p>
 <ul class="simple">
 <li><p>Linux: N/A</p></li>
@@ -346,7 +372,7 @@ To install in this way, navigate to the download folder in your terminal and run
 </ul>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">¶</a></h2>
 <p>graspologic uses the Python <code class="docutils literal notranslate"><span class="pre">pytest</span></code> testing package.  If you don't already have
 that package installed, follow the directions on the <a class="reference external" href="https://docs.pytest.org/en/latest/">pytest homepage</a>.</p>
 </section>

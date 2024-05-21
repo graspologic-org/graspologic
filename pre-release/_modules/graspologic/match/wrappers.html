@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.match.wrappers &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>graspologic.match.wrappers &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,9 +260,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -320,7 +322,7 @@
     <span class="n">indices_B</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Indices in ``B`` which were matched. Element ``indices_B[i]`` was matched</span>
-<span class="sd">    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a </span>
+<span class="sd">    to element ``indices_A[i]``. ``indices_B`` can also be thought of as a</span>
 <span class="sd">    permutation of the nodes of ``B`` with respect to ``A``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -336,7 +338,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="graph_match"><a class="viewcode-back" href="../../../reference/reference/match.html#graspologic.match.graph_match">[docs]</a><span class="nd">@beartype</span>
+<div class="viewcode-block" id="graph_match">
+<a class="viewcode-back" href="../../../reference/reference/match.html#graspologic.match.graph_match">[docs]</a>
+<span class="nd">@beartype</span>
 <span class="k">def</span> <span class="nf">graph_match</span><span class="p">(</span>
     <span class="n">A</span><span class="p">:</span> <span class="n">MultilayerAdjacency</span><span class="p">,</span>
     <span class="n">B</span><span class="p">:</span> <span class="n">MultilayerAdjacency</span><span class="p">,</span>
@@ -617,6 +621,7 @@
     <span class="k">return</span> <span class="n">MatchResult</span><span class="p">(</span>
         <span class="n">best_result</span><span class="o">.</span><span class="n">indices_A</span><span class="p">,</span> <span class="n">best_result</span><span class="o">.</span><span class="n">indices_B</span><span class="p">,</span> <span class="n">best_result</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="n">miscs</span>
     <span class="p">)</span></div>
+
 </pre></div>
 
            </div>

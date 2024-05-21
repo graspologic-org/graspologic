@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.utils.utils &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>graspologic.utils.utils &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,9 +260,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -316,7 +318,7 @@
 
 <span class="nd">@beartype</span>
 <span class="k">def</span> <span class="nf">average_matrices</span><span class="p">(</span>
-    <span class="n">matrices</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_array</span><span class="p">]]]</span>
+    <span class="n">matrices</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">csr_array</span><span class="p">]]],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper method to encapsulate calculating the average of matrices represented either as a</span>
@@ -339,7 +341,9 @@
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unexpected type </span><span class="si">{</span><span class="n">matrices</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="import_graph"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.import_graph">[docs]</a><span class="k">def</span> <span class="nf">import_graph</span><span class="p">(</span>
+<div class="viewcode-block" id="import_graph">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.import_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">import_graph</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">copy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sparse</span><span class="o">.</span><span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -394,14 +398,15 @@
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input must be networkx.Graph, np.array, or scipy.sparse.csr_array,</span><span class="se">\</span>
-<span class="s2">        not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
-        <span class="p">)</span>
+<span class="s2">        not </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">graph</span><span class="p">))</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 
 
-<div class="viewcode-block" id="import_edgelist"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.import_edgelist">[docs]</a><span class="k">def</span> <span class="nf">import_edgelist</span><span class="p">(</span>
+
+<div class="viewcode-block" id="import_edgelist">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.import_edgelist">[docs]</a>
+<span class="k">def</span> <span class="nf">import_edgelist</span><span class="p">(</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]],</span>
     <span class="n">extension</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;edgelist&quot;</span><span class="p">,</span>
     <span class="n">delimiter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -493,6 +498,7 @@
         <span class="k">return</span> <span class="n">out</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">is_symmetric</span><span class="p">(</span><span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
     <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span>
 
@@ -575,7 +581,9 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;input a correct matrix type.&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="symmetrize"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.symmetrize">[docs]</a><span class="k">def</span> <span class="nf">symmetrize</span><span class="p">(</span>
+<div class="viewcode-block" id="symmetrize">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.symmetrize">[docs]</a>
+<span class="k">def</span> <span class="nf">symmetrize</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;triu&quot;</span><span class="p">,</span> <span class="s2">&quot;tril&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;avg&quot;</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -640,7 +648,10 @@
     <span class="k">return</span> <span class="n">graph</span></div>
 
 
-<div class="viewcode-block" id="remove_loops"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remove_loops">[docs]</a><span class="k">def</span> <span class="nf">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="remove_loops">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remove_loops">[docs]</a>
+<span class="k">def</span> <span class="nf">remove_loops</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to remove loops from a graph.</span>
 
@@ -668,10 +679,13 @@
     <span class="k">return</span> <span class="n">graph</span></div>
 
 
+
 <span class="n">LaplacianFormType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;I-DAD&quot;</span><span class="p">,</span> <span class="s2">&quot;DAD&quot;</span><span class="p">,</span> <span class="s2">&quot;R-DAD&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="to_laplacian"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.to_laplacian">[docs]</a><span class="k">def</span> <span class="nf">to_laplacian</span><span class="p">(</span>
+<div class="viewcode-block" id="to_laplacian">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.to_laplacian">[docs]</a>
+<span class="k">def</span> <span class="nf">to_laplacian</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span>
     <span class="n">form</span><span class="p">:</span> <span class="n">LaplacianFormType</span> <span class="o">=</span> <span class="s2">&quot;DAD&quot;</span><span class="p">,</span>
     <span class="n">regularizer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -786,7 +800,10 @@
     <span class="k">return</span> <span class="n">L</span></div>
 
 
-<div class="viewcode-block" id="is_fully_connected"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.is_fully_connected">[docs]</a><span class="k">def</span> <span class="nf">is_fully_connected</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+<div class="viewcode-block" id="is_fully_connected">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.is_fully_connected">[docs]</a>
+<span class="k">def</span> <span class="nf">is_fully_connected</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Checks whether the input graph is fully connected in the undirected case</span>
 <span class="sd">    or weakly connected in the directed case.</span>
@@ -835,7 +852,10 @@
         <span class="k">return</span> <span class="n">nx</span><span class="o">.</span><span class="n">is_connected</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="largest_connected_component"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.largest_connected_component">[docs]</a><span class="k">def</span> <span class="nf">largest_connected_component</span><span class="p">(</span>
+
+<div class="viewcode-block" id="largest_connected_component">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.largest_connected_component">[docs]</a>
+<span class="k">def</span> <span class="nf">largest_connected_component</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiGraph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">MultiDiGraph</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span>
     <span class="p">],</span>
@@ -884,6 +904,7 @@
             <span class="s2">&quot; numpy ndarray or scipy csr_array format.&quot;</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">_largest_connected_component_networkx</span><span class="p">(</span>
@@ -943,7 +964,9 @@
         <span class="k">return</span> <span class="n">lcc</span>
 
 
-<div class="viewcode-block" id="multigraph_lcc_union"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.multigraph_lcc_union">[docs]</a><span class="k">def</span> <span class="nf">multigraph_lcc_union</span><span class="p">(</span>
+<div class="viewcode-block" id="multigraph_lcc_union">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.multigraph_lcc_union">[docs]</a>
+<span class="k">def</span> <span class="nf">multigraph_lcc_union</span><span class="p">(</span>
     <span class="n">graphs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">]],</span> <span class="n">return_inds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
     <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -1002,7 +1025,10 @@
     <span class="k">return</span> <span class="n">graphs</span></div>
 
 
-<div class="viewcode-block" id="multigraph_lcc_intersection"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.multigraph_lcc_intersection">[docs]</a><span class="k">def</span> <span class="nf">multigraph_lcc_intersection</span><span class="p">(</span>
+
+<div class="viewcode-block" id="multigraph_lcc_intersection">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.multigraph_lcc_intersection">[docs]</a>
+<span class="k">def</span> <span class="nf">multigraph_lcc_intersection</span><span class="p">(</span>
     <span class="n">graphs</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">return_inds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span>
     <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">GraphRepresentation</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
@@ -1080,7 +1106,10 @@
         <span class="k">return</span> <span class="n">result_graphs</span></div>
 
 
-<div class="viewcode-block" id="augment_diagonal"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.augment_diagonal">[docs]</a><span class="k">def</span> <span class="nf">augment_diagonal</span><span class="p">(</span>
+
+<div class="viewcode-block" id="augment_diagonal">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.augment_diagonal">[docs]</a>
+<span class="k">def</span> <span class="nf">augment_diagonal</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1129,6 +1158,7 @@
     <span class="n">graph</span> <span class="o">+=</span> <span class="n">diags</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">diag</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">graph</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">binarize</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">csr_array</span><span class="p">]:</span>
@@ -1316,7 +1346,9 @@
     <span class="k">return</span> <span class="n">A</span>
 
 
-<div class="viewcode-block" id="remap_labels"><a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remap_labels">[docs]</a><span class="k">def</span> <span class="nf">remap_labels</span><span class="p">(</span>
+<div class="viewcode-block" id="remap_labels">
+<a class="viewcode-back" href="../../../reference/reference/utils.html#graspologic.utils.remap_labels">[docs]</a>
+<span class="k">def</span> <span class="nf">remap_labels</span><span class="p">(</span>
     <span class="n">y_true</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">],</span>
     <span class="n">y_pred</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">],</span>
     <span class="n">return_map</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1402,6 +1434,7 @@
         <span class="k">return</span> <span class="n">remapped_y_pred</span></div>
 
 
+
 <span class="k">def</span> <span class="nf">remap_node_ids</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
@@ -1450,9 +1483,9 @@
 
         <span class="n">graph_remapped</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node_id_dict</span><span class="p">[</span><span class="n">source</span><span class="p">],</span> <span class="n">node_id_dict</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
 
-        <span class="n">graph_remapped</span><span class="p">[</span><span class="n">node_id_dict</span><span class="p">[</span><span class="n">source</span><span class="p">]][</span><span class="n">node_id_dict</span><span class="p">[</span><span class="n">target</span><span class="p">]][</span>
-            <span class="n">weight_attribute</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="n">graph_remapped</span><span class="p">[</span><span class="n">node_id_dict</span><span class="p">[</span><span class="n">source</span><span class="p">]][</span><span class="n">node_id_dict</span><span class="p">[</span><span class="n">target</span><span class="p">]][</span><span class="n">weight_attribute</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">weight</span>
+        <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">graph_remapped</span><span class="p">,</span> <span class="n">node_id_dict</span>
 

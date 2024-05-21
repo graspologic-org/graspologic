@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.cluster.autogmm &mdash; graspologic 3.3.0dev6345475692 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>graspologic.cluster.autogmm &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c33a48df"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="../../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -31,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                3.3.0dev6345475692
+                3.3.0
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -258,9 +260,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference external" href="http://www.github.com/microsoft/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/microsoft/graspologic/issues">Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
 </ul>
 
         </div>
@@ -317,7 +319,9 @@
 <span class="n">CovarianceType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="s2">&quot;tied&quot;</span><span class="p">,</span> <span class="s2">&quot;diag&quot;</span><span class="p">,</span> <span class="s2">&quot;spherical&quot;</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="AutoGMMCluster"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster">[docs]</a><span class="k">class</span> <span class="nc">AutoGMMCluster</span><span class="p">(</span><span class="n">BaseCluster</span><span class="p">):</span>
+<div class="viewcode-block" id="AutoGMMCluster">
+<a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster">[docs]</a>
+<span class="k">class</span> <span class="nc">AutoGMMCluster</span><span class="p">(</span><span class="n">BaseCluster</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Automatic Gaussian Mixture Model (GMM) selection.</span>
 
@@ -510,7 +514,9 @@
 <span class="sd">       Statistical Association, 93(441):294–302, 1998.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="AutoGMMCluster.__init__"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="AutoGMMCluster.__init__">
+<a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">min_components</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
         <span class="n">max_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
@@ -685,6 +691,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">max_agglom_size</span> <span class="o">=</span> <span class="n">max_agglom_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span></div>
 
+
     <span class="k">def</span> <span class="nf">_fit_cluster</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -768,7 +775,9 @@
         <span class="p">}</span>
         <span class="k">return</span> <span class="n">results</span>
 
-<div class="viewcode-block" id="AutoGMMCluster.fit"><a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AutoGMMCluster&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="AutoGMMCluster.fit">
+<a class="viewcode-back" href="../../../reference/reference/cluster.html#graspologic.cluster.AutoGMMCluster.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;AutoGMMCluster&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Fits gaussian mixture model to the data.</span>
 <span class="sd">        Initialize with agglomerative clustering then</span>
@@ -859,8 +868,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">label_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">p_ag</span> <span class="ow">in</span> <span class="n">param_grid_ag</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">p_ag</span><span class="p">[</span><span class="s2">&quot;affinity&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+                    <span class="n">p_ag_without_affinity</span> <span class="o">=</span> <span class="n">p_ag</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">affinity</span> <span class="o">=</span> <span class="n">p_ag_without_affinity</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;affinity&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                     <span class="n">agg</span> <span class="o">=</span> <span class="n">AgglomerativeClustering</span><span class="p">(</span>
-                        <span class="n">n_clusters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_components</span><span class="p">,</span> <span class="o">**</span><span class="n">p_ag</span>
+                        <span class="n">n_clusters</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min_components</span><span class="p">,</span>
+                        <span class="n">metric</span><span class="o">=</span><span class="n">affinity</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">p_ag_without_affinity</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">agg</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_subset</span><span class="p">)</span>
                     <span class="n">hierarchical_labels</span> <span class="o">=</span> <span class="n">_hierarchical_labels</span><span class="p">(</span>
@@ -897,7 +910,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ari_</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">,</span> <span class="s2">&quot;ari&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">best_idx</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span></div>
+</div>
+
 
 
 <span class="k">def</span> <span class="nf">_increase_reg</span><span class="p">(</span><span class="n">reg</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -1048,9 +1063,10 @@
         <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">hierarchical_labels</span><span class="p">[:,</span> <span class="n">n</span><span class="p">],</span> <span class="n">children</span><span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">:]))[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">hierarchical_labels</span><span class="p">[</span><span class="n">inds</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">n_samples</span> <span class="o">+</span> <span class="n">n</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">merge_end</span><span class="p">:</span>
-            <span class="n">hierarchical_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
-                <span class="p">(</span><span class="n">hierarchical_labels</span><span class="p">,</span> <span class="n">hierarchical_labels</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
-            <span class="p">)</span>
+            <span class="n">hierarchical_labels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span>
+                <span class="n">hierarchical_labels</span><span class="p">,</span>
+                <span class="n">hierarchical_labels</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="p">))</span>
 
     <span class="n">hierarchical_labels</span> <span class="o">=</span> <span class="n">hierarchical_labels</span><span class="p">[:,</span> <span class="n">merge_start</span><span class="p">:]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hierarchical_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
