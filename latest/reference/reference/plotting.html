@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plotting &mdash; graspologic 3.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/documentation_options.js?v=3eb8911e"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Preprocessing" href="preprocessing.html" />
+    <link rel="prev" title="Pipeline" href="pipeline.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                3.3.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release.html">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-3-0">graspologic 3.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-2-0">graspologic 3.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release.html#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">&lt;no title&gt;</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Reference</a></li>
+      <li class="breadcrumb-item active">Plotting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/reference/reference/plotting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="plotting">
+<h1>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">¶</a></h1>
+<section id="heatmap">
+<h2>Heatmap<a class="headerlink" href="#heatmap" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.heatmap">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticklabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticklabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_hier_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_hier_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hier_label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#heatmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.heatmap" title="Link to this definition">¶</a></dt>
+<dd><p>Plots a graph as a color-encoded matrix.</p>
+<p>Nodes can be grouped by providing <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> or both
+<code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">outer_hier_labels</span></code>. Nodes can also
+be sorted by the degree from largest to smallest degree nodes.
+The nodes will be sorted within each group if labels are also
+provided.</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">nx.Graph or np.ndarray object</span></dt><dd><p>Graph or numpy matrix to plot</p>
+</dd>
+<dt><strong>transform</strong><span class="classifier">None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}</span></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>'log'</dt><dd><p>Plots the natural log of all nonzero numbers</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'log10'</dt><dd><p>Plots the base 10 log of all nonzero numbers</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'zero-boost'</dt><dd><p>Pass to ranks method. preserves the edge weight for all 0s, but ranks
+the other edges as if the ranks of all 0 edges has been assigned.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'simple-all'</dt><dd><p>Pass to ranks method. Assigns ranks to all non-zero edges, settling
+ties using the average. Ranks are then scaled by
+<span class="math notranslate nohighlight">\(\frac{rank(\text{non-zero edges})}{n^2 + 1}\)</span>
+where n is the number of nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'simple-nonzero'</dt><dd><p>Pass to ranks method. Same as simple-all, but ranks are scaled by
+<span class="math notranslate nohighlight">\(\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}\)</span></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'binarize'</dt><dd><p>Binarize input graph such that any edge weight greater than 0 becomes 1.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple of integers, optional, default: (10, 10)</span></dt><dd><p>Width, height in inches.</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str, optional, default: None</span></dt><dd><p>Title of plot.</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {paper, notebook, talk (default), poster}</span></dt><dd><p>The name of a preconfigured set.</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>xticklabels, yticklabels</strong><span class="classifier">bool or list, optional</span></dt><dd><p>If list-like, plot these alternate labels as the ticklabels.</p>
+</dd>
+<dt><strong>cmap</strong><span class="classifier">str, list of colors, or matplotlib.colors.Colormap, default: 'RdBu_r'</span></dt><dd><p>Valid matplotlib color map.</p>
+</dd>
+<dt><strong>vmin, vmax</strong><span class="classifier">floats, optional (default=None)</span></dt><dd><p>Values to anchor the colormap, otherwise they are inferred from the data and
+other keyword arguments.</p>
+</dd>
+<dt><strong>center</strong><span class="classifier">float, default: 0</span></dt><dd><p>The value at which to center the colormap</p>
+</dd>
+<dt><strong>cbar</strong><span class="classifier">bool, default: True</span></dt><dd><p>Whether to draw a colorbar.</p>
+</dd>
+<dt><strong>inner_hier_labels</strong><span class="classifier">array-like, length of X's first dimension, default: None</span></dt><dd><p>Categorical labeling of the nodes. If not None, will group the nodes
+according to these labels and plot the labels on the marginal</p>
+</dd>
+<dt><strong>outer_hier_labels</strong><span class="classifier">array-like, length of X's first dimension, default: None</span></dt><dd><p>Categorical labeling of the nodes, ignored without <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code>
+If not None, will plot these labels as the second level of a hierarchy on the
+marginals</p>
+</dd>
+<dt><strong>hier_label_fontsize</strong><span class="classifier">int</span></dt><dd><p>Size (in points) of the text labels for the <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> and
+<code class="docutils literal notranslate"><span class="pre">outer_hier_labels</span></code>.</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">matplotlib Axes, optional</span></dt><dd><p>Axes in which to draw the plot, otherwise will generate its own axes</p>
+</dd>
+<dt><strong>title_pad</strong><span class="classifier">int, float or None, optional (default=None)</span></dt><dd><p>Custom padding to use for the distance of the title from the heatmap. Autoscales
+if <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt><strong>sort_nodes</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether or not to sort the nodes of the graph by the sum of edge weights
+(degree for an unweighted graph). If <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> is passed and
+<code class="docutils literal notranslate"><span class="pre">sort_nodes</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, will sort nodes this way within block.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict, optional</span></dt><dd><p>additional plotting arguments passed to Seaborn's <code class="docutils literal notranslate"><span class="pre">heatmap</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.0)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>xticklabels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>yticklabels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>cmap</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>vmin</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>vmax</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>center</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>cbar</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>inner_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>outer_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>hier_label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>sort_nodes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="gridplot">
+<h2>Gridplot<a class="headerlink" href="#gridplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.gridplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">gridplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">200)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Type'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_hier_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_hier_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hier_label_fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#gridplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.gridplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plots multiple graphs on top of each other with dots as edges.</p>
+<p>This function is useful for visualizing multiple graphs simultaneously.
+The size of the dots correspond to the edge weights of the graphs, and
+colors represent input graphs.</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">list of nx.Graph or np.ndarray object</span></dt><dd><p>List of nx.Graph or numpy arrays to plot</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">list of str</span></dt><dd><p>List of strings, which are labels for each element in X.
+<code class="docutils literal notranslate"><span class="pre">len(X)</span> <span class="pre">==</span> <span class="pre">len(labels)</span></code>.</p>
+</dd>
+<dt><strong>transform</strong><span class="classifier">None, or string {'log', 'log10', 'zero-boost', 'simple-all', 'simple-nonzero'}</span></dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>'log'</dt><dd><p>Plots the natural log of all nonzero numbers</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'log10'</dt><dd><p>Plots the base 10 log of all nonzero numbers</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'zero-boost'</dt><dd><p>Pass to ranks method. preserves the edge weight for all 0s, but ranks
+the other edges as if the ranks of all 0 edges has been assigned.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'simple-all'</dt><dd><p>Pass to ranks method. Assigns ranks to all non-zero edges, settling
+ties using the average. Ranks are then scaled by
+<span class="math notranslate nohighlight">\(\frac{rank(\text{non-zero edges})}{n^2 + 1}\)</span>
+where n is the number of nodes</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'simple-nonzero'</dt><dd><p>Pass to ranks method. Same as simple-all, but ranks are scaled by
+<span class="math notranslate nohighlight">\(\frac{rank(\text{non-zero edges})}{\text{# non-zero edges} + 1}\)</span></p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>'binarize'</dt><dd><p>Binarize input graph such that any edge weight greater than 0 becomes 1.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>height</strong><span class="classifier">int, optional, default: 10</span></dt><dd><p>Height of figure in inches.</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str, optional, default: None</span></dt><dd><p>Title of plot.</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {paper, notebook, talk (default), poster}</span></dt><dd><p>The name of a preconfigured set.</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
+be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
+For acceptable string arguments, see the palette options at
+<a class="reference external" href="https://matplotlib.org/stable/users/explain/colors/colormaps.html" title="(in Matplotlib v3.9.0)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a></p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float [0, 1], default</span><span class="classifier">0.7</span></dt><dd><p>Alpha value of plotted gridplot points</p>
+</dd>
+<dt><strong>sizes</strong><span class="classifier">length 2 tuple, default: (10, 200)</span></dt><dd><p>Min and max size to plot edge weights</p>
+</dd>
+<dt><strong>legend_name</strong><span class="classifier">string, default: 'Type'</span></dt><dd><p>Name to plot above the legend</p>
+</dd>
+<dt><strong>inner_hier_labels</strong><span class="classifier">array-like, length of X's first dimension, default: None</span></dt><dd><p>Categorical labeling of the nodes. If not None, will group the nodes
+according to these labels and plot the labels on the marginal</p>
+</dd>
+<dt><strong>outer_hier_labels</strong><span class="classifier">array-like, length of X's first dimension, default: None</span></dt><dd><p>Categorical labeling of the nodes, ignored without <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code>
+If not None, will plot these labels as the second level of a hierarchy on the
+marginals</p>
+</dd>
+<dt><strong>hier_label_fontsize</strong><span class="classifier">int</span></dt><dd><p>Size (in points) of the text labels for the <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> and
+<code class="docutils literal notranslate"><span class="pre">outer_hier_labels</span></code>.</p>
+</dd>
+<dt><strong>title_pad</strong><span class="classifier">int, float or None, optional (default=None)</span></dt><dd><p>Custom padding to use for the distance of the title from the heatmap. Autoscales
+if <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd>
+<dt><strong>sort_nodes</strong><span class="classifier">boolean, optional (default=False)</span></dt><dd><p>Whether or not to sort the nodes of the graph by the sum of edge weights
+(degree for an unweighted graph). If <code class="docutils literal notranslate"><span class="pre">inner_hier_labels</span></code> is passed and
+<code class="docutils literal notranslate"><span class="pre">sort_nodes</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, will sort nodes this way within block.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.0)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>labels</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>transform</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>sizes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>inner_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>outer_hier_labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>hier_label_fontsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>)</p></li>
+<li><p><strong>title_pad</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>sort_nodes</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="pairplot">
+<h2>Pairplot<a class="headerlink" href="#pairplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.pairplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">pairplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diag_kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#pairplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.pairplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plot pairwise relationships in a dataset.</p>
+<p>By default, this function will create a grid of axes such that each dimension
+in data will by shared in the y-axis across a single row and in the x-axis
+across a single column.</p>
+<p>The off-diagonal axes show the pairwise relationships displayed as scatterplot.
+The diagonal axes show the univariate distribution of the data for that
+dimension displayed as either a histogram or kernel density estimates (KDEs).</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">array-like or list, shape (n_samples), optional</span></dt><dd><p>Labels that correspond to each sample in <code class="docutils literal notranslate"><span class="pre">X</span></code>.</p>
+</dd>
+<dt><strong>col_names</strong><span class="classifier">array-like or list, shape (n_features), optional</span></dt><dd><p>Names or labels for each feature in <code class="docutils literal notranslate"><span class="pre">X</span></code>. If not provided, the default
+will be <cite>Dimension 1, Dimension 2, etc</cite>.</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str, optional, default: None</span></dt><dd><p>Title of plot.</p>
+</dd>
+<dt><strong>legend_name</strong><span class="classifier">str, optional, default: None</span></dt><dd><p>Title of the legend.</p>
+</dd>
+<dt><strong>variables</strong><span class="classifier">list of variable names, optional</span></dt><dd><p>Variables to plot based on col_names, otherwise use every column with
+a numeric datatype.</p>
+</dd>
+<dt><strong>height</strong><span class="classifier">int, optional, default: 10</span></dt><dd><p>Height of figure in inches.</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {paper, notebook, talk (default), poster}</span></dt><dd><p>The name of a preconfigured set.</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
+be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
+For acceptable string arguments, see the palette options at
+<a class="reference external" href="https://matplotlib.org/stable/users/explain/colors/colormaps.html" title="(in Matplotlib v3.9.0)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, optional, default: 0.7</span></dt><dd><p>Opacity value of plotter markers between 0 and 1</p>
+</dd>
+<dt><strong>size</strong><span class="classifier">float or int, optional, default: 50</span></dt><dd><p>Size of plotted markers.</p>
+</dd>
+<dt><strong>marker</strong><span class="classifier">string, optional, default: '.'</span></dt><dd><p>Matplotlib marker specifier, see the marker options at
+<a class="reference external" href="https://matplotlib.org/stable/api/markers_api.html" title="(in Matplotlib v3.9.0)"><span class="xref std std-doc">Matplotlib style marker specification</span></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>col_names</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>variables</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>height</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>marker</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>diag_kind</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.PairGrid.html#seaborn.PairGrid" title="(in seaborn v0.13.2)"><em>PairGrid</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.pairplot_with_gmm">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">pairplot_with_gmm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gmm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">12)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histplot_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#pairplot_with_gmm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.pairplot_with_gmm" title="Link to this definition">¶</a></dt>
+<dd><p>Plot pairwise relationships in a dataset, also showing a clustering predicted by
+a Gaussian mixture model.</p>
+<p>By default, this function will create a grid of axes such that each dimension
+in data will by shared in the y-axis across a single row and in the x-axis
+across a single column.</p>
+<p>The off-diagonal axes show the pairwise relationships displayed as scatterplot.
+The diagonal axes show the univariate distribution of the data for that
+dimension displayed as either a histogram or kernel density estimates (KDEs).</p>
+<p>Read more in the <a class="reference external" href="https://microsoft.github.io/graspologic/tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and
+Clustering Tutorial</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like, shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
+</dd>
+<dt><strong>gmm: GaussianMixture object</strong></dt><dd><p>A fit <a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a> object.
+Gaussian mixture models (GMMs) are probabilistic models for representing data
+based on normally distributed subpopulations, GMM clusters each data point into
+a corresponding subpopulation.</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">array-like or list, shape (n_samples), optional</span></dt><dd><p>Labels that correspond to each sample in <code class="docutils literal notranslate"><span class="pre">X</span></code>.
+If labels are not passed in then labels are predicted by <code class="docutils literal notranslate"><span class="pre">gmm</span></code>.</p>
+</dd>
+<dt><strong>label_palette</strong><span class="classifier">str or dict, optional, default: 'Set1'</span></dt><dd><p>Palette used to color points if <code class="docutils literal notranslate"><span class="pre">labels</span></code> are passed in.</p>
+</dd>
+<dt><strong>cluster_palette</strong><span class="classifier">str or dict, optional, default: 'Set1'</span></dt><dd><p>Palette used to color GMM ellipses (and points if no <code class="docutils literal notranslate"><span class="pre">labels</span></code> are passed).</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">string, default: &quot;&quot;</span></dt><dd><p>Title of the plot.</p>
+</dd>
+<dt><strong>legend_name</strong><span class="classifier">string, default: None</span></dt><dd><p>Name to put above the legend.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will be &quot;Cluster&quot; if no custom <code class="docutils literal notranslate"><span class="pre">labels</span></code> are passed, and &quot;&quot;
+otherwise.</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {talk (default), paper, notebook, poster}</span></dt><dd><p>Seaborn plotting context</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, optional, default: 0.7</span></dt><dd><p>Opacity value of plotter markers between 0 and 1</p>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple</span></dt><dd><p>The size of the 2d subplots configuration</p>
+</dd>
+<dt><strong>histplot_kws</strong><span class="classifier">dict, default: {}</span></dt><dd><p>Keyword arguments passed down to <a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.histplot.html#seaborn.histplot" title="(in seaborn v0.13.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">seaborn.histplot()</span></code></a></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>fig</strong><span class="classifier">matplotlib Figure</span></dt><dd></dd>
+<dt><strong>axes</strong><span class="classifier">np.ndarray</span></dt><dd><p>Array of matplotlib Axes</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>gmm</strong> (<a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.6)"><em>GaussianMixture</em></a>)</p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>cluster_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>)</p></li>
+<li><p><strong>label_palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>legend_name</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>histplot_kws</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a>[<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="(in Matplotlib v3.9.0)"><em>Figure</em></a>, <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a>]</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#graspologic.plot.pairplot" title="graspologic.plot.pairplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.plot.pairplot</span></code></a></dt><dd></dd>
+<dt><a class="reference internal" href="cluster.html#graspologic.cluster.AutoGMMCluster" title="graspologic.cluster.AutoGMMCluster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">graspologic.cluster.AutoGMMCluster</span></code></a></dt><dd></dd>
+<dt><a class="reference external" href="https://scikit-learn.org/dev/modules/generated/sklearn.mixture.GaussianMixture.html#sklearn.mixture.GaussianMixture" title="(in scikit-learn v1.6)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.mixture.GaussianMixture</span></code></a></dt><dd></dd>
+</dl>
+</div>
+</dd></dl>
+
+</section>
+<section id="degreeplot">
+<h2>Degreeplot<a class="headerlink" href="#degreeplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.degreeplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">degreeplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'out'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Degree</span> <span class="pre">plot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#degreeplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.degreeplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plots the distribution of node degrees for the input graph.
+Allows for sets of node labels, will plot a distribution for each
+node category.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>input graph</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">1d np.ndarray or list, same length as dimensions of <code class="docutils literal notranslate"><span class="pre">X</span></code></span></dt><dd><p>Labels for different categories of graph nodes</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">string, ('out', 'in')</span></dt><dd><p>Whether to plot out degree or in degree for a directed graph</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">string, default</span><span class="classifier">'Degree plot'</span></dt><dd><p>Plot title</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {talk (default), paper, notebook, poster}</span></dt><dd><p>Seaborn plotting context</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
+be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
+For acceptable string arguments, see the palette options at
+<a class="reference external" href="https://matplotlib.org/stable/users/explain/colors/colormaps.html" title="(in Matplotlib v3.9.0)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple of length 2, default (10, 5)</span></dt><dd><p>Size of the figure (width, height)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>direction</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="edgeplot">
+<h2>Edgeplot<a class="headerlink" href="#edgeplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.edgeplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">edgeplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nonzero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Edge</span> <span class="pre">plot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Set1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#edgeplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.edgeplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plots the distribution of edge weights for the input graph.
+Allows for sets of node labels, will plot edge weight distribution
+for each node category.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>Input graph</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">1d np.ndarray or list, same length as dimensions of <code class="docutils literal notranslate"><span class="pre">X</span></code></span></dt><dd><p>Labels for different categories of graph nodes</p>
+</dd>
+<dt><strong>nonzero</strong><span class="classifier">boolean, default: False</span></dt><dd><p>Whether to restrict the edgeplot to only the non-zero edges</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">string, default</span><span class="classifier">'Edge plot'</span></dt><dd><p>Plot title</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {talk (default), paper, notebook, poster}</span></dt><dd><p>Seaborn plotting context</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>palette</strong><span class="classifier">str, dict, optional, default: 'Set1'</span></dt><dd><p>Set of colors for mapping the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable. If a dict, keys should
+be values in the <code class="docutils literal notranslate"><span class="pre">hue</span></code> variable.
+For acceptable string arguments, see the palette options at
+<a class="reference external" href="https://matplotlib.org/stable/users/explain/colors/colormaps.html" title="(in Matplotlib v3.9.0)"><span class="xref std std-doc">Choosing Colormaps in Matplotlib</span></a>.</p>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple of length 2, default (10, 5)</span></dt><dd><p>Size of the figure (width, height)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>labels</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Any" title="(in Python v3.9)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>nonzero</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>palette</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="screeplot">
+<h2>Screeplot<a class="headerlink" href="#screeplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.screeplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">screeplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Scree</span> <span class="pre">plot'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'talk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(10,</span> <span class="pre">5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cumulative</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_elbow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot.html#screeplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.screeplot" title="Link to this definition">¶</a></dt>
+<dd><p>Plots the distribution of singular values for a matrix, either showing the
+raw distribution or an empirical CDF (depending on <code class="docutils literal notranslate"><span class="pre">cumulative</span></code>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">np.ndarray (2D)</span></dt><dd><p>Input matrix</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">string, default</span><span class="classifier">'Scree plot'</span></dt><dd><p>Plot title</p>
+</dd>
+<dt><strong>context</strong><span class="classifier">None, or one of {talk (default), paper, notebook, poster}</span></dt><dd><p>Seaborn plotting context</p>
+</dd>
+<dt><strong>font_scale</strong><span class="classifier">float, optional, default: 1</span></dt><dd><p>Separate scaling factor to independently scale the size of the font
+elements.</p>
+</dd>
+<dt><strong>figsize</strong><span class="classifier">tuple of length 2, default (10, 5)</span></dt><dd><p>Size of the figure (width, height)</p>
+</dd>
+<dt><strong>cumulative</strong><span class="classifier">boolean, default: True</span></dt><dd><p>Whether or not to plot a cumulative cdf of singular values</p>
+</dd>
+<dt><strong>show_first</strong><span class="classifier">int or None, default: None</span></dt><dd><p>Whether to restrict the plot to the first <code class="docutils literal notranslate"><span class="pre">show_first</span></code> components</p>
+</dd>
+<dt><strong>show_elbow</strong><span class="classifier">bool, or int, default: False</span></dt><dd><p>Whether to show an elbow (an optimal embedding dimension) estimated
+via [1]. An integer is interpreted as a number of likelihood
+elbows to return. Must be <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib axis object</span></dt><dd><p>Output plot</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>ndarray</em>)</p></li>
+<li><p><strong>title</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>)</p></li>
+<li><p><strong>font_scale</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
+<li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>]</em>)</p></li>
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>cumulative</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>)</p></li>
+<li><p><strong>show_first</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>show_elbow</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.9.0)"><em>Axes</em></a></p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r74cabad275f4-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Zhu, M. and Ghodsi, A. (2006).
+Automatic dimensionality selection from the scree plot via the use of
+profile likelihood. Computational Statistics &amp; Data Analysis, 51(2),
+pp.918-930.</p>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="adjplot">
+<h2>Adjplot<a class="headerlink" href="#adjplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.adjplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">adjplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'heatmap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'size'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab10'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridline_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinestyle_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot_matrix.html#adjplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.adjplot" title="Link to this definition">¶</a></dt>
+<dd><p>Sorts and plots a square matrix in various ways, and with optional information added
+to the margin of the matrix plot.</p>
+<p>This function is a wrapper around <code class="docutils literal notranslate"><span class="pre">matrixplot</span></code> which assumes that the plotted
+matrix is square, and that the rows and columns represent the same items and have
+the same metadata (e.g. the adjacency matrix of a graph).</p>
+<p>Read more in the <cite>Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">np.ndarray or scipy.sparse.csr_array with ndim=2</span></dt><dd><p>Matrix to plot, must be square.
+Sparse matrix input is only accepted if <code class="docutils literal notranslate"><span class="pre">plot_type</span> <span class="pre">==</span> <span class="pre">'scattermap'</span></code>.</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">matplotlib axes object (default=None)</span></dt><dd><p>Axes in which to draw the plot. If no axis is passed, one will be created.</p>
+</dd>
+<dt><strong>plot_type</strong><span class="classifier">str in {&quot;heatmap&quot;, &quot;scattermap&quot;} (default=&quot;heatmap&quot;)</span></dt><dd><p>&quot;heatmap&quot; will draw the matrix using <a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.heatmap.html#seaborn.heatmap" title="(in seaborn v0.13.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">seaborn.heatmap()</span></code></a>, &quot;scattermap&quot; will
+draw each nonzero element of the matrix using <a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.scatterplot.html#seaborn.scatterplot" title="(in seaborn v0.13.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">seaborn.scatterplot()</span></code></a>.
+&quot;scattermap&quot; is recommended for larger sparse matrices.</p>
+</dd>
+<dt><strong>meta</strong><span class="classifier">pd.DataFrame or None, (default=None)</span></dt><dd><p>Metadata of the matrix.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">meta</span></code> is pd.DataFrame</dt><dd><p>All sorting keywords should only be str or list of str.
+They should contain references to columns in <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">meta</span></code> is None</dt><dd><p>All sorting keywords should only array-like with the same length as the
+corresponding axis of <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>group</strong><span class="classifier">str, list of str, or array-like, (default=None)</span></dt><dd><p>Attribute(s) by which to group rows/columns of <code class="docutils literal notranslate"><span class="pre">data</span></code>. If multiple groups are
+specified, rows/columns will be sorted hierarchically (first by the first group),
+then within that group by a possible second group, etc.). Behaves similarly to
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v2.2.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
+</dd>
+<dt><strong>group_order</strong><span class="classifier">str, list of str, or array-like, (default=&quot;size&quot;)</span></dt><dd><p>Attribute(s) by which to sort the groups if provided by <code class="docutils literal notranslate"><span class="pre">group</span></code>.
+Groups are sorted by the mean of this attribute in ascending order. &quot;size&quot; is a
+special keyword which will sort groups by the number of elements per group.</p>
+</dd>
+<dt><strong>item_order</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) by which to sort the individual rows/columns within each group.</p>
+</dd>
+<dt><strong>color</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) to use for drawing colors on the borders of the matrix plot.</p>
+</dd>
+<dt><strong>highlight</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) in meta by which to draw highlighted separators between specific
+groups, can be useful for emphasizing a particular region of the plot. Styling
+of the highlighted separators can be specified via <cite>spinestyle_kws</cite>.</p>
+</dd>
+<dt><strong>palette</strong><span class="classifier">str, dict, list of str or dict (default=&quot;tab10&quot;)</span></dt><dd><p>Colormap(s) of the color axes if specified by <code class="docutils literal notranslate"><span class="pre">color</span></code>.</p>
+</dd>
+<dt><strong>ticks</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether the plot has labels for the groups specified by <code class="docutils literal notranslate"><span class="pre">group</span></code>.</p>
+</dd>
+<dt><strong>tick_pad</strong><span class="classifier">int or float (default=None)</span></dt><dd><p>Custom padding to use for the distance between tick axes</p>
+</dd>
+<dt><strong>color_pad</strong><span class="classifier">int or float (default=None)</span></dt><dd><p>Custom padding to use for the distance between color axes</p>
+</dd>
+<dt><strong>border</strong><span class="classifier">bool (default=True)</span></dt><dd><p>Whether the plot should have a border.</p>
+</dd>
+<dt><strong>center</strong><span class="classifier">int (default=0)</span></dt><dd><p>The value at which to center the colormap when plotting divergent data (only
+used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;heatmap&quot;</span></code>).</p>
+</dd>
+<dt><strong>cmap</strong><span class="classifier">str (default=&quot;RdBu_r&quot;)</span></dt><dd><p>Colormap of the heatmap (only used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;heatmap&quot;</span></code>).</p>
+</dd>
+<dt><strong>sizes</strong><span class="classifier">tuple (default=(5, 10))</span></dt><dd><p>Min and max sizes of dots (only used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;scattermap&quot;</span></code>).</p>
+</dd>
+<dt><strong>square</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Whether the plot should be square.</p>
+</dd>
+<dt><strong>gridline_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the separators.</p>
+</dd>
+<dt><strong>spinestyle_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the spine border.</p>
+</dd>
+<dt><strong>highlight_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the highlighted separators.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Additional plotting arguments passed down to the plotting function which will
+draw the matrix <code class="docutils literal notranslate"><span class="pre">data</span></code>, see <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> for more information.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib axes object</span></dt><dd><p>Axes in which to draw the plot, by default None</p>
+</dd>
+<dt><strong>divider</strong><span class="classifier">AxesLocator</span></dt><dd><p>Divider used to add new axes to the plot</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="matrixplot">
+<h2>Matrixplot<a class="headerlink" href="#matrixplot" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="graspologic.plot.matrixplot">
+<span class="sig-prename descclassname"><span class="pre">graspologic.plot.</span></span><span class="sig-name descname"><span class="pre">matrixplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'heatmap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_group_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'size'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_group_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'size'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_item_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_item_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_highlight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_highlight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab10'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_palette</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab10'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_tick_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_tick_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_color_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_color_pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'RdBu_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(5,</span> <span class="pre">10)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gridline_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinestyle_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight_kws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/graspologic/plot/plot_matrix.html#matrixplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#graspologic.plot.matrixplot" title="Link to this definition">¶</a></dt>
+<dd><p>Sorts and plots a matrix in various ways, and with optional information added to the
+margin of the matrix plot.</p>
+<p>Read more in the <cite>Tutorial https://microsoft.github.io/graspologic/tutorials/plotting/matrixplot.html</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">np.ndarray or scipy.sparse.csr_array with ndim=2</span></dt><dd><p>Matrix to plot. Sparse matrix input is only accepted if <code class="docutils literal notranslate"><span class="pre">plot_type</span> <span class="pre">==</span> <span class="pre">'scattermap'</span></code>.</p>
+</dd>
+<dt><strong>ax</strong><span class="classifier">matplotlib axes object (default=None)</span></dt><dd><p>Axes in which to draw the plot. If no axis is passed, one will be created.</p>
+</dd>
+<dt><strong>plot_type</strong><span class="classifier">str in {&quot;heatmap&quot;, &quot;scattermap&quot;} (default=&quot;heatmap&quot;)</span></dt><dd><p>&quot;heatmap&quot; will draw the matrix using <a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.heatmap.html#seaborn.heatmap" title="(in seaborn v0.13.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">seaborn.heatmap()</span></code></a>, &quot;scattermap&quot; will
+draw each nonzero element of the matrix using <a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.scatterplot.html#seaborn.scatterplot" title="(in seaborn v0.13.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">seaborn.scatterplot()</span></code></a>.
+&quot;scattermap&quot; is recommended for larger sparse matrices.</p>
+</dd>
+<dt><strong>{row,col}_meta</strong><span class="classifier">pd.DataFrame or None, (default=None)</span></dt><dd><p>Metadata of the matrix.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">{row,col}_meta</span></code> is pd.DataFrame</dt><dd><p>All sorting keywords should only be str or list of str.
+They should contain references to columns in <code class="docutils literal notranslate"><span class="pre">meta</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">{row,col}_meta</span></code> is None</dt><dd><p>All sorting keywords should only array-like with the same length as the
+corresponding axis of <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>{row,col}_group</strong><span class="classifier">str, list of str, or array-like, (default=None)</span></dt><dd><p>Attribute(s) by which to group rows/columns of <code class="docutils literal notranslate"><span class="pre">data</span></code>. If multiple groups are
+specified, rows/columns will be sorted hierarchically (first by the first group),
+then within that group by a possible second group, etc.). Behaves similarly to
+<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sort_values.html#pandas.DataFrame.sort_values" title="(in pandas v2.2.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.sort_values()</span></code></a>.</p>
+</dd>
+<dt><strong>{row,col}_group_order</strong><span class="classifier">str, list of str, or array-like, (default=&quot;size&quot;)</span></dt><dd><p>Attribute(s) by which to sort the groups if provided by <code class="docutils literal notranslate"><span class="pre">{row,col}_group</span></code>.
+Groups are sorted by the mean of this attribute in ascending order. &quot;size&quot; is a
+special keyword which will sort groups by the number of elements per group.</p>
+</dd>
+<dt><strong>{row,col}_item_order</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) by which to sort the individual rows/columns within each group.</p>
+</dd>
+<dt><strong>{row,col}_color</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) to use for drawing colors on the borders of the matrix plot.</p>
+</dd>
+<dt><strong>{row,col}_highlight</strong><span class="classifier">str, list of str, or array-like (default=None)</span></dt><dd><p>Attribute(s) in meta by which to draw highlighted separators between specific
+groups, can be useful for emphasizing a particular region of the plot. Styling
+of the highlighted separators can be specified via <cite>spinestyle_kws</cite>.</p>
+</dd>
+<dt><strong>{row,col}_palette</strong><span class="classifier">str, dict, list of str or dict (default=&quot;tab10&quot;)</span></dt><dd><p>Colormap(s) of the color axes if specified by <code class="docutils literal notranslate"><span class="pre">{row,col}_color</span></code>.</p>
+</dd>
+<dt><strong>{row,col}_ticks</strong><span class="classifier">bool, optional (default=True)</span></dt><dd><p>Whether the plot has labels for the groups specified by <code class="docutils literal notranslate"><span class="pre">{row,col}_group</span></code>.</p>
+</dd>
+<dt><strong>{row,col}_tick_pad</strong><span class="classifier">int or float (default=None)</span></dt><dd><p>Custom padding to use for the distance between tick axes</p>
+</dd>
+<dt><strong>{row,col}_color_pad</strong><span class="classifier">int or float (default=None)</span></dt><dd><p>Custom padding to use for the distance between color axes</p>
+</dd>
+<dt><strong>border</strong><span class="classifier">bool (default=True)</span></dt><dd><p>Whether the plot should have a border.</p>
+</dd>
+<dt><strong>center</strong><span class="classifier">int (default=0)</span></dt><dd><p>The value at which to center the colormap when plotting divergent data (only
+used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;heatmap&quot;</span></code>).</p>
+</dd>
+<dt><strong>cmap</strong><span class="classifier">str (default=&quot;RdBu_r&quot;)</span></dt><dd><p>Colormap of the heatmap (only used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;heatmap&quot;</span></code>).</p>
+</dd>
+<dt><strong>sizes</strong><span class="classifier">tuple (default=(5, 10))</span></dt><dd><p>Min and max sizes of dots (only used when <code class="docutils literal notranslate"><span class="pre">plot_type=&quot;scattermap&quot;</span></code>).</p>
+</dd>
+<dt><strong>square</strong><span class="classifier">bool (default=False)</span></dt><dd><p>Whether the plot should be square.</p>
+</dd>
+<dt><strong>gridline_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the separators.</p>
+</dd>
+<dt><strong>spinestyle_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the spine border.</p>
+</dd>
+<dt><strong>highlight_kws</strong><span class="classifier">dict (default=None)</span></dt><dd><p>Plotting arguments for the highlighted separators.</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p>Additional plotting arguments passed down to the plotting function which will
+draw the matrix <code class="docutils literal notranslate"><span class="pre">data</span></code>, see <code class="docutils literal notranslate"><span class="pre">plot_type</span></code> for more information.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ax</strong><span class="classifier">matplotlib axes object</span></dt><dd><p>Axes in which to draw the plot, by default None</p>
+</dd>
+<dt><strong>divider</strong><span class="classifier">AxesLocator</span></dt><dd><p>Divider used to add new axes to the plot</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pipeline.html" class="btn btn-neutral float-left" title="Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="preprocessing.html" class="btn btn-neutral float-right" title="Preprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
