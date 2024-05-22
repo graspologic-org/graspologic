@@ -1396,19 +1396,19 @@ test = ["pep440", "pre-commit", "pytest", "testpath"]
 
 [[package]]
 name = "nbsphinx"
-version = "0.8.12"
+version = "0.9.4"
 description = "Jupyter Notebook Tools for Sphinx"
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "nbsphinx-0.8.12-py3-none-any.whl", hash = "sha256:c15b681c7fce287000856f91fe1edac50d29f7b0c15bbc746fbe55c8eb84750b"},
-    {file = "nbsphinx-0.8.12.tar.gz", hash = "sha256:76570416cdecbeb21dbf5c3d6aa204ced6c1dd7ebef4077b5c21b8c6ece9533f"},
+    {file = "nbsphinx-0.9.4-py3-none-any.whl", hash = "sha256:22cb1d974a8300e8118ca71aea1f649553743c0c5830a54129dcd446e6a8ba17"},
+    {file = "nbsphinx-0.9.4.tar.gz", hash = "sha256:042a60806fc23d519bc5bef59d95570713913fe442fda759d53e3aaf62104794"},
 ]
 
 [package.dependencies]
-docutils = "*"
+docutils = ">=0.18.1"
 jinja2 = "*"
-nbconvert = "!=5.4"
+nbconvert = ">=5.3,<5.4 || >5.4"
 nbformat = "*"
 sphinx = ">=1.8"
 traitlets = ">=5"
@@ -3105,4 +3105,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9,<3.13"
-content-hash = "d194538e624c13b182d8d1fbbf55cb7ebc33f266958cb431a766443da4747951"
+content-hash = "4c8c447cb2423ff4cdd0cf8fee909c7c91f2a57449f6623760192be71985c47b"
