@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "graspologic"
-version = "3.3.0"
+version = "3.4.0"
 description = "A set of Python modules for graph statistics"
 repository = "https://github.com/graspologic-org/graspologic"
 authors = [
