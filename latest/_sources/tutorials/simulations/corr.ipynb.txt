@@ -1,0 +1,181 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Correlated Graph Pairs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The correlated Graph Pairs Model means that we generate a graph pair with some correlation. We define the probability of observing the same edge in both graphs by adjusting the correlation values and sampling the graph pairs."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## ER correlation graph pair"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "There are different ways to define the probability matrix of the first graph. The ER model is a simple example. We assume that each edge for all pairs of vertices is sampled independently from each other edge.\n",
+    "\n",
+    "ER_CORR(n, p, r) - this model specifies the number of vertices, $n$, the probability of an edge existing between a given pair of vertices, $p$, and the correlation value between the two, $r$.\n",
+    "\n",
+    "Below, we sample a graph pair with the ER model (undirected and no self-loops) $G_1, G_2 \\sim ER\\_{CORR}\\,(50, 0.5, 0.3)$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import er_corr"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "n = 50\n",
+    "r = 0.3\n",
+    "p = 0.5\n",
+    "\n",
+    "np.random.seed(2)\n",
+    "G1, G2 = er_corr(n, p, r, directed = False, loops = False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graphs using heatmap"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "heatmap(G1, title = 'Correlated ER Simulation Graph 1')\n",
+    "_ = heatmap(G2, title = 'Correlated ER Simulation Graph 2')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## SBM correlated graph pair"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Stochastic block models tend to produce graphs containing communities: subsets characterized by being connected with one another with particular edge densities. We can define the partitioned matrix with different probabilities of having edges and the correlation values between the two.\n",
+    "\n",
+    "Below, we sample a two-block SBM graph pair (undirected and no self-loops) G1 and G2 with the following parameters:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= [20, 30]\\\\\n",
+    "p &= \\begin{bmatrix} \n",
+    "0.5 & 0.2\\\\\n",
+    "0.2 & 0.5\n",
+    "\\end{bmatrix}\\\\\n",
+    "r &= 0.3\n",
+    "\\end{align*}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm_corr"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "np.random.seed(3)\n",
+    "n = [20, 30]\n",
+    "p = [[0.5, 0.2], [0.2, 0.5]]\n",
+    "r = 0.3\n",
+    "\n",
+    "G1, G2 = sbm_corr(n, p, r, directed=False, loops=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Visualize the graphs using heatmap"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "heatmap(G1, title = 'Correlated SBM Simulation Graph 1')\n",
+    "_ = heatmap(G2, title = 'Correlated SBM Simulation Graph 2')"
+   ]
+  }
+ ],
+ "metadata": {
+  "file_extension": ".py",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  },
+  "mimetype": "text/x-python",
+  "name": "python",
+  "npconvert_exporter": "python",
+  "pygments_lexer": "ipython3",
+  "version": 3
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
