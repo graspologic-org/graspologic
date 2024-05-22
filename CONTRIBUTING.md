@@ -17,23 +17,23 @@ or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any addi
 
 We use GitHub issues to track all bugs and feature requests; feel free to open an issue if you have found a bug or wish 
 to see a feature implemented. Please also feel free to tag one of the core 
-contributors (see our [Roles page](https://github.com/microsoft/graspologic/blob/dev/ROLES.md)).
+contributors (see our [Roles page](https://github.com/graspologic-org/graspologic/blob/dev/ROLES.md)).
 
 In case you experience issues using this package, do not hesitate to submit a ticket to our 
-[Issue Tracker](https://github.com/microsoft/graspologic/issues).  You are also welcome to post feature requests or pull requests.
+[Issue Tracker](https://github.com/graspologic-org/graspologic/issues).  You are also welcome to post feature requests or pull requests.
 
 It is recommended to check that your issue complies with the following rules before submitting:
 
 - Verify that your issue is not being currently addressed by other 
-  [issues](https://github.com/microsoft/graspologic/issues?q=) or 
-  [pull requests](https://github.com/microsoft/graspologic/pulls?q=).
+  [issues](https://github.com/graspologic-org/graspologic/issues?q=) or 
+  [pull requests](https://github.com/graspologic-org/graspologic/pulls?q=).
 
 - If you are submitting a bug report, we strongly encourage you to follow the guidelines in 
   [How to create an actionable bug report](#how-to-create-an-actionable-bug-report)
 
 ## How to create an actionable bug report
 
-When you submit an issue to [Github](https://github.com/microsoft/graspologic/issues), please do your best to
+When you submit an issue to [Github](https://github.com/graspologic-org/graspologic/issues), please do your best to
 follow these guidelines! This will make it a lot faster for us to respond to your issue.
 
 - The ideal bug report contains a **short reproducible code snippet**, this way
@@ -71,7 +71,7 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 The preferred workflow for contributing to `graspologic` is to fork the main repository on GitHub, clone, and develop on a
 branch using a virtual environment. Steps: 
 
-1. Fork the [project repository](https://github.com/microsoft/graspologic) by clicking on the ‘Fork’ button near the top
+1. Fork the [project repository](https://github.com/graspologic-org/graspologic) by clicking on the ‘Fork’ button near the top
    right of the page. This creates a copy of the code under your GitHub user account. For more details on how to
    fork a repository see [this guide](https://help.github.com/articles/fork-a-repo/).
 
@@ -100,13 +100,13 @@ branch using a virtual environment. Steps:
   - Uniformly formatted code makes it easier to share code ownership. Graspologic package closely follows the official Python guidelines detailed in [PEP8](https://www.python.org/dev/peps/pep-0008/) that detail how code should be formatted and indented. Please read it and follow it.
   - In order to make sure all code is formatted seamlessly and uniformly, we use [black](https://github.com/psf/black) to automatically format our code.
   - All new functions should have PEP-compliant type hints and [@beartype](https://github.com/beartype/beartype) decorator.  This allows us a reasonable level of confidence that arguments passed into the API are what we expect them to be without sacrificing runtime speed.
-- All public methods should have informative [`docstrings`](https://github.com/microsoft/graspologic/blob/dev/CONTRIBUTING.md#docstring-guidelines) with sample usage presented as doctests when appropriate.
+- All public methods should have informative [`docstrings`](https://github.com/graspologic-org/graspologic/blob/dev/CONTRIBUTING.md#docstring-guidelines) with sample usage presented as doctests when appropriate.
   - Properly formatted docstrings are required for documentation generation by [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html). The graspologic package closely 
 follows the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html#overview) guidelines. Please read and follow the 
 numpydoc guidelines. Refer to the 
 [example.py](https://numpydoc.readthedocs.io/en/latest/example.html#example) provided by numpydoc.
 - If proposing a new method, include at least one paragraph of narrative documentation with links to references in the literature (with PDF links when possible) and the example.
-- If your feature is complex enough, consider creating a Jupyter notebook tutorial to illustrate its use instead. Tutorial Jupyter notebooks can be added to the docs [here](https://github.com/microsoft/graspologic/tree/dev/docs/tutorials).
+- If your feature is complex enough, consider creating a Jupyter notebook tutorial to illustrate its use instead. Tutorial Jupyter notebooks can be added to the docs [here](https://github.com/graspologic-org/graspologic/tree/dev/docs/tutorials).
 - All functions and classes should be rigorously typed with Python 3.5+ [`typehinting`](https://docs.python.org/3/library/typing.html). 
 - All functions and classes must have unit tests. These should include, at the very least, type checking and ensuring correct computation/outputs.
 
@@ -180,7 +180,7 @@ We recommend that your pull request complies with the following rules before it 
 - Link your pull request to the issue (see: [closing keywords](https://docs.github.com/en/github/managing-your-work-on-github/linking-a-pull-request-to-an-issue) for an easy way of linking your issue)
 - Include a brief description of the changes you made in the code in the "write" box provided in the pull request page
 
-Once submitted, your PR will undergo automated tests that ensure its compilability and compatibility with our project. For debugging tests that raise errors online but passed locally, one can look at [this file](https://github.com/microsoft/graspologic/blob/dev/.github/workflows/build.yml) to see Github's exact execution.
+Once submitted, your PR will undergo automated tests that ensure its compilability and compatibility with our project. For debugging tests that raise errors online but passed locally, one can look at [this file](https://github.com/graspologic-org/graspologic/blob/dev/.github/workflows/build.yml) to see Github's exact execution.
 
 
 
