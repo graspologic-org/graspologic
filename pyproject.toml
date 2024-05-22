@@ -33,15 +33,15 @@ exclude = [
 [tool.poetry.dependencies]
 python = "^3.9,<3.13"
 anytree = "^2.12.1"
-beartype = "^0.10.4"
+beartype = "^0.18.5"
 gensim = "^4.3.2"
 graspologic-native = "^1.2.1"
-hyppo = "^0.3.2"
+hyppo = "^0.4.0"
 joblib = "^1.4.2"
 matplotlib = "^3.8.4"
-networkx = "^2.8.8"
+networkx = "^3"
 numpy = "^1.26.4"
-POT = "^0.7.0"
+POT = "^0.9"
 seaborn = "^0.13.2"
 scikit-learn = "^1.4.2"
 scipy = "1.12.0"
@@ -50,10 +50,10 @@ typing-extensions = "^4.4.0"
 umap-learn = "^0.5.6"
 
 [tool.poetry.group.dev.dependencies]
-ipykernel = "^5.1.0"
-ipython = "^7.4.0,!=8.7.0" # https://github.com/spatialaudio/nbsphinx/issues/687#issuecomment-1339271312
+ipykernel = "^6"
+ipython = "^8.8"
 mypy = "^1.10.0"
-nbsphinx = "^0.8.7"
+nbsphinx = "^0.9.4"
 numpydoc = "^1.1.0"
 pandoc = "^2.3.0"
 pytest = "^8.2.0"
@@ -61,7 +61,7 @@ pytest-cov = "^5.0.0"
 sphinx = "^7.3.7"
 sphinxcontrib-rawfiles = "^0.1.1"
 sphinx-rtd-theme = "^2.0.0"
-testfixtures = "^6.18.3"
+testfixtures = "^8.2.0"
 pipdeptree = "^2.20.0"
 poethepoet = "^0.26.1"
 ruff = "^0.4.4"
@@ -81,6 +81,21 @@ format-jinja = """
     {%- else -%}
         {{ serialize_pep440(base, stage, revision, dev=distance) }}
     {%- endif -%}
+"""
+[tool.poetry-dynamic-versioning.files."graspologic/version.py"]
+persistent-substitution = true
+initial-content-jinja = """
+# This version placeholder will be replaced during package build.
+# Do not commit this file.
+__version__ = {%- if distance == 0 -%}
+    "{{ serialize_pep440(base, stage, revision) }}"
+{%- else -%}
+    "{{ serialize_pep440(base, stage, revision, dev=distance) }}"
+{%- endif -%}
+#
+#
+def __version() -> str:
+    return __version__
 """
 
 [tool.poe.tasks]

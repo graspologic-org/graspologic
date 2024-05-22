@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
-import atexit
 import json
 import math
 import os
@@ -10,7 +9,6 @@ from pathlib import Path
 from typing import Any, Optional
 
 import numpy as np
-import pkg_resources
 from sklearn.preprocessing import minmax_scale
 
 from graspologic.types import Dict, Tuple
@@ -22,9 +20,8 @@ def _load_thematic_json(path: Optional[str]) -> Tuple[Dict[Any, Any], Dict[Any, 
     if path is not None and Path(path).is_file():
         colors_path = path
     else:
-        atexit.register(pkg_resources.cleanup_resources)
-        include_path = pkg_resources.resource_filename(__package__, "include")
-        colors_path = os.path.join(include_path, "colors-100.json")
+        dir = os.path.dirname(__file__)
+        colors_path = os.path.join(dir, "include", "colors-100.json")
 
     with open(colors_path) as thematic_json_io:
         thematic_json = json.load(thematic_json_io)
