@@ -21,7 +21,6 @@ classifiers = [
 ]
 include = [
     "graspologic",
-    "graspologic/version.py",
     "graspologic/**/*.typed",
     "graspologic/datasets/**/*.edgelist",
     "graspologic/datasets/**/*.csv",
@@ -86,7 +85,8 @@ format-jinja = """
 [tool.poetry-dynamic-versioning.files."graspologic/version.py"]
 persistent-substitution = true
 initial-content-jinja = """
-# These version placeholders will be replaced later during substitution.
+# This version placeholder will be replaced during package build.
+# Do not commit this file.
 __version__ = {%- if distance == 0 -%}
     "{{ serialize_pep440(base, stage, revision) }}"
 {%- else -%}
