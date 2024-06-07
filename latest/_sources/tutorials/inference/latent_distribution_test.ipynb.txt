@@ -1,0 +1,270 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "source": [
+    "## Latent Distribution Two-Graph Testing"
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "np.random.seed(8888)\n",
+    "\n",
+    "from graspologic.inference import latent_distribution_test\n",
+    "from graspologic.embed import AdjacencySpectralEmbed\n",
+    "from graspologic.simulations import sbm, rdpg\n",
+    "from graspologic.utils import symmetrize\n",
+    "from graspologic.plot import heatmap, pairplot\n",
+    "\n",
+    "%matplotlib inline"
+   ],
+   "outputs": [],
+   "metadata": {
+    "tags": []
+   }
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "### Generate a stochastic block model graph\n",
+    "\n",
+    "We generate a 2-block stochastic blockmodel (SBM) graph and embed it using Adjacency Spectral Embedding (ASE)."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "n_components = 2 # the number of embedding dimensions for ASE\n",
+    "P = np.array([[0.9, 0.6],\n",
+    "              [0.6, 0.9]])\n",
+    "csize = [50] * 2\n",
+    "A1 = sbm(csize, P)\n",
+    "X1 = AdjacencySpectralEmbed(n_components=n_components).fit_transform(A1)\n",
+    "heatmap(A1, title='2-block SBM adjacency matrix')\n",
+    "_ = pairplot(X1, title='2-block adjacency spectral embedding', height=4.5)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "We generate a second SBM with a different number of vertices in each block, but with the same probability matrix."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "csize_2 = [75] * 2\n",
+    "A2 = sbm(csize_2, P)\n",
+    "X2 = AdjacencySpectralEmbed(n_components=n_components).fit_transform(A2)\n",
+    "\n",
+    "heatmap(A2, title='2-block SBM adjacency matrix')\n",
+    "_ = pairplot(X2, title='2-block adjacency spectral embedding', height=4.5)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "### Latent distribution test where null is true\n",
+    "We want to know whether the latent positions of the two graphs above were generated from the same latent distribution. In other words, we are testing\n",
+    "\n",
+    "$$ H_0:F_{X_1} = F_{X_2} Q$$$$ H_\\alpha: F_{X_1} \\neq F_{X_2} Q $$ \n",
+    "\n",
+    "The $Q$ is an orthogonal rotation matrix present due to the orthogonal non-identifiability in the random dot product graphs.\n",
+    "\n",
+    "We know that in this case the graphs were actually generated from the same distribution, so the test should reject no more often than the significance level $\\alpha$, and on average the $p$-value should be high (fail to reject the null).\n",
+    "\n",
+    "In this tutorial, we will use the latent distribution test on unmatched graphs. This means there is not an alignment between each node of the two graphs."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "### Plots of Null Distribution for Dcorr and MGC\n",
+    "\n",
+    "The class supports the following independence tests documented [here](https://hyppo.neurodata.io/reference/independence.html), as well as any distance function.\n",
+    "\n",
+    "We plot the null distribution (blue), test statistic (red), and p-value (title) of the Dcorr and MGC independence tests using euclidean distance."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "ldt_dcorr = latent_distribution_test(A1, A2, test=\"dcorr\", metric=\"euclidean\", n_bootstraps=100)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "ldt_mgc = latent_distribution_test(A1, A2, test=\"mgc\", metric=\"euclidean\", n_bootstraps=100)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "print(ldt_dcorr[1], ldt_mgc[1])"
+   ],
+   "outputs": [],
+   "metadata": {
+    "tags": []
+   }
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "fig, ax = plt.subplots(1, 2, figsize=(10, 6))\n",
+    "ax[0].hist(ldt_dcorr[2]['null_distribution'], 50)\n",
+    "ax[0].axvline(ldt_dcorr[0], color='r')\n",
+    "ax[0].set_title(\"DCorr: P-value = {}\".format(ldt_dcorr[1]), fontsize=20)\n",
+    "ax[0].set_xlabel(\"test static\")\n",
+    "ax[0].set_ylabel(\"frequency\")\n",
+    "ax[1].hist(ldt_mgc[2]['null_distribution'], 50)\n",
+    "ax[1].axvline(ldt_mgc[0], color='r')\n",
+    "ax[1].set_title(\"MGC: P-value = {}\".format(ldt_mgc[1]), fontsize=20)\n",
+    "ax[1].set_xlabel(\"test static\")\n",
+    "ax[1].set_ylabel(\"frequency\")\n",
+    "plt.show();"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "We see that the test static is small, resulting in p-values above 0.05. Thus, we cannot reject the null hypothesis that the two graphs come from the same generating distributions."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "### Latent distribution test where null is false\n",
+    "\n",
+    "We generate a third SBM with different interblock probability, and run a latent distribution test comaring the first graph with the new one."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "P2 = np.array([[0.9, 0.4],\n",
+    "               [0.4, 0.9]])\n",
+    "\n",
+    "A3 = sbm(csize_2, P2)\n",
+    "\n",
+    "X1 = AdjacencySpectralEmbed(n_components=n_components).fit_transform(A1)\n",
+    "X3 = AdjacencySpectralEmbed(n_components=n_components).fit_transform(A3)\n",
+    "heatmap(A1, title='2-block SBM adjacency matrix A1')\n",
+    "heatmap(A3, title='2-block SBM adjacency matrix A3')\n",
+    "pairplot(X1, title='2-block adjacency spectral embedding A1', height=4.5)\n",
+    "_ = pairplot(X3, title='2-block adjacency spectral embedding A3', height=4.5)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "### Plot of Null Distribution\n",
+    "\n",
+    "We plot the null distribution shown in blue and the test statistic shown red vertical line. We see that the test static is small, resulting in p-value of 0. Thus, we reject the null hypothesis that the two graphs come from the same generating distributions."
+   ],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "ldt_dcorr = latent_distribution_test(A1, A3, test=\"dcorr\", metric=\"euclidean\", n_bootstraps=100)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "ldt_mgc = latent_distribution_test(A1, A3, test=\"mgc\", metric=\"euclidean\", n_bootstraps=100)"
+   ],
+   "outputs": [],
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "print(ldt_dcorr[1], ldt_mgc[1])"
+   ],
+   "outputs": [],
+   "metadata": {
+    "tags": []
+   }
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "source": [
+    "fig, ax = plt.subplots(1, 2, figsize=(10, 6))\n",
+    "ax[0].hist(ldt_dcorr[2]['null_distribution'], 50)\n",
+    "ax[0].axvline(ldt_dcorr[0], color='r')\n",
+    "ax[0].set_title(\"DCorr: P-value = {}\".format(ldt_dcorr[1]), fontsize=20)\n",
+    "ax[0].set_xlabel(\"test static\")\n",
+    "ax[0].set_ylabel(\"frequency\")\n",
+    "ax[1].hist(ldt_mgc[2]['null_distribution'], 50)\n",
+    "ax[1].axvline(ldt_mgc[0], color='r')\n",
+    "ax[1].set_title(\"MGC: P-value = {}\".format(ldt_mgc[1]), fontsize=20)\n",
+    "ax[1].set_xlabel(\"test static\")\n",
+    "ax[1].set_ylabel(\"frequency\")\n",
+    "plt.show();"
+   ],
+   "outputs": [],
+   "metadata": {}
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3.7.9 64-bit ('kullah': conda)"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.9"
+  },
+  "interpreter": {
+   "hash": "2c45c21955c23c021299f75bcdfcc84b9d8fb228286b02a064249b8ddffbe816"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
