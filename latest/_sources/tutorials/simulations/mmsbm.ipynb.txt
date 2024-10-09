@@ -1,0 +1,302 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "source": [
+    "# Mixed Membership Stochastic Blockmodel (MMSBM)"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic\n",
+    "\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "source": [
+    "Unlike [Stochastic Block Models (SBM)](./sbm.ipynb), Mixed Membership Stochastic Blockmodels (MMSBM) allow nodes to pertain to multiple communities when interacting with other nodes.\n",
+    "\n",
+    "Given a network with $k$ communities, an MMSBM is parametrized by the number of nodes $n$ of the graph, a block connectivity matrix $B \\in \\mathbb{R}^{k x k}$ where each element specifies the probability of interaction between nodes based upon their community membership, and a vector $\\vec{\\alpha}$ which controls the mixed-membership allowed for each node.\n",
+    "\n",
+    "Below, we sample a two-block MMSBM with following parameters:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= 100\\\\\n",
+    "P &= \\begin{bmatrix} \n",
+    "0.7 & 0.2\\\\\n",
+    "0.2 & 0.05\n",
+    "\\end{bmatrix}\\\\\n",
+    "\\vec{\\alpha} &= \\begin{bmatrix} 0.1 & 0.1 \\end{bmatrix}\\\\\n",
+    "\\end{align*}"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import mmsbm\n",
+    "\n",
+    "rng = np.random.default_rng(123)\n",
+    "\n",
+    "n = 100\n",
+    "p = [[0.7, 0.2],\n",
+    "     [0.2, 0.05]]\n",
+    "alpha = [0.1]*2\n",
+    "\n",
+    "G = mmsbm(n, p, alpha, rng = rng)"
+   ]
+  },
+  {
+   "source": [
+    "## Visualize the graph using heatmap"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "heatmap(G, cbar= False, title ='MMSBM Simulation');"
+   ]
+  },
+  {
+   "source": [
+    "## Generating various types of graphs"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "source": [
+    "Each node $p$ is assigned a membership vector $\\vec{\\pi}_p \\in \\mathbb{R}^{k}$ sampled from a [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution):\n",
+    "\\begin{align*}\n",
+    "\\vec{\\pi}_p \\sim \\mbox{Dir}(\\vec{\\alpha})\\\\\n",
+    "\\end{align*}\n",
+    "\n",
+    "This vector indicates the probability of a node to interact with other nodes as if belonging to a certain community. For example, in a four communities graph, let:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "\\vec{\\pi}_p &= \\begin{bmatrix} 1 & 0 & 0 & 0 \\end{bmatrix}\\\\\n",
+    "\\vec{\\pi}_q &= \\begin{bmatrix} 0.25 & 0.25 & 0.25 & 0.25 \\end{bmatrix}\\\\\n",
+    "\\end{align*}\n",
+    "\n",
+    "According to $\\vec{\\pi}_p$, node $p$ will always behave as if pertaining to the first community when interacting with other nodes, while node $q$ will interact 25% of the time as if belonging to community 1, 25% of the time as if belonging to community 2, etc.\n",
+    "\n",
+    "Therefore, controlling these membership vectors by varying the parameter $\\vec{\\alpha}$ allows generation of various types of graphs.\n"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "source": [
+    "### Generating Erdos-Renyi (ER) graphs"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "source": [
+    "To generate [Erdos-Renyi (ER)](./erdos_renyi.ipynb), one of the $\\vec{\\alpha}$ entries can be set to be much greater than the others.\n",
+    "\n",
+    "For example, consider the two graphs (undirected, no self-loops) parameterized by:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "n &= 100\\\\\n",
+    "P &= \\begin{bmatrix} \n",
+    "0.8 & 0.2\\\\\n",
+    "0.2 & 0.5\n",
+    "\\end{bmatrix}\\\\\n",
+    "\\end{align*}\n",
+    "\n",
+    "With $\\vec{\\alpha}$ respectively equal to:\n",
+    "\n",
+    "\\begin{align*}\n",
+    "\\vec{\\alpha_1} &= \\begin{bmatrix} 100 & 1 \\end{bmatrix}\\\\\n",
+    "\\vec{\\alpha_2} &= \\begin{bmatrix} 1 & 100 \\end{bmatrix}\\\\\n",
+    "\\end{align*}\n"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import er_np\n",
+    "\n",
+    "n = 100\n",
+    "p = [[0.8, 0.2],\n",
+    "     [0.2, 0.5]]\n",
+    "\n",
+    "alpha_1 = [100, 1]\n",
+    "G_1 =  mmsbm(n, p, alpha_1, rng = rng)\n",
+    "\n",
+    "alpha_2 = [1, 100]\n",
+    "G_2 =  mmsbm(n, p, alpha_2, rng = rng)"
+   ]
+  },
+  {
+   "source": [
+    "### Visualize the graphs using heatmap"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "heatmap(G_1, cbar= False, title ='MMSBM Simulation(alpha = [100, 1])');\n",
+    "heatmap(G_2, cbar= False, title ='MMSBM Simulation(alpha = [1, 100])');"
+   ]
+  },
+  {
+   "source": [
+    "### Differences with Stochastic Block Model (SBM) graphs"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "source": [
+    "According to the [Stochastic Block Models (SBM)](./sbm.ipynb), each node in a graph can only pertain to one community. Therefore, one way to recreate such model with an MMSBM is to set all the entries of $\\vec{\\alpha}$ equal to the same value. The closer the value is to $0$ the more the simulated graphs will appear similar to an SBM, the closer the value is to $1$ the more uniform the graph will look, thus losing the community structure dictated by the SBM.\n",
+    "\n",
+    "To show this we sample a four-block SBM (undirected, no self-loops) graph with following parameters:\n",
+    "\\begin{align*}\n",
+    "n &= \\begin{bmatrix} 50 & 50 & 50 & 50 \\end{bmatrix}\\\\\n",
+    "B &=\\begin{bmatrix} 0.8 & 0.2 & 0.2 & 0.2 \\\\ 0.2 & 0.8 & 0.2 & 0.2 \\\\ 0.2 & 0.2 & 0.8 & 0.2 \\\\ 0.2 & 0.2 & 0.2 & 0.8 \\end{bmatrix}\n",
+    "\\end{align*}\n",
+    "\n",
+    "We also sample a four-block MMSBM with parameter $\\vec{\\alpha}$ such that:\n",
+    "\\begin{align*}\n",
+    "\\vec{\\alpha} &= \\begin{bmatrix} 0.01 & 0.01 & 0.01 & 0.01 \\end{bmatrix}\\\\\n",
+    "\\end{align*}\n"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.simulations import sbm\n",
+    "\n",
+    "n = [50] * 4\n",
+    "p = [[0.8,0.2,0.2,0.2],\n",
+    "    [ 0.2,0.8,0.2,0.2],\n",
+    "    [ 0.2,0.2,0.8,0.2],\n",
+    "    [ 0.2,0.2,0.2,0.8]]\n",
+    "\n",
+    "G_sbm = sbm(n, p, directed=False, loops=False)\n",
+    "\n",
+    "n = 200\n",
+    "k = 4\n",
+    "alpha = [0.01]*k\n",
+    "\n",
+    "G_mmsbm = mmsbm(n, p, alpha= alpha, rng = rng)"
+   ]
+  },
+  {
+   "source": [
+    "### Plot SBM and MMSBM graphs using heatmap"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "heatmap(G_sbm, cbar= False, title ='SBM Simulation');\n",
+    "heatmap(G_mmsbm, cbar= False, title ='MMSBM Simulation(alpha = 0.01)');"
+   ]
+  },
+  {
+   "source": [
+    "As expected, the two graphs appear to be generated from four-block SBMs with connectivity matrix $B$. In the MMSBM case, the number of nodes assigned to each block is not specified which is why we can see a different number of nodes per block.\n",
+    "\n",
+    "Now let's try increasing the values of each entry of the concentration parameter $\\vec{\\alpha}$ first to $0.25$, then $0.5$ and finally to $1$."
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "alpha = [0.25]*k\n",
+    "print(\"First increase alpha to: \" + str(alpha))\n",
+    "\n",
+    "G_mmsbm_25 = mmsbm(n, p, alpha= alpha, rng = rng)\n",
+    "heatmap(G_mmsbm_25, cbar= False, title ='MMSBM Simulation(alpha = 0.25)');\n",
+    "\n",
+    "alpha = [0.5]*k\n",
+    "print(\"Then increase alpha to: \" + str(alpha))\n",
+    "\n",
+    "G_mmsbm_50 = mmsbm(n, p, alpha= alpha, rng = rng)\n",
+    "heatmap(G_mmsbm_50, cbar= False, title ='MMSBM Simulation(alpha = 0.5)');\n",
+    "\n",
+    "alpha = [1.0]*k\n",
+    "print(\"Finally increase alpha to: \" + str(alpha))\n",
+    "\n",
+    "G_mmsbm_100 = mmsbm(n, p, alpha= alpha, rng = rng)\n",
+    "heatmap(G_mmsbm_100, cbar= False, title ='MMSBM Simulation(alpha = 1.0)');"
+   ]
+  },
+  {
+   "source": [
+    "As expected, as we increase the value of $\\vec{\\alpha}$ we increase the mixed-membership allowed at each node so that the community structure is progressively lost."
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  }
+ ]
+}
