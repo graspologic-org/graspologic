@@ -354,8 +354,8 @@ comparison performed:</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a>)</p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a>)</p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a>)</p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a>)</p></li>
 <li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'score'</em><em>, </em><em>'fisher'</em><em>, </em><em>'chi2'</em><em>]</em>)</p></li>
 </ul>
 </dd>
@@ -440,11 +440,11 @@ chi-squared test, or &quot;fisher&quot; for Fisher's exact test.</p>
 <dt><strong>combine_method: str, optional</strong></dt><dd><p>Specifies the method for combining p-values (see Notes and <a class="reference internal" href="#r7ed7fab7df47-1" id="id2">[1]</a> for more
 details). Default is &quot;tippett&quot; for Tippett's method (recommended), but the user
 can also enter any other method supported by
-<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html#scipy.stats.combine_pvalues" title="(in SciPy v1.13.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.combine_pvalues()</span></code></a>.</p>
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.combine_pvalues.html#scipy.stats.combine_pvalues" title="(in SciPy v1.14.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">scipy.stats.combine_pvalues()</span></code></a>.</p>
 </dd>
 <dt><strong>correct_method: str, optional</strong></dt><dd><p>Specifies the method for correcting for multiple comparisons. Default value is
 &quot;holm&quot; to use the Holm-Bonferroni correction method, but
-many others are possible (see <a class="reference external" href="https://www.statsmodels.org/stable/generated/statsmodels.stats.multitest.multipletests.html#statsmodels.stats.multitest.multipletests" title="(in statsmodels 0.14.1 v0.14.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">statsmodels.stats.multitest.multipletests()</span></code></a>
+many others are possible (see <a class="reference external" href="https://www.statsmodels.org/stable/generated/statsmodels.stats.multitest.multipletests.html#statsmodels.stats.multitest.multipletests" title="(in statsmodels 0.14.4 v0.14.4)"><code class="xref py py-func docutils literal notranslate"><span class="pre">statsmodels.stats.multitest.multipletests()</span></code></a>
 for more details and options).</p>
 </dd>
 <dt><strong>alpha: float, optional</strong></dt><dd><p>The significance threshold. By default, this is the conventional value of
@@ -531,8 +531,8 @@ after correction using the chosen correction_method.</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a>)</p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a>)</p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a>)</p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a>)</p></li>
 <li><p><strong>labels1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>)</p></li>
 <li><p><strong>labels2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>)</p></li>
 <li><p><strong>density_adjustment</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>)</p></li>
@@ -712,8 +712,8 @@ distributions are generated</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
 <li><p><strong>embedding</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'ase'</em><em>, </em><em>'omnibus'</em><em>]</em>)</p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>test_case</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'rotation'</em><em>, </em><em>'scalar-rotation'</em><em>, </em><em>'diagonal-rotation'</em><em>]</em>)</p></li>
@@ -762,7 +762,7 @@ Expected variable type and shape depends on input_graph attribute</p>
 <dt><strong>test</strong><span class="classifier">str (default=&quot;dcorr&quot;)</span></dt><dd><p>Backend hypothesis test to use, one of [&quot;cca&quot;, &quot;dcorr&quot;, &quot;hhg&quot;, &quot;rv&quot;, &quot;hsic&quot;, &quot;mgc&quot;].
 These tests are typically used for independence testing, but here they
 are used for a two-sample hypothesis test on the latent positions of
-two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+two graphs. See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.5.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>metric</strong><span class="classifier">str or function (default=&quot;euclidean&quot;)</span></dt><dd><p>Distance or a kernel metric to use, either a callable or a valid string.
 Kernel metrics (e.g. &quot;gaussian&quot;) must be used with kernel-based HSIC test
@@ -781,7 +781,7 @@ then it should behave similarly to either
 <code class="docutils literal notranslate"><span class="pre">&quot;jaccard&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;kulsinski&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mahalanobis&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;rogerstanimoto&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;russellrao&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;seuclidean&quot;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">&quot;sokalmichener&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sokalsneath&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;sqeuclidean&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.13.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
+<code class="docutils literal notranslate"><span class="pre">&quot;yule&quot;</span></code>] See the documentation for <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/spatial.distance.html#module-scipy.spatial.distance" title="(in SciPy v1.14.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.spatial.distance</span></code></a> for
 details on these metrics.</p></li>
 </ul>
 </div></blockquote>
@@ -801,7 +801,7 @@ See <a class="reference internal" href="embed.html#graspologic.embed.select_svd"
 This argument is ignored if <code class="docutils literal notranslate"><span class="pre">input_graph</span></code> is False.</p>
 </dd>
 <dt><strong>n_bootstraps</strong><span class="classifier">int (default=200)</span></dt><dd><p>Number of bootstrap iterations for the backend hypothesis test.
-See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
+See <a class="reference external" href="https://hyppo.neurodata.io/api/generated/hyppo.ksample.KSample.html#hyppo.ksample.KSample" title="(in hyppo v0.5.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">hyppo.ksample.KSample</span></code></a> for more information.</p>
 </dd>
 <dt><strong>random_state</strong><span class="classifier">{None, int, <cite>~np.random.RandomState</cite>, <cite>~np.random.Generator</cite>}</span></dt><dd><p>This parameter defines the object to use for drawing random
 variates.
@@ -940,8 +940,8 @@ two input graphs.</p>
 </dd>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
-<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.13.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>A1</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
+<li><p><strong>A2</strong> (<em>ndarray</em><em> | </em><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.csr_array.html#scipy.sparse.csr_array" title="(in SciPy v1.14.1)"><em>csr_array</em></a><em> | </em><a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/graph.html#networkx.Graph" title="(in NetworkX v3.3)"><em>Graph</em></a>)</p></li>
 <li><p><strong>test</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Literal" title="(in Python v3.9)"><em>Literal</em></a><em>[</em><em>'cca'</em><em>, </em><em>'dcorr'</em><em>, </em><em>'hhg'</em><em>, </em><em>'rv'</em><em>, </em><em>'hsic'</em><em>, </em><em>'mgc'</em><em>]</em>)</p></li>
 <li><p><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3.9/library/typing.html#typing.Callable" title="(in Python v3.9)"><em>Callable</em></a>)</p></li>
 <li><p><strong>n_components</strong> (<a class="reference external" href="https://docs.python.org/3.9/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> | </em><em>None</em>)</p></li>
