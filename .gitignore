@@ -131,3 +131,4 @@ notebooks/bpedigo
 *.iml
 pip-wheel-metadata
 
+graspologic/version.py

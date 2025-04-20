@@ -6,6 +6,9 @@ from .leiden import (
     HierarchicalClusters,
     hierarchical_leiden,
     leiden,
+    leiden_with_context,
+    hierarchical_leiden_with_context,
+    LeidenContextResult,
 )
 from .modularity import modularity, modularity_components
 
@@ -14,6 +17,9 @@ __all__ = [
     "HierarchicalClusters",
     "hierarchical_leiden",
     "leiden",
+    "leiden_with_context",
+    "hierarchical_leiden_with_context",
+    "LeidenContextResult",
     "modularity",
     "modularity_components",
 ]

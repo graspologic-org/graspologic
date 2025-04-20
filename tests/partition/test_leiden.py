@@ -2,7 +2,12 @@
 # Licensed under the MIT license.
 
 import unittest
+from .debug_utils import print_node_structure
 from typing import Dict, List, Tuple
+from collections import defaultdict, Counter
+from graspologic.partition.leiden import compute_node2vec_embeddings
+from graspologic.partition.leiden import leiden_with_context
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 import networkx as nx
 import numpy as np
@@ -25,6 +30,137 @@ from graspologic.partition.leiden import (
 )
 from tests.utils import data_file
 
+class TestLeidenSemantic(unittest.TestCase):
+    def test_misalignment_with_inspection(self):
+        graph = nx.karate_club_graph()
+        result = leiden(
+            graph,
+            track_misalignment=True,
+            embedding_method="node2vec",
+            random_seed=42,
+        )
+        partitions, misaligned = result
+        embeddings = compute_node2vec_embeddings(graph)
+
+        semantic_labels = {n: data["club"] for n, data in graph.nodes(data=True)}
+        from collections import defaultdict, Counter
+
+        def label_communities_tfidf(graph, partitions, attribute="description", fallback="Unknown"):
+            """
+            Infers a name for each community by extracting the most representative keyword
+            from node descriptions using TF-IDF.
+            """
+            community_to_nodes = defaultdict(list)
+            for node, comm in partitions.items():
+                community_to_nodes[comm].append(node)
+
+            community_labels = {}
+            for comm, nodes in community_to_nodes.items():
+                texts = [graph.nodes[n].get(attribute, "") for n in nodes if attribute in graph.nodes[n]]
+                if not texts:
+                    community_labels[comm] = fallback
+                    continue
+
+                vectorizer = TfidfVectorizer(stop_words="english", max_features=50)
+                X = vectorizer.fit_transform(texts)
+                if X.shape[1] == 0:
+                    community_labels[comm] = fallback
+                else:
+                    top_idx = X.mean(axis=0).argmax()
+                    community_labels[comm] = vectorizer.get_feature_names_out()[top_idx]
+
+            return community_labels
+
+        community_labels = label_communities_tfidf(graph, partitions, attribute="club")
+
+        print("\n--- Misalignment Report ---")
+        for node, better_comm in misaligned.items():
+            assigned = partitions[node]
+            node_sem = semantic_labels.get(node, "unknown")
+            assigned_sem = community_labels.get(assigned, "unknown")
+            better_sem = community_labels.get(better_comm, "unknown")
+            print(
+                f"Node {node} ('{node_sem}') → Assigned to {assigned} ('{assigned_sem}'), "
+                f"but is closer to {better_comm} ('{better_sem}')"
+            )
+
+        # Deep-dive into 3 example nodes
+        for node in list(misaligned.keys())[:3]:
+            print_node_structure(graph, node, partitions, misaligned, embeddings)
+
+        self.assertTrue(len(partitions) > 0)
+    def test_context_semantics(self):
+        """
+        Verifies that context nodes truly bridge communities, and that the
+        cluster‑level graph reflects those bridges with positive weights.
+        """
+        graph = nx.karate_club_graph()
+        from graspologic.partition.leiden import leiden_with_context
+
+        print("\n=== Running leiden_with_context on Karate Club graph ===")
+        result = leiden_with_context(graph, lambda_=2, random_seed=42)
+
+        communities = result.partitions
+        context_nodes = result.context_nodes
+        cluster_graph = result.cluster_graph
+
+        # Group nodes by community
+        from collections import defaultdict
+        community_to_nodes = defaultdict(list)
+        for node, comm in communities.items():
+            community_to_nodes[comm].append(node)
+
+        print(f"#Communities: {len(community_to_nodes)}")
+        print(f"#Context-node sets: {len(context_nodes)}")
+        print(f"#Cluster-graph edges: {cluster_graph.number_of_edges()}")
+
+        # Print nodes in each community
+        for comm_id, nodes in sorted(community_to_nodes.items()):
+            print(f"\nCommunity {comm_id} → {sorted(nodes)}")
+
+        # 1) Ensure every context node bridges communities
+        for comm_id, nodes in context_nodes.items():
+            print(f"\nCommunity {comm_id} context nodes → {sorted(nodes)}")
+            for node in nodes:
+                self.assertEqual(communities[node], comm_id)
+                ext_neigh = [
+                    nbr for nbr in graph.neighbors(node)
+                    if communities[nbr] != comm_id
+                ]
+                print(f"  Node {node} external neighbours → {sorted(ext_neigh)}")
+                self.assertTrue(
+                    len(ext_neigh) > 0,
+                    f"Context node '{node}' is not bridging communities."
+                )
+
+        # 2) Validate cluster-graph edge weights
+        print("\nCluster‑level edges with weights:")
+        for u, v, data in cluster_graph.edges(data=True):
+            print(f"  {u} — {v}  (weight={data['weight']})")
+            self.assertGreater(data["weight"], 0)
+
+        # 3) Ensure every bridging edge has a cluster-level equivalent
+        cluster_edges = {
+            (min(u, v), max(u, v)) for u, v in cluster_graph.edges()
+        }
+        missing = []
+        for comm_id, nodes in context_nodes.items():
+            for node in nodes:
+                for nbr in graph.neighbors(node):
+                    nbr_comm = communities[nbr]
+                    if nbr_comm != comm_id:
+                        pair = (min(comm_id, nbr_comm), max(comm_id, nbr_comm))
+                        if pair not in cluster_edges:
+                            missing.append((node, pair))
+
+        print(f"\n#Missing cluster edges (should be 0) → {len(missing)}")
+        for node, pair in missing:
+            print(f"  Missing edge {pair} caused by node {node}")
+
+        self.assertEqual(
+            len(missing), 0,
+            "Some inter-community connections are not represented in cluster_graph."
+        )
 
 class TestHierarchicalCluster(unittest.TestCase):
     def test_from_native(self):

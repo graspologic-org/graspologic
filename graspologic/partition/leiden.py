@@ -2,11 +2,15 @@
 # Licensed under the MIT license.
 
 import warnings
-from typing import Any, NamedTuple, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, NamedTuple
+from collections import defaultdict
 
 import graspologic_native as gn
 import networkx as nx
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from node2vec import Node2Vec
+
 import scipy
 from beartype import beartype
 
@@ -175,6 +179,45 @@ def _validate_common_arguments(
 
 
 @beartype
+def compute_node2vec_embeddings(
+    graph: nx.Graph, dimensions: int = 64
+) -> Dict[str, np.ndarray]:
+    node2vec = Node2Vec(graph, dimensions=dimensions, walk_length=30, num_walks=200, workers=1)
+    model = node2vec.fit(window=10, min_count=1)
+    return {str(node): model.wv[str(node)] for node in graph.nodes()}
+
+
+@beartype
+def detect_misalignment(
+    partitions: Dict[Any, int],
+    embeddings: Dict[str, np.ndarray]
+) -> Dict[Any, int]:
+    community_to_nodes: Dict[int, List[Any]] = {}
+    for node, comm in partitions.items():
+        community_to_nodes.setdefault(comm, []).append(node)
+
+    misaligned = {}
+    for node, comm in partitions.items():
+        node_emb = embeddings[str(node)]
+        max_sim = -1
+        best_comm = comm
+        for other_comm, members in community_to_nodes.items():
+            if other_comm == comm:
+                continue
+            sims = [
+                cosine_similarity([node_emb], [embeddings[str(m)]])[0, 0]
+                for m in members if str(m) in embeddings
+            ]
+            if sims:
+                avg_sim = np.mean(sims)
+                if avg_sim > max_sim:
+                    max_sim = avg_sim
+                    best_comm = other_comm
+        if best_comm != comm:
+            misaligned[node] = best_comm
+    return misaligned
+
+@beartype
 def leiden(
     graph: Union[
         List[Tuple[Any, Any, Union[int, float]]],
@@ -191,7 +234,9 @@ def leiden(
     weight_default: Union[int, float] = 1.0,
     check_directed: bool = True,
     trials: int = 1,
-) -> Dict[Any, int]:
+    track_misalignment: bool = False,
+    embedding_method: Optional[str] = "node2vec",
+) -> Union[Dict[Any, int], Tuple[Dict[Any, int], Dict[Any, int]]]:
     """
     Leiden is a global network partitioning algorithm. Given a graph, it will iterate
     through the network node by node, and test for an improvement in our quality
@@ -339,6 +384,16 @@ def leiden(
             "Leiden partitions do not contain all nodes from the input graph because input graph "
             "contained isolate nodes."
         )
+
+    if track_misalignment:
+        if not isinstance(graph, nx.Graph):
+            raise ValueError("Semantic misalignment tracking requires a networkx graph")
+        if embedding_method == "node2vec":
+            embeddings = compute_node2vec_embeddings(graph)
+        else:
+            raise NotImplementedError(f"Embedding method {embedding_method} not implemented")
+        misaligned_nodes = detect_misalignment(proper_partitions, embeddings)
+        return proper_partitions, misaligned_nodes
 
     return proper_partitions
 
@@ -610,3 +665,76 @@ def hierarchical_leiden(
         )
 
     return result_partitions
+
+class LeidenContextResult(NamedTuple):
+    partitions: Dict[Any, int]
+    context_nodes: Dict[int, Set[Any]]
+    cluster_graph: nx.Graph
+
+def _build_context(edges: List[Tuple[Any, Any, float]],
+                   partitions: Dict[Any, int],
+                   lambda_: int = 3) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
+    inter_edges = []
+    raw_context: Dict[int, Dict[Any, float]] = defaultdict(lambda: defaultdict(float))
+
+    for u, v, w in edges:
+        cu, cv = partitions[u], partitions[v]
+        if cu != cv:
+            inter_edges.append((cu, cv, w))
+            raw_context[cu][u] += w
+            raw_context[cv][v] += w
+
+    context_nodes = {
+        c: {n for n, _ in sorted(nw.items(), key=lambda x: -x[1])[:lambda_]}
+        for c, nw in raw_context.items()
+    }
+
+    cluster_graph = nx.Graph()
+    cluster_graph.add_weighted_edges_from(inter_edges)
+    return context_nodes, cluster_graph
+
+def leiden_with_context(graph,
+                        *,
+                        lambda_: int = 3,
+                        **kwargs) -> LeidenContextResult:
+    partitions = leiden(graph, **kwargs)
+
+    if isinstance(graph, nx.Graph):
+        edges = [(u, v, graph[u][v].get("weight", 1.0)) for u, v in graph.edges()]
+    elif isinstance(graph, list):
+        edges = graph
+    else:
+        _, edges = _adjacency_matrix_to_edge_list(
+            graph, _IdentityMapper(), check_directed=False,
+            is_weighted=None, weight_default=1.0
+        )
+
+    context_nodes, cluster_graph = _build_context(edges, partitions, lambda_)
+    return LeidenContextResult(partitions, context_nodes, cluster_graph)
+
+def hierarchical_leiden_with_context(graph,
+                                     *,
+                                     lambda_: int = 3,
+                                     **kwargs) -> List[LeidenContextResult]:
+    h_clusters: HierarchicalClusters = hierarchical_leiden(graph, **kwargs)
+    levels = max(hc.level for hc in h_clusters)
+
+    results: List[LeidenContextResult] = []
+    for L in range(levels + 1):
+        level_partitions = {
+            hc.node: hc.cluster for hc in h_clusters if hc.level == L
+        }
+
+        if isinstance(graph, nx.Graph):
+            edges = [(u, v, graph[u][v].get("weight", 1.0)) for u, v in graph.edges()]
+        elif isinstance(graph, list):
+            edges = graph
+        else:
+            _, edges = _adjacency_matrix_to_edge_list(
+                graph, _IdentityMapper(), check_directed=False,
+                is_weighted=None, weight_default=1.0
+            )
+
+        ctxt, c_graph = _build_context(edges, level_partitions, lambda_)
+        results.append(LeidenContextResult(level_partitions, ctxt, c_graph))
+    return results
