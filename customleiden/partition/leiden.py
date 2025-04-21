@@ -673,9 +673,10 @@ class LeidenContextResult(NamedTuple):
 
 def _build_context(edges: List[Tuple[Any, Any, float]],
                    partitions: Dict[Any, int],
-                   lambda_: int = 3) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
+                   lambda_: Optional[int] = None) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
     inter_edges = []
     raw_context: Dict[int, Dict[Any, float]] = defaultdict(lambda: defaultdict(float))
+    cluster_pair_counts = defaultdict(int)
 
     for u, v, w in edges:
         if u not in partitions or v not in partitions:
@@ -686,6 +687,14 @@ def _build_context(edges: List[Tuple[Any, Any, float]],
             inter_edges.append((cu, cv, w))
             raw_context[cu][u] += w
             raw_context[cv][v] += w
+            cluster_pair_counts[(cu, cv)] += 1
+            cluster_pair_counts[(cv, cu)] += 1  # Undirected
+
+    # Dynamically determine lambda if not provided
+    if lambda_ is None:
+        total_links = sum(len(nodes) for nodes in raw_context.values())
+        cluster_count = len(raw_context)
+        lambda_ = max(1, round(total_links / cluster_count)) if cluster_count else 1
 
     context_nodes = {
         c: {n for n, _ in sorted(nw.items(), key=lambda x: -x[1])[:lambda_]}
@@ -698,7 +707,7 @@ def _build_context(edges: List[Tuple[Any, Any, float]],
 
 def leiden_with_context(graph,
                         *,
-                        lambda_: int = 3,
+                        lambda_: Optional[int] = None,
                         **kwargs) -> LeidenContextResult:
     partitions = leiden(graph, **kwargs)
 
@@ -717,7 +726,7 @@ def leiden_with_context(graph,
 
 def hierarchical_leiden_with_context(graph,
                                      *,
-                                     lambda_: int = 3,
+                                     lambda_: Optional[int] = None,
                                      **kwargs) -> List[LeidenContextResult]:
     h_clusters: HierarchicalClusters = hierarchical_leiden(graph, **kwargs)
     levels = max(hc.level for hc in h_clusters)

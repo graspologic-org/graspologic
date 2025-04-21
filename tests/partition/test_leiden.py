@@ -98,7 +98,7 @@ class TestLeidenSemantic(unittest.TestCase):
         from customleiden.partition.leiden import leiden_with_context
 
         print("\n=== Running leiden_with_context on Karate Club graph ===")
-        result = leiden_with_context(graph, lambda_=2, random_seed=42)
+        result = leiden_with_context(graph, random_seed=42)
 
         communities = result.partitions
         context_nodes = result.context_nodes
