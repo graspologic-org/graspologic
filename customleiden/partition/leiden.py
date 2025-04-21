@@ -678,6 +678,9 @@ def _build_context(edges: List[Tuple[Any, Any, float]],
     raw_context: Dict[int, Dict[Any, float]] = defaultdict(lambda: defaultdict(float))
 
     for u, v, w in edges:
+        if u not in partitions or v not in partitions:
+            print(f"[WARN] Missing partition: {u=} {v=}")
+            continue
         cu, cv = partitions[u], partitions[v]
         if cu != cv:
             inter_edges.append((cu, cv, w))
