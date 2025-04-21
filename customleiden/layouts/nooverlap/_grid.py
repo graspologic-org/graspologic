@@ -4,7 +4,7 @@
 import math
 from collections import defaultdict
 
-from graspologic.types import Dict, List, Set, Tuple
+from customleiden.types import Dict, List, Set, Tuple
 
 from ._node import _Node
 

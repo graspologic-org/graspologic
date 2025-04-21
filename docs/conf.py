@@ -116,7 +116,7 @@ if tags.has("build_tutorials"):
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 html_static_path = []
-modindex_common_prefix = ["graspologic."]
+modindex_common_prefix = ["customleiden."]
 
 pygments_style = "sphinx"
 smartquotes = False
@@ -166,7 +166,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "graspologic.tex", "graspologic Documentation", authors, "manual")
+    (master_doc, "customleiden.tex", "graspologic Documentation", authors, "manual")
 ]
 
 # -- Options for manual page output ------------------------------------------

@@ -9,7 +9,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_array
 from typing_extensions import Literal
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..embed import AdjacencySpectralEmbed, BaseSpectralEmbed, LaplacianSpectralEmbed
 
@@ -46,8 +46,8 @@ class SpectralVertexNomination(BaseEstimator):
     embedder: str or BaseSpectralEmbed, default = 'ASE'
         May provide either a embed object or a string indicating which embedding method
         to use, which may be either:
-        "ASE" for :py:class:`~graspologic.embed.AdjacencySpectralEmbed` or
-        "LSE" for :py:class:`~graspologic.embed.LaplacianSpectralEmbed`.
+        "ASE" for :py:class:`~customleiden.embed.AdjacencySpectralEmbed` or
+        "LSE" for :py:class:`~customleiden.embed.LaplacianSpectralEmbed`.
     n_neighbors: int, default=None
         The number of vertices to nominate for each seed.
     metric : str, default = 'euclidean'

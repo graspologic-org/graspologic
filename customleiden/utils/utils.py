@@ -19,7 +19,7 @@ from sklearn.utils import check_array, check_consistent_length, column_or_1d
 from sklearn.utils.multiclass import type_of_target, unique_labels
 from typing_extensions import Literal
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..types import GraphRepresentation
 
@@ -1167,7 +1167,7 @@ def remap_node_ids(
 
 def suppress_common_warnings() -> None:
     """
-    Suppresses common warnings that occur when using graspologic.
+    Suppresses common warnings that occur when using customleiden.
     """
     warnings.filterwarnings("ignore", category=RuntimeWarning)
     warnings.filterwarnings("ignore", category=PendingDeprecationWarning)

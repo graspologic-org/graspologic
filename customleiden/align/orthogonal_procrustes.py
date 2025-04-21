@@ -16,7 +16,7 @@ class OrthogonalProcrustes(BaseAlign):
     or a different dataset in the same space.
 
     Note that when used to match two datasets, this method unlike
-    :class:`~graspologic.align.SeedlessProcrustes`, not only requires that the
+    :class:`~customleiden.align.SeedlessProcrustes`, not only requires that the
     datasets have the same number of entries, but also that there is some
     correspondence between the entries. In graph embeddings, this usually
     corresponds to the assumption that the vertex :math:`i` in graph ``X`` has the same
@@ -59,7 +59,7 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "OrthogonalProcrustes":
         """
-        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~customleiden.align.OrthogonalProcrustes.Q_` that aligns the
         first dataset with the second.
 
         Parameters
@@ -95,9 +95,9 @@ class OrthogonalProcrustes(BaseAlign):
 
     def fit_transform(self, X: np.ndarray, Y: np.ndarray) -> np.ndarray:
         """
-        Uses the two datasets to learn the matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~customleiden.align.OrthogonalProcrustes.Q_` that aligns the
         first dataset with the second. Then, transforms the first dataset ``X``
-        using the learned matrix :attr:`~graspologic.align.OrthogonalProcrustes.Q_`.
+        using the learned matrix :attr:`~customleiden.align.OrthogonalProcrustes.Q_`.
 
         Parameters
         ----------
@@ -111,6 +111,6 @@ class OrthogonalProcrustes(BaseAlign):
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
+            ``X`` @ :attr:`~customleiden.align.BaseAlign.Q_`.
         """
         return super().fit_transform(X, Y)

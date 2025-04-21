@@ -5,7 +5,7 @@ from typing import Tuple
 
 import numpy as np
 
-from graspologic.simulations import p_from_latent, sample_edges_corr
+from customleiden.simulations import p_from_latent, sample_edges_corr
 
 
 def rdpg_corr(

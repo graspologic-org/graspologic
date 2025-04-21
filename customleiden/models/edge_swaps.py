@@ -6,9 +6,9 @@ from beartype import beartype
 from scipy.sparse import csr_array, lil_matrix
 from sklearn.utils import check_scalar
 
-from graspologic.preconditions import check_argument
-from graspologic.types import AdjacencyMatrix, Tuple
-from graspologic.utils import import_graph, is_loopless, is_symmetric, is_unweighted
+from customleiden.preconditions import check_argument
+from customleiden.types import AdjacencyMatrix, Tuple
+from customleiden.utils import import_graph, is_loopless, is_symmetric, is_unweighted
 
 
 # Code based on: https://github.com/joelnish/double-edge-swap-mcmc/blob/master/dbl_edge_mcmc.py

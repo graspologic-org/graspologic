@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 import numpy as np
 
-from graspologic.types import Dict
+from customleiden.types import Dict
 
 from ..embed import AdjacencySpectralEmbed
 from ..simulations import p_from_latent
@@ -29,7 +29,7 @@ class RDPGEstimator(BaseGraphEstimator):
     where :math:`x_i` is the left latent position of node :math:`i`, and :math:`y_j` is
     the right latent position of node :math:`j`. If the graph being modeled is
     is undirected, then :math:`x_i = y_i`. Latent positions can be estimated via
-    :class:`~graspologic.embed.AdjacencySpectralEmbed`.
+    :class:`~customleiden.embed.AdjacencySpectralEmbed`.
 
     Read more in the `Random Dot Product Graph (RDPG) Model Tutorial
     <https://microsoft.github.io/graspologic/tutorials/simulations/rdpg.html>`_
@@ -46,7 +46,7 @@ class RDPGEstimator(BaseGraphEstimator):
 
     ase_kws : dict, optional (default={})
         Dictionary of keyword arguments passed down to
-        :class:`~graspologic.embed.AdjacencySpectralEmbed`, which is used to fit the model.
+        :class:`~customleiden.embed.AdjacencySpectralEmbed`, which is used to fit the model.
 
     diag_aug_weight : int or float, optional (default=1)
         Weighting used for diagonal augmentation, which is a form of regularization for
@@ -72,9 +72,9 @@ class RDPGEstimator(BaseGraphEstimator):
 
     See also
     --------
-    graspologic.simulations.rdpg
-    graspologic.embed.AdjacencySpectralEmbed
-    graspologic.utils.augment_diagonal
+    customleiden.simulations.rdpg
+    customleiden.embed.AdjacencySpectralEmbed
+    customleiden.utils.augment_diagonal
 
     References
     ----------

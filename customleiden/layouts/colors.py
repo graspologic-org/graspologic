@@ -11,7 +11,7 @@ from typing import Any, Optional
 import numpy as np
 from sklearn.preprocessing import minmax_scale
 
-from graspologic.types import Dict, Tuple
+from customleiden.types import Dict, Tuple
 
 __all__ = ["categorical_colors", "sequential_colors"]
 

@@ -8,7 +8,7 @@ import numpy as np
 from joblib import Parallel, delayed
 from typing_extensions import Literal
 
-from graspologic.types import Tuple
+from customleiden.types import Tuple
 
 from ..align import OrthogonalProcrustes
 from ..embed import AdjacencySpectralEmbed, OmnibusEmbed, select_dimension
@@ -110,9 +110,9 @@ def latent_position_test(
 
     See also
     --------
-    graspologic.embed.AdjacencySpectralEmbed
-    graspologic.embed.OmnibusEmbed
-    graspologic.embed.select_svd
+    customleiden.embed.AdjacencySpectralEmbed
+    customleiden.embed.OmnibusEmbed
+    customleiden.embed.select_svd
 
     References
     ----------

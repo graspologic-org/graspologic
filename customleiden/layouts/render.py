@@ -6,8 +6,8 @@ from typing import Any
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from graspologic.layouts.classes import NodePosition
-from graspologic.types import Dict, List, Tuple
+from customleiden.layouts.classes import NodePosition
+from customleiden.types import Dict, List, Tuple
 
 
 def _calculate_x_y_domain(
@@ -182,7 +182,7 @@ def show_graph(
     graph : nx.Graph
         The graph to be displayed. If the networkx Graph contains only nodes, no
         edges will be displayed.
-    positions : List[:class:`graspologic.layouts.NodePosition`]
+    positions : List[:class:`customleiden.layouts.NodePosition`]
         The positionsfor every node in the graph.
     node_colors : Dict[Any, str]
         A mapping of node id to colors. Must contain an entry for every node in the
@@ -264,7 +264,7 @@ def save_graph(
     graph : nx.Graph
         The graph to be displayed. If the networkx Graph contains only nodes, no
         edges will be displayed.
-    positions : List[:class:`graspologic.layouts.NodePosition`]
+    positions : List[:class:`customleiden.layouts.NodePosition`]
         The positionsfor every node in the graph.
     node_colors : Dict[Any, str]
         A mapping of node id to colors. Must contain an entry for every node in the

@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import PAIRED_DISTANCES, PAIRWISE_KERNEL_FUNCTIONS
 from sklearn.utils import check_array, check_random_state
 from typing_extensions import Literal
 
-from graspologic.types import Dict, Tuple
+from customleiden.types import Dict, Tuple
 
 from ..align import SeedlessProcrustes, SignFlips
 from ..embed import AdjacencySpectralEmbed, select_dimension
@@ -107,7 +107,7 @@ def latent_distribution_test(
     n_components : int or None (default=None)
         Number of embedding dimensions. If None, the optimal embedding
         dimensions are found by the Zhu and Godsi algorithm.
-        See :func:`~graspologic.embed.select_svd` for more information.
+        See :func:`~customleiden.embed.select_svd` for more information.
         This argument is ignored if ``input_graph`` is False.
 
     n_bootstraps : int (default=200)
@@ -167,7 +167,7 @@ def latent_distribution_test(
         - 'sign_flips'
             A simple heuristic that flips the signs of one of the embeddings,
             if the medians of the two embeddings in that dimension differ from
-            each other. See :class:`graspologic.align.SignFlips` for more
+            each other. See :class:`customleiden.align.SignFlips` for more
             information on this procedure. In the limit, this is guaranteed to
             lead to a valid test, as long as matrix :math:`X^T X`, where
             :math:`X` is the latent positions does not have repeated non-zero
@@ -178,7 +178,7 @@ def latent_distribution_test(
             procedure is slower than sign flips, but is guaranteed to yield a
             valid test in the limit, and also makes the test more valid in some
             finite sample cases, in which the eigenvalues are very close to
-            each other. See :class:`graspologic.align.SignFlips` for more information
+            each other. See :class:`customleiden.align.SignFlips` for more information
             on the procedure.
         - None
             Do not use any alignment technique. This is strongly not
@@ -186,8 +186,8 @@ def latent_distribution_test(
 
     align_kws : dict
         Keyword arguments for the aligner of choice, either
-        :class:`graspologic.align.SignFlips` or
-        :class:`graspologic.align.SeedlessProcrustes`, depending on the ``align_type``.
+        :class:`customleiden.align.SignFlips` or
+        :class:`customleiden.align.SeedlessProcrustes`, depending on the ``align_type``.
         See respective classes for more information.
 
     input_graph : bool (default=True)

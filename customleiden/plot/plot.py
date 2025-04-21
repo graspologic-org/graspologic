@@ -21,7 +21,7 @@ from scipy.sparse import csr_array
 from sklearn.preprocessing import Binarizer
 from sklearn.utils import check_array, check_consistent_length, check_X_y
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..embed import select_svd
 from ..pipeline.embed._elbow import _index_of_elbow
@@ -847,8 +847,8 @@ def pairplot_with_gmm(
 
     See Also
     --------
-    graspologic.plot.pairplot
-    graspologic.cluster.AutoGMMCluster
+    customleiden.plot.pairplot
+    customleiden.cluster.AutoGMMCluster
     sklearn.mixture.GaussianMixture
     """
     # Handle X and labels

@@ -11,7 +11,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
 from typing_extensions import Literal
 
-from graspologic.types import List, Tuple
+from customleiden.types import List, Tuple
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import (
@@ -76,7 +76,7 @@ class BaseSpectralEmbed(BaseEstimator):
 
     See Also
     --------
-    graspologic.embed.select_svd, graspologic.embed.select_dimension
+    customleiden.embed.select_svd, customleiden.embed.select_dimension
     """
 
     def __init__(
@@ -194,7 +194,7 @@ class BaseSpectralEmbed(BaseEstimator):
                 msg = (
                     "Input graph is not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.largest_connected_component``."
+                    + "using ``customleiden.utils.largest_connected_component``."
                 )
                 warnings.warn(msg, UserWarning)
 

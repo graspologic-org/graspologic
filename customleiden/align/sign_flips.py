@@ -74,12 +74,12 @@ class SignFlips(BaseAlign):
 
     def fit(self, X: np.ndarray, Y: np.ndarray) -> "SignFlips":
         """
-        Uses the two datasets to learn the matrix :attr:`~graspologic.align.SignFlips.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~customleiden.align.SignFlips.Q_` that aligns the
         first dataset with the second.
 
-        In sign flips, :attr:`~graspologic.align.SignFlips.Q_` is an diagonal orthogonal matrices (i.e. a
+        In sign flips, :attr:`~customleiden.align.SignFlips.Q_` is an diagonal orthogonal matrices (i.e. a
         matrix with 1 or -1 in each entry on diagonal and 0 everywhere else)
-        picked such that all dimensions of ``X`` @ :attr:`~graspologic.align.SignFlips.Q_`
+        picked such that all dimensions of ``X`` @ :attr:`~customleiden.align.SignFlips.Q_`
         and ``Y`` are in the same orthant using some critera (median or max magnitude).
 
         Parameters

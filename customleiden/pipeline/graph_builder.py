@@ -7,7 +7,7 @@ from typing import Any, Union
 import networkx as nx
 from beartype import beartype
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 __all__ = ["GraphBuilder"]
 

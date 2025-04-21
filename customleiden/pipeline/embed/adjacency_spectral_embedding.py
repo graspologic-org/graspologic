@@ -8,10 +8,10 @@ import networkx as nx
 import numpy as np
 from beartype import beartype
 
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.embed.base import SvdAlgorithmType
-from graspologic.preconditions import check_argument, is_real_weighted
-from graspologic.utils import (
+from customleiden.embed import AdjacencySpectralEmbed
+from customleiden.embed.base import SvdAlgorithmType
+from customleiden.preconditions import check_argument, is_real_weighted
+from customleiden.utils import (
     augment_diagonal,
     is_fully_connected,
     pass_to_ranks,
@@ -112,9 +112,9 @@ def adjacency_spectral_embedding(
 
     See Also
     --------
-    graspologic.pipeline.embed.Embeddings
-    graspologic.embed.AdjacencySpectralEmbed
-    graspologic.embed.select_svd
+    customleiden.pipeline.embed.Embeddings
+    customleiden.embed.AdjacencySpectralEmbed
+    customleiden.embed.select_svd
 
     Notes
     -----

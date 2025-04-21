@@ -9,7 +9,7 @@ from typing import Any
 
 import networkx as nx
 
-from graspologic.types import Dict, List
+from customleiden.types import Dict, List
 
 from . import NodePosition, auto, render
 from .colors import categorical_colors
@@ -19,7 +19,7 @@ def _graph_from_file(
     path: str,
     skip_header: bool = False,
 ) -> nx.Graph:
-    logger = logging.getLogger("graspologic.layouts")
+    logger = logging.getLogger("customleiden.layouts")
     graph = nx.Graph()
     with open(path, "r") as edge_io:
         if skip_header is True:
@@ -187,7 +187,7 @@ def _common_edge_list_args(parser: argparse.ArgumentParser) -> argparse.Argument
 
 def _parser() -> argparse.ArgumentParser:
     root_parser = argparse.ArgumentParser(
-        prog="python -m graspologic.layouts",
+        prog="python -m customleiden.layouts",
         description="Runnable module that automatically generates a layout of a graph "
         "by a provided edge list",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -339,7 +339,7 @@ def main() -> None:
         logging.basicConfig(
             format="%(asctime)s:%(levelname)s:%(name)s, %(message)s", level=logging.INFO
         )
-        logger = logging.getLogger("graspologic.layouts")
+        logger = logging.getLogger("customleiden.layouts")
 
     args.func(args)
 

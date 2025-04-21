@@ -21,7 +21,7 @@ from typing import Any
 import numpy as np
 from beartype import beartype
 
-from graspologic.types import Tuple
+from customleiden.types import Tuple
 
 
 class Embeddings:
@@ -118,7 +118,7 @@ class EmbeddingsView(OrderedDict):
             raise ValueError("embeddings must not be None")
         if not isinstance(embeddings, Embeddings):
             raise TypeError(
-                "embeddings must be a graspologic.pipeline.embed.Embeddings"
+                "embeddings must be a customleiden.pipeline.embed.Embeddings"
             )
         super(EmbeddingsView, self).__init__()
         for label, embedding in embeddings:

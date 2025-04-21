@@ -11,7 +11,7 @@ import networkx as nx
 import numpy as np
 from gensim.models import Word2Vec
 
-from graspologic.types import List, Tuple
+from customleiden.types import List, Tuple
 
 from ..utils import remap_node_ids
 

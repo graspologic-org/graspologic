@@ -7,7 +7,7 @@ from typing import Any, Callable, Optional, Union
 import numpy as np
 from sklearn.utils import check_array, check_scalar
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..utils import cartesian_product, symmetrize
 

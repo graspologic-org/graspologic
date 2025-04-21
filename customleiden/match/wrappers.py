@@ -8,8 +8,8 @@ from beartype import beartype
 from joblib import Parallel, delayed
 from sklearn.utils import check_scalar
 
-from graspologic.match.solver import _GraphMatchSolver
-from graspologic.types import Dict, List, RngType
+from customleiden.match.solver import _GraphMatchSolver
+from customleiden.types import Dict, List, RngType
 
 from .types import (
     AdjacencyMatrix,

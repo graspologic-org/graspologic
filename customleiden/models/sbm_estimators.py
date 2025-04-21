@@ -6,7 +6,7 @@ from typing import Any, Optional
 import numpy as np
 from sklearn.utils import check_X_y
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..cluster import GaussianCluster
 from ..embed import AdjacencySpectralEmbed, LaplacianSpectralEmbed
@@ -85,7 +85,7 @@ class SBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension`.
+        will be chosen by :func:`~customleiden.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -94,10 +94,10 @@ class SBMEstimator(BaseGraphEstimator):
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspologic.cluster.GaussianCluster`
+        Additional kwargs passed down to :class:`~customleiden.cluster.GaussianCluster`
 
     embed_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspologic.embed.AdjacencySpectralEmbed`
+        Additional kwargs passed down to :class:`~customleiden.embed.AdjacencySpectralEmbed`
 
     Attributes
     ----------
@@ -112,15 +112,15 @@ class SBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.SBMEstimator.fit`.
+        belongs to if ``y`` was not passed during the call to :func:`~customleiden.models.SBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
 
     See also
     --------
-    graspologic.models.DCSBMEstimator
-    graspologic.simulations.sbm
+    customleiden.models.DCSBMEstimator
+    customleiden.simulations.sbm
 
     References
     ----------
@@ -285,7 +285,7 @@ class DCSBMEstimator(BaseGraphEstimator):
     n_components : int, optional (default=None)
         Desired dimensionality of embedding for clustering to find communities.
         ``n_components`` must be ``< min(X.shape)``. If None, then optimal dimensions
-        will be chosen by :func:`~graspologic.embed.select_dimension`.
+        will be chosen by :func:`~customleiden.embed.select_dimension`.
 
     min_comm : int, optional (default=1)
         The minimum number of communities (blocks) to consider.
@@ -294,10 +294,10 @@ class DCSBMEstimator(BaseGraphEstimator):
         The maximum number of communities (blocks) to consider (inclusive).
 
     cluster_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspologic.cluster.GaussianCluster`
+        Additional kwargs passed down to :class:`~customleiden.cluster.GaussianCluster`
 
     embed_kws : dict, optional (default={})
-        Additional kwargs passed down to :class:`~graspologic.embed.LaplacianSpectralEmbed`
+        Additional kwargs passed down to :class:`~customleiden.embed.LaplacianSpectralEmbed`
 
     Attributes
     ----------
@@ -318,15 +318,15 @@ class DCSBMEstimator(BaseGraphEstimator):
 
     vertex_assignments_ : np.ndarray, shape (n_verts)
         A vector of integer labels corresponding to the predicted block that each node
-        belongs to if ``y`` was not passed during the call to :func:`~graspologic.models.DCSBMEstimator.fit`.
+        belongs to if ``y`` was not passed during the call to :func:`~customleiden.models.DCSBMEstimator.fit`.
 
     block_weights_ : np.ndarray, shape (n_blocks)
         Contains the proportion of nodes that belong to each block in the fit model.
 
     See also
     --------
-    graspologic.models.SBMEstimator
-    graspologic.simulations.sbm
+    customleiden.models.SBMEstimator
+    customleiden.simulations.sbm
 
     Notes
     -----

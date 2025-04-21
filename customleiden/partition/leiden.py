@@ -284,7 +284,7 @@ def leiden(
     is_weighted : Optional[bool]
         Default is ``None``. Only used when creating a weighted edge list of tuples
         when the source graph is an adjacency matrix. The
-        :func:`graspologic.utils.is_unweighted` function will scan these
+        :func:`customleiden.utils.is_unweighted` function will scan these
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
@@ -323,7 +323,7 @@ def leiden(
 
     See Also
     --------
-    graspologic.utils.is_unweighted
+    customleiden.utils.is_unweighted
 
     References
     ----------
@@ -423,7 +423,7 @@ class HierarchicalClusters(List[HierarchicalCluster]):
     helper methods for retrieving dictionary views of the first and final
     level of hierarchical clustering in dictionary form.  The rest of the
     HierarchicalCluster entries in this list can be seen as a transition
-    state log of our :func:`graspologic.partition.hierarchical_leiden` process
+    state log of our :func:`customleiden.partition.hierarchical_leiden` process
     as it continuously tries to break down communities over a certain size,
     with the two helper methods on this list providing you the starting point
     community map and ending point community map.
@@ -497,7 +497,7 @@ def hierarchical_leiden(
     This process continues until no moves are made that increases the partitioning
     quality.
 
-    Unlike the function :func:`graspologic.partition.leiden`, this function does not
+    Unlike the function :func:`customleiden.partition.leiden`, this function does not
     stop after maximization has been achieved. On some large graphs, it's useful to
     identify particularly large communities whose membership counts exceed
     ``max_cluster_size`` and induce a subnetwork solely out of that community. This
@@ -506,7 +506,7 @@ def hierarchical_leiden(
 
     The results also differ substantially; the returned List[HierarchicalCluster] is
     more of a log of state at each level. All HierarchicalClusters at level 0 should be
-    considered to be the results of running :func:`graspologic.partition.leiden`. Every
+    considered to be the results of running :func:`customleiden.partition.leiden`. Every
     community whose membership is greater than ``max_cluster_size`` will then
     also have entries where level == 1, and so on until no communities are greater in
     population than ``max_cluster_size`` OR we are unable to break them down any
@@ -514,7 +514,7 @@ def hierarchical_leiden(
 
     Once a node's membership registration in a community cannot be changed any further,
     it is marked with the flag
-    ``graspologic.partition.HierarchicalCluster.is_final_cluster = True``.
+    ``customleiden.partition.HierarchicalCluster.is_final_cluster = True``.
 
     Parameters
     ----------
@@ -565,7 +565,7 @@ def hierarchical_leiden(
     is_weighted : Optional[bool]
         Default is ``None``. Only used when creating a weighted edge list of tuples
         when the source graph is an adjacency matrix. The
-        :func:`graspologic.utils.is_unweighted` function will scan these
+        :func:`customleiden.utils.is_unweighted` function will scan these
         matrices and attempt to determine whether it is weighted or not. This flag can
         short circuit this test and the values in the adjacency matrix will be treated
         as weights.
@@ -597,7 +597,7 @@ def hierarchical_leiden(
 
     See Also
     --------
-    graspologic.utils.is_unweighted
+    customleiden.utils.is_unweighted
 
     References
     ----------
@@ -695,6 +695,8 @@ def _build_context(edges: List[Tuple[Any, Any, float]],
         total_links = sum(len(nodes) for nodes in raw_context.values())
         cluster_count = len(raw_context)
         lambda_ = max(1, round(total_links / cluster_count)) if cluster_count else 1
+    
+    print(f"[INFO] Used lambda is: {lambda_}")
 
     context_nodes = {
         c: {n for n, _ in sorted(nw.items(), key=lambda x: -x[1])[:lambda_]}

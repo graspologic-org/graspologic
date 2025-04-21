@@ -7,7 +7,7 @@ from typing import Any
 
 import networkx as nx
 
-from graspologic.types import Dict
+from customleiden.types import Dict
 
 
 def _modularity_component(

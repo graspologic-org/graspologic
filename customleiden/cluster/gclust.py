@@ -10,7 +10,7 @@ from sklearn.mixture import GaussianMixture
 from sklearn.model_selection import ParameterGrid
 from typing_extensions import Literal
 
-from graspologic.types import List
+from customleiden.types import List
 
 from .base import BaseCluster
 

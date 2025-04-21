@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_array
 
-from graspologic.types import Tuple
+from customleiden.types import Tuple
 
 Self = TypeVar("Self", bound="BaseAlign")
 
@@ -55,7 +55,7 @@ class BaseAlign(BaseEstimator):
     @abstractmethod
     def fit(self: Self, X: np.ndarray, Y: np.ndarray) -> Self:
         """
-        Uses the two datasets to learn the matrix :attr:`~graspologic.align.BaseAlign.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~customleiden.align.BaseAlign.Q_` that aligns the
         first dataset with the second.
 
         Parameters
@@ -75,8 +75,8 @@ class BaseAlign(BaseEstimator):
 
     def transform(self, X: np.ndarray) -> np.ndarray:
         """
-        Transforms the dataset ``X`` using the learned matrix :attr:`~graspologic.align.BaseAlign.Q_`. This may
-        be the same as the first dataset as in :func:`~graspologic.align.BaseAlign.fit`, or a new dataset.
+        Transforms the dataset ``X`` using the learned matrix :attr:`~customleiden.align.BaseAlign.Q_`. This may
+        be the same as the first dataset as in :func:`~customleiden.align.BaseAlign.fit`, or a new dataset.
         For example, additional samples from the same dataset.
 
         Parameters
@@ -89,7 +89,7 @@ class BaseAlign(BaseEstimator):
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
+            ``X`` @ :attr:`~customleiden.align.BaseAlign.Q_`.
         """
         if not isinstance(X, np.ndarray):
             msg = f"Dataset is a {type(X)}, not an np.ndarray! "
@@ -108,9 +108,9 @@ class BaseAlign(BaseEstimator):
 
     def fit_transform(self, X: np.ndarray, Y: np.ndarray) -> np.ndarray:
         """
-        Uses the two datasets to learn the matrix :attr:`~graspologic.align.BaseAlign.Q_` that aligns the
+        Uses the two datasets to learn the matrix :attr:`~customleiden.align.BaseAlign.Q_` that aligns the
         first dataset with the second. Then, transforms the first dataset ``X``
-        using the learned matrix :attr:`~graspologic.align.BaseAlign.Q_`.
+        using the learned matrix :attr:`~customleiden.align.BaseAlign.Q_`.
 
         Parameters
         ----------
@@ -125,7 +125,7 @@ class BaseAlign(BaseEstimator):
         -------
         X_prime : np.ndarray, shape (n, d)
             First dataset of vectors, aligned to second. Equal to
-            ``X`` @ :attr:`~graspologic.align.BaseAlign.Q_`.
+            ``X`` @ :attr:`~customleiden.align.BaseAlign.Q_`.
         """
         self.fit(X, Y)
         return self.transform(X)

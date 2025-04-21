@@ -11,7 +11,7 @@ from sklearn.utils import check_array
 from sklearn.utils.validation import check_is_fitted
 from typing_extensions import Literal
 
-from graspologic.types import Dict, Tuple
+from customleiden.types import Dict, Tuple
 
 from .autogmm import AutoGMMCluster
 from .kclust import KMeansCluster
@@ -57,8 +57,8 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
     ----------
     cluster_method : str {"gmm", "kmeans"}, defaults to "gmm".
         The underlying clustering method to apply. If "gmm" will use
-        :class:`~graspologic.cluster.AutoGMMCluster`. If "kmeans", will use
-        :class:`~graspologic.cluster.KMeansCluster`.
+        :class:`~customleiden.cluster.AutoGMMCluster`. If "kmeans", will use
+        :class:`~customleiden.cluster.KMeansCluster`.
     min_components : int, defaults to 1.
         The minimum number of mixture components/clusters to consider
         for the first split if "gmm" is selected as ``cluster_method``;
@@ -86,8 +86,8 @@ class DivisiveCluster(NodeMixin, BaseEstimator):
 
     See Also
     --------
-    graspologic.cluster.AutoGMMCluster
-    graspologic.cluster.KMeansCluster
+    customleiden.cluster.AutoGMMCluster
+    customleiden.cluster.KMeansCluster
     anytree.node.nodemixin.NodeMixin
 
     Notes

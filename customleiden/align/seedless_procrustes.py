@@ -7,7 +7,7 @@ import numpy as np
 import ot
 from sklearn.utils import check_array
 
-from graspologic.types import Tuple
+from customleiden.types import Tuple
 
 from .base import BaseAlign
 from .orthogonal_procrustes import OrthogonalProcrustes
@@ -17,7 +17,7 @@ from .sign_flips import SignFlips
 class SeedlessProcrustes(BaseAlign):
     """
     Matches two datasets using an orthogonal matrix. Unlike
-    :class:`~graspologic.align.OrthogonalProcrustes`, this does not require a
+    :class:`~customleiden.align.OrthogonalProcrustes`, this does not require a
     matching between entries. It can even be used in the settings where the two
     datasets do not have the same number of entries.
 
@@ -25,7 +25,7 @@ class SeedlessProcrustes(BaseAlign):
     graphs, when it requires some simultaneous inference task and no 1-1
     matching between the vertices of the two graphs can be established, for
     example, inside of the test for the equivalence of the latent distributions
-    (see: :class:`~graspologic.inference.LatentDistributionTest`).
+    (see: :class:`~customleiden.inference.LatentDistributionTest`).
 
     Parameters
     ----------

@@ -1,22 +1,22 @@
 # Copyright (c) Microsoft Corporation and contributors.
 # Licensed under the MIT License.
 
-import graspologic.align
-import graspologic.cluster
-import graspologic.datasets
-import graspologic.embed
-import graspologic.inference
-import graspologic.layouts
-import graspologic.models
-import graspologic.nominate
-import graspologic.partition
-import graspologic.pipeline
-import graspologic.plot
-import graspologic.preprocessing
-import graspologic.simulations
-import graspologic.subgraph
-import graspologic.utils
-from graspologic.types import *
-from graspologic.version import __version
+import customleiden.align
+import customleiden.cluster
+import customleiden.datasets
+import customleiden.embed
+import customleiden.inference
+import customleiden.layouts
+import customleiden.models
+import customleiden.nominate
+import customleiden.partition
+import customleiden.pipeline
+import customleiden.plot
+import customleiden.preprocessing
+import customleiden.simulations
+import customleiden.subgraph
+import customleiden.utils
+from customleiden.types import *
+from customleiden.version import __version
 
 __version__ = __version()

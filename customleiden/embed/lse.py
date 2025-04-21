@@ -25,17 +25,17 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     ----------
     form : {'DAD' (default), 'I-DAD', 'R-DAD'}, optional
         Specifies the type of Laplacian normalization to use. See
-        :func:`~graspologic.utils.to_laplacian` for more details regarding form.
+        :func:`~customleiden.utils.to_laplacian` for more details regarding form.
 
     n_components : int or None, default = None
         Desired dimensionality of output data. If "full",
         ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
         ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
-        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~customleiden.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components`` is None, then compute the optimal embedding dimension using
-        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        :func:`~customleiden.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -73,7 +73,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
     ----------
     n_features_in_: int
         Number of features passed to the
-        :func:`~graspologic.embed.LaplacianSpectralEmbed.fit` method.
+        :func:`~customleiden.embed.LaplacianSpectralEmbed.fit` method.
 
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
@@ -91,9 +91,9 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
 
     See Also
     --------
-    graspologic.embed.select_svd
-    graspologic.embed.select_dimension
-    graspologic.utils.to_laplacian
+    customleiden.embed.select_svd
+    customleiden.embed.select_dimension
+    customleiden.utils.to_laplacian
 
     Notes
     -----
@@ -160,7 +160,7 @@ class LaplacianSpectralEmbed(BaseSpectralEmbed):
         Parameters
         ----------
         graph : array-like, scipy.sparse.csr_array, or networkx.Graph
-            Input graph to embed. see graspologic.utils.import_graph
+            Input graph to embed. see customleiden.utils.import_graph
 
         Returns
         -------

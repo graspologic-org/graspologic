@@ -21,7 +21,7 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
     # instead, we're going to test type and range checks, the elbow finding,
     # and at the least that a fixed dimension embed request from pipeline
     # matches a fixed dimension embed request of
-    # graspologic.embed.LaplacianSpectralEmbed
+    # customleiden.embed.LaplacianSpectralEmbed
 
     def setUp(self) -> None:
         self.graph = nx.erdos_renyi_graph(1000, 0.2)

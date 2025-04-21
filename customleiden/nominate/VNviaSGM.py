@@ -5,7 +5,7 @@ from typing import Any, Optional, Union
 import numpy as np
 from sklearn.base import BaseEstimator
 
-from graspologic.types import Dict, List
+from customleiden.types import Dict, List
 
 from ..match import graph_match
 
@@ -19,7 +19,7 @@ class VNviaSGM(BaseEstimator):
     the algorithm described in [1].
 
     Rather than providing a 1-1 matching for the vertices of two graphs, as in
-    :class:`~graspologic.match.GraphMatch`, VNviaSGM ranks the potential matches for a
+    :class:`~customleiden.match.GraphMatch`, VNviaSGM ranks the potential matches for a
     vertex of interst (VOI) in one to graph to the vertices in another graph, based on
     probability of matching.
 
@@ -51,7 +51,7 @@ class VNviaSGM(BaseEstimator):
     graph_match_kws : dict (default = {})
         Gives users the option to pass custom arguments to the graph matching
         algorithm. Format should be {'arg_name': arg_value, ...}. See
-        :class:`~graspologic.match.GraphMatch`
+        :class:`~customleiden.match.GraphMatch`
 
 
     Attributes
@@ -74,7 +74,7 @@ class VNviaSGM(BaseEstimator):
     All the seeds that are close enough are then used to generate subgraphs in both
     ``A`` and ``B``. These subgraphs are matched using several random initializations
     of the seeded graph matching algorithm (SGM), and a nomination list is returned.
-    See :class:`~graspologic.match.GraphMatch` for SGM docs
+    See :class:`~customleiden.match.GraphMatch` for SGM docs
 
     References
     ----------

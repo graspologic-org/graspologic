@@ -19,7 +19,7 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.utils import check_scalar
 from typing_extensions import Literal
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from .base import BaseCluster
 
@@ -203,8 +203,8 @@ class AutoGMMCluster(BaseCluster):
 
     See Also
     --------
-    graspologic.cluster.GaussianCluster
-    graspologic.cluster.KMeansCluster
+    customleiden.cluster.GaussianCluster
+    customleiden.cluster.KMeansCluster
 
     Notes
     -----

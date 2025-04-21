@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score, silhouette_score
 
-from graspologic.types import List
+from customleiden.types import List
 
 from .base import BaseCluster
 

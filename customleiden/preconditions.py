@@ -6,7 +6,7 @@ from typing import Any, Union
 
 import networkx as nx
 
-from graspologic.types import Tuple
+from customleiden.types import Tuple
 
 
 def check_argument_types(

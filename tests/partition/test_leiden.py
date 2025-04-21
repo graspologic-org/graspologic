@@ -95,7 +95,6 @@ class TestLeidenSemantic(unittest.TestCase):
         cluster‑level graph reflects those bridges with positive weights.
         """
         graph = nx.karate_club_graph()
-        from customleiden.partition.leiden import leiden_with_context
 
         print("\n=== Running leiden_with_context on Karate Club graph ===")
         result = leiden_with_context(graph, random_seed=42)
@@ -168,7 +167,7 @@ class TestHierarchicalCluster(unittest.TestCase):
             _from_native(1, {"1": 1})
 
         # note: it is impossible to create a native instance of a HierarchicalCluster.  We will
-        # test from_native indirectly through calling graspologic.partition.hierarchical_leiden()
+        # test from_native indirectly through calling customleiden.partition.hierarchical_leiden()
 
     def test_final_hierarchical_clustering(self):
         hierarchical_clusters = HierarchicalClusters([

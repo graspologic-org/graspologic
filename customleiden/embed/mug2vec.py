@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from typing_extensions import Literal
 
-from graspologic.types import List
+from customleiden.types import List
 
 from ..types import GraphRepresentation
 from ..utils import pass_to_ranks
@@ -61,11 +61,11 @@ class mug2vec(BaseEstimator):
         Desired dimensionality of output data. If "full",
         ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
         ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
-        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~customleiden.embed.select_dimension` using ``n_elbows`` argument.
 
     omnibus_n_elbows, cmds_n_elbows: int, optional, default: 2
         If ``n_components`` is None, then compute the optimal embedding dimension using
-        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        :func:`~customleiden.embed.select_dimension`. Otherwise, ignored.
 
     svd_seed : int or None (default ``None``)
         Allows you to seed the randomized svd solver used in the Omnibus embedding
@@ -87,10 +87,10 @@ class mug2vec(BaseEstimator):
 
     See also
     --------
-    graspologic.utils.pass_to_ranks
-    graspologic.embed.OmnibusEmbed
-    graspologic.embed.ClassicalMDS
-    graspologic.embed.select_dimension
+    customleiden.utils.pass_to_ranks
+    customleiden.embed.OmnibusEmbed
+    customleiden.embed.ClassicalMDS
+    customleiden.embed.select_dimension
     """
 
     def __init__(

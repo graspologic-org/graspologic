@@ -10,8 +10,8 @@ import numpy as np
 from scipy.spatial import distance
 from sklearn.preprocessing import normalize
 
-from graspologic.layouts.classes import NodePosition
-from graspologic.types import Dict, List, Set, Tuple
+from customleiden.layouts.classes import NodePosition
+from customleiden.types import Dict, List, Set, Tuple
 
 from ._node import _Node
 

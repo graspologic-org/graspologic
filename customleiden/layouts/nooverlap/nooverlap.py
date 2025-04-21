@@ -4,7 +4,7 @@
 import logging
 import time
 
-from graspologic.types import List
+from customleiden.types import List
 
 from .. import NodePosition
 from ._node import _Node

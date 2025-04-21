@@ -12,7 +12,7 @@ from ot import sinkhorn
 from scipy.optimize import linear_sum_assignment
 from sklearn.utils import check_scalar
 
-from graspologic.types import List, RngType, Tuple
+from customleiden.types import List, RngType, Tuple
 
 from .types import (
     AdjacencyMatrix,

@@ -11,7 +11,7 @@ import numpy as np
 import umap
 from sklearn.manifold import TSNE
 
-from graspologic.types import Dict, List, Tuple
+from customleiden.types import Dict, List, Tuple
 
 from ..embed import node2vec_embed
 from ..partition import leiden
@@ -50,7 +50,7 @@ def layout_tsne(
     After dimensionality reduction, sizes are generated for each node based upon
     their degree centrality, and these sizes and positions are further refined by an
     overlap removal phase. Lastly, a global partitioning algorithm
-    (:func:`graspologic.partition.leiden`) is executed for the largest connected
+    (:func:`customleiden.partition.leiden`) is executed for the largest connected
     component and the partition ID is included with each node position.
 
     Parameters
@@ -142,7 +142,7 @@ def layout_umap(
     After dimensionality reduction, sizes are generated for each node based upon
     their degree centrality, and these sizes and positions are further refined by an
     overlap removal phase. Lastly, a global partitioning algorithm
-    (:func:`graspologic.partition.leiden`) is executed for the largest connected
+    (:func:`customleiden.partition.leiden`) is executed for the largest connected
     component and the partition ID is included with each node position.
 
     Parameters

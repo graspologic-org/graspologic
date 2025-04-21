@@ -8,11 +8,11 @@ import networkx as nx
 import numpy as np
 from beartype import beartype
 
-from graspologic.embed import OmnibusEmbed
-from graspologic.embed.base import SvdAlgorithmType
-from graspologic.preconditions import check_argument, is_real_weighted
-from graspologic.types import List, Set, Tuple
-from graspologic.utils import (
+from customleiden.embed import OmnibusEmbed
+from customleiden.embed.base import SvdAlgorithmType
+from customleiden.preconditions import check_argument, is_real_weighted
+from customleiden.types import List, Set, Tuple
+from customleiden.utils import (
     augment_diagonal,
     largest_connected_component,
     pass_to_ranks,
@@ -113,10 +113,10 @@ def omnibus_embedding_pairwise(
 
     See Also
     --------
-    graspologic.pipeline.embed.Embeddings
-    graspologic.embed.OmnibusEmbed
-    graspologic.embed.AdjacencySpectralEmbed
-    graspologic.embed.select_svd
+    customleiden.pipeline.embed.Embeddings
+    customleiden.embed.OmnibusEmbed
+    customleiden.embed.AdjacencySpectralEmbed
+    customleiden.embed.select_svd
 
     References
     ----------

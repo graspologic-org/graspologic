@@ -47,9 +47,9 @@ class EREstimator(SBMEstimator):
 
     See also
     --------
-    graspologic.models.DCEREstimator
-    graspologic.models.SBMEstimator
-    graspologic.simulations.er_np
+    customleiden.models.DCEREstimator
+    customleiden.models.SBMEstimator
+    customleiden.simulations.er_np
 
     References
     ----------
@@ -123,9 +123,9 @@ class DCEREstimator(DCSBMEstimator):
 
     See also
     --------
-    graspologic.models.DCSBMEstimator
-    graspologic.models.EREstimator
-    graspologic.simulations.er_np
+    customleiden.models.DCSBMEstimator
+    customleiden.models.EREstimator
+    customleiden.simulations.er_np
 
     References
     ----------

@@ -9,10 +9,10 @@ import networkx as nx
 import numpy as np
 from beartype import beartype
 
-from graspologic.embed import LaplacianSpectralEmbed
-from graspologic.embed.base import SvdAlgorithmType
-from graspologic.preconditions import check_argument, is_real_weighted
-from graspologic.utils import is_fully_connected, pass_to_ranks, remove_loops
+from customleiden.embed import LaplacianSpectralEmbed
+from customleiden.embed.base import SvdAlgorithmType
+from customleiden.preconditions import check_argument, is_real_weighted
+from customleiden.utils import is_fully_connected, pass_to_ranks, remove_loops
 
 from ...utils import LaplacianFormType
 from . import __SVD_SOLVER_TYPES  # from the module init
@@ -62,7 +62,7 @@ def laplacian_spectral_embedding(
     form : str (default="R-DAD")
         Specifies the type of Laplacian normalization to use. Allowed values are:
         { "DAD", "I-DAD", "R-DAD" }.  See
-        :func:`~graspologic.utils.to_laplacian` for more details regarding form.
+        :func:`~customleiden.utils.to_laplacian` for more details regarding form.
     dimensions : int (default=100)
         Dimensions to use for the svd solver.
         For undirected graphs, if ``elbow_cut==None``, you will receive an embedding
@@ -115,10 +115,10 @@ def laplacian_spectral_embedding(
 
     See Also
     --------
-    graspologic.pipeline.embed.Embeddings
-    graspologic.embed.LaplacianSpectralEmbed
-    graspologic.embed.select_svd
-    graspologic.utils.to_laplacian
+    customleiden.pipeline.embed.Embeddings
+    customleiden.embed.LaplacianSpectralEmbed
+    customleiden.embed.select_svd
+    customleiden.utils.to_laplacian
 
     Notes
     -----

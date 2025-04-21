@@ -4,9 +4,9 @@ import numpy as np
 from scipy.sparse.linalg import LinearOperator, eigsh
 from sklearn.preprocessing import normalize, scale
 
-from graspologic.embed.base import BaseSpectralEmbed
-from graspologic.types import Tuple
-from graspologic.utils import import_graph, is_almost_symmetric, to_laplacian
+from customleiden.embed.base import BaseSpectralEmbed
+from customleiden.types import Tuple
+from customleiden.utils import import_graph, is_almost_symmetric, to_laplacian
 
 
 class CovariateAssistedEmbed(BaseSpectralEmbed):
@@ -115,7 +115,7 @@ class CovariateAssistedEmbed(BaseSpectralEmbed):
         Parameters
         ----------
         graph : array-like or networkx.Graph
-            Input graph to embed. See graspologic.utils.import_graph
+            Input graph to embed. See customleiden.utils.import_graph
 
         covariates : array-like, shape (n_vertices, n_covariates)
             Covariate matrix. Each node of the graph is associated with a set of

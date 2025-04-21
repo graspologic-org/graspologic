@@ -15,7 +15,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     The adjacency spectral embedding (ASE) is a k-dimensional Euclidean representation
     of the graph based on its adjacency matrix. It relies on an SVD to reduce
     the dimensionality to the specified k, or if k is unspecified, can find a number of
-    dimensions automatically (see :class:`~graspologic.embed.select_svd`).
+    dimensions automatically (see :class:`~customleiden.embed.select_svd`).
 
     Read more in the `Adjacency Spectral Embedding Tutorial
     <https://microsoft.github.io/graspologic/tutorials/embedding/AdjacencySpectralEmbed.html>`_
@@ -26,11 +26,11 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
         Desired dimensionality of output data. If "full",
         ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
         ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
-        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~customleiden.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components`` is None, then compute the optimal embedding dimension using
-        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        :func:`~customleiden.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -74,7 +74,7 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
     ----------
     n_features_in_: int
         Number of features passed to the
-        :func:`~graspologic.embed.AdjacencySpectralEmbed.fit` method.
+        :func:`~customleiden.embed.AdjacencySpectralEmbed.fit` method.
     latent_left_ : array, shape (n_samples, n_components)
         Estimated left latent positions of the graph.
     latent_right_ : array, shape (n_samples, n_components), or None
@@ -85,8 +85,8 @@ class AdjacencySpectralEmbed(BaseSpectralEmbed):
 
     See Also
     --------
-    graspologic.embed.select_svd
-    graspologic.embed.select_dimension
+    customleiden.embed.select_svd
+    customleiden.embed.select_dimension
 
     Notes
     -----

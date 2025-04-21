@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 # ruff: noqa: E402 SVD_SOLVER_TYPES needs to be first
 """
-The embed module of ``graspologic.pipeline.embed`` is intended to provide faster
+The embed module of ``customleiden.pipeline.embed`` is intended to provide faster
 application development support. The functions provided in it reflect common call
 patterns used when developing data processing pipelines and future consumption
 by nearest neighbor services and visualization routines.

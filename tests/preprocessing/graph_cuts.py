@@ -218,7 +218,7 @@ class TestEdgeWeights(unittest.TestCase):
             # check logger is logging things correctly since it is an important part of this function
             # by proxy this also checks that edges_by_weight is called
             log_capture.check((
-                "graspologic.preprocessing.graph_cuts",
+                "customleiden.preprocessing.graph_cuts",
                 "WARNING",
                 "Graph contains 1 edges with no weight. Histogram excludes these values.",
             ))

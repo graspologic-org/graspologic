@@ -15,7 +15,7 @@ else:
 
 from typing_extensions import Literal
 
-from graspologic.types import List, Tuple
+from customleiden.types import List, Tuple
 
 # redefining since I don't want to add csr_array for ALL code in graspologic yet
 AdjacencyMatrix = Union[np.ndarray, csr_array, csr_array]

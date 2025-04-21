@@ -8,7 +8,7 @@ import numpy as np
 from beartype import beartype
 from scipy.sparse import csr_array, hstack, isspmatrix_csr, vstack
 
-from graspologic.types import List
+from customleiden.types import List
 
 from ..types import AdjacencyMatrix, GraphRepresentation
 from ..utils import average_matrices, is_fully_connected, to_laplacian
@@ -137,11 +137,11 @@ class OmnibusEmbed(BaseEmbedMulti):
         Desired dimensionality of output data. If "full",
         ``n_components`` must be ``<= min(X.shape)``. Otherwise, ``n_components`` must be
         ``< min(X.shape)``. If None, then optimal dimensions will be chosen by
-        :func:`~graspologic.embed.select_dimension` using ``n_elbows`` argument.
+        :func:`~customleiden.embed.select_dimension` using ``n_elbows`` argument.
 
     n_elbows : int, optional, default: 2
         If ``n_components`` is None, then compute the optimal embedding dimension using
-        :func:`~graspologic.embed.select_dimension`. Otherwise, ignored.
+        :func:`~customleiden.embed.select_dimension`. Otherwise, ignored.
 
     algorithm : {'randomized' (default), 'full', 'truncated'}, optional
         SVD solver to use:
@@ -203,8 +203,8 @@ class OmnibusEmbed(BaseEmbedMulti):
 
     See Also
     --------
-    graspologic.embed.select_svd
-    graspologic.embed.select_dimension
+    customleiden.embed.select_svd
+    customleiden.embed.select_dimension
 
     References
     ----------
@@ -262,7 +262,7 @@ class OmnibusEmbed(BaseEmbedMulti):
                 msg = (
                     "Input graphs are not fully connected. Results may not"
                     + "be optimal. You can compute the largest connected component by"
-                    + "using ``graspologic.utils.multigraph_lcc_union``."
+                    + "using ``customleiden.utils.multigraph_lcc_union``."
                 )
                 warnings.warn(msg, UserWarning)
 

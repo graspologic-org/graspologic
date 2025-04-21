@@ -2,7 +2,7 @@
 # Licensed under the MIT license.
 from typing import Optional
 
-from graspologic.types import List, Tuple
+from customleiden.types import List, Tuple
 
 from ._node import _Node
 from ._quad_node import _QuadNode
