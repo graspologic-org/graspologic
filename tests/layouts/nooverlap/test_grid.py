@@ -3,8 +3,8 @@
 
 import unittest
 
-from graspologic.layouts.nooverlap._grid import _GridBuckets
-from graspologic.layouts.nooverlap._node import _Node
+from customleiden.layouts.nooverlap._grid import _GridBuckets
+from customleiden.layouts.nooverlap._node import _Node
 
 
 class TestGrid(unittest.TestCase):

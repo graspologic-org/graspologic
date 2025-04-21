@@ -9,9 +9,9 @@ from numpy.linalg import norm
 from numpy.testing import assert_allclose
 from scipy.sparse import csr_array
 
-from graspologic.embed.omni import OmnibusEmbed, _get_omni_matrix
-from graspologic.simulations.simulations import er_nm, er_np
-from graspologic.utils.utils import is_symmetric, symmetrize, to_laplacian
+from customleiden.embed.omni import OmnibusEmbed, _get_omni_matrix
+from customleiden.simulations.simulations import er_nm, er_np
+from customleiden.utils.utils import is_symmetric, symmetrize, to_laplacian
 
 
 def generate_data(n, seed=1, symetric=True):

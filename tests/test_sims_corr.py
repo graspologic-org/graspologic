@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from graspologic.simulations.simulations_corr import (
+from customleiden.simulations.simulations_corr import (
     er_corr,
     sample_edges_corr,
     sbm_corr,

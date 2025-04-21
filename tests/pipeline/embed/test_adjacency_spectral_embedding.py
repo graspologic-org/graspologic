@@ -8,9 +8,9 @@ import numpy as np
 import pytest
 from beartype.roar import BeartypeCallHintParamViolation
 
-import graspologic.utils
-from graspologic.embed import AdjacencySpectralEmbed
-from graspologic.pipeline.embed import adjacency_spectral_embedding
+import customleiden.utils
+from customleiden.embed import AdjacencySpectralEmbed
+from customleiden.pipeline.embed import adjacency_spectral_embedding
 from tests.utils import data_file
 
 
@@ -109,7 +109,7 @@ class TestAdjacencySpectralEmbedding(unittest.TestCase):
     def test_dimensions(self):
         graph = self.graph.copy()
         sparse = nx.to_scipy_sparse_array(graph)
-        ranked = graspologic.utils.pass_to_ranks(sparse)
+        ranked = customleiden.utils.pass_to_ranks(sparse)
         ase = AdjacencySpectralEmbed(n_components=100, n_elbows=None, svd_seed=1234)
         core_response = ase.fit_transform(ranked)
 

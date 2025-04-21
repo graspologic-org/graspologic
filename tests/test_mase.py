@@ -6,9 +6,9 @@ import unittest
 import numpy as np
 from numpy.testing import assert_array_almost_equal
 
-from graspologic.cluster.gclust import GaussianCluster
-from graspologic.embed.mase import MultipleASE
-from graspologic.simulations.simulations import er_np, sbm
+from customleiden.cluster.gclust import GaussianCluster
+from customleiden.embed.mase import MultipleASE
+from customleiden.simulations.simulations import er_np, sbm
 
 
 class TestMase(unittest.TestCase):

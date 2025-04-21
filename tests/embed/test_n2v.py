@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.metrics import adjusted_rand_score
 
-import graspologic as gc
+import customleiden as gc
 
 
 class Node2VecEmbedTest(unittest.TestCase):

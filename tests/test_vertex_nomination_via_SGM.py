@@ -5,8 +5,8 @@ import unittest
 
 import numpy as np
 
-from graspologic.nominate import VNviaSGM
-from graspologic.simulations import er_np
+from customleiden.nominate import VNviaSGM
+from customleiden.simulations import er_np
 
 np.random.seed(1)
 

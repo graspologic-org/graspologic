@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_array
 
-from graspologic.plot.plot_matrix import adjplot, matrixplot
-from graspologic.simulations.simulations import er_np
+from customleiden.plot.plot_matrix import adjplot, matrixplot
+from customleiden.simulations.simulations import er_np
 
 
 class TestPlotMatrix(unittest.TestCase):

@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from graspologic.utils import is_unweighted, pass_to_ranks
+from customleiden.utils import is_unweighted, pass_to_ranks
 
 
 class TestPTR(unittest.TestCase):

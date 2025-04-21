@@ -3,7 +3,7 @@
 
 import unittest
 
-from graspologic.datasets import *
+from customleiden.datasets import *
 
 
 class TestDatasets(unittest.TestCase):

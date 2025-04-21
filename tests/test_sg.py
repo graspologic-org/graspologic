@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_equal
 
-import graspologic.subgraph as sg
+import customleiden.subgraph as sg
 
 
 class TestEstimateSubgraph(unittest.TestCase):

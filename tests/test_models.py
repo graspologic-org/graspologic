@@ -10,7 +10,7 @@ from scipy.sparse import csr_array
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
-from graspologic.models import (
+from customleiden.models import (
     DCEREstimator,
     DCSBMEstimator,
     EdgeSwapper,
@@ -18,8 +18,8 @@ from graspologic.models import (
     RDPGEstimator,
     SBMEstimator,
 )
-from graspologic.simulations import er_np, sample_edges, sbm
-from graspologic.utils import cartesian_product, is_symmetric
+from customleiden.simulations import er_np, sample_edges, sbm
+from customleiden.utils import cartesian_product, is_symmetric
 
 
 class TestER(unittest.TestCase):

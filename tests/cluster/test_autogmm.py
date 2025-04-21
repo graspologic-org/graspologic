@@ -8,9 +8,9 @@ import pytest
 from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
-from graspologic.cluster.autogmm import AutoGMMCluster
-from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.simulations.simulations import sbm
+from customleiden.cluster.autogmm import AutoGMMCluster
+from customleiden.embed.ase import AdjacencySpectralEmbed
+from customleiden.simulations.simulations import sbm
 
 
 class TestAutoGMM(unittest.TestCase):

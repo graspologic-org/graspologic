@@ -3,14 +3,14 @@
 
 import unittest
 
-from graspologic.layouts import NodePosition
-from graspologic.layouts.nooverlap._node import _Node
-from graspologic.layouts.nooverlap._quad_node import (
+from customleiden.layouts import NodePosition
+from customleiden.layouts.nooverlap._node import _Node
+from customleiden.layouts.nooverlap._quad_node import (
     _QuadNode,
     move_point_on_line,
     node_positions_overlap,
 )
-from graspologic.layouts.nooverlap.nooverlap import remove_overlaps
+from customleiden.layouts.nooverlap.nooverlap import remove_overlaps
 
 
 class TestNoOverlap(unittest.TestCase):

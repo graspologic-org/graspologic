@@ -11,8 +11,8 @@ import numpy as np
 from numpy.testing import assert_equal
 from scipy.sparse import csr_array
 
-from graspologic.utils import remap_labels
-from graspologic.utils import utils as gus
+from customleiden.utils import remap_labels
+from customleiden.utils import utils as gus
 
 
 class TestAverageMatrices(unittest.TestCase):

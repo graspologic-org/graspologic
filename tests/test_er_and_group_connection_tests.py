@@ -3,8 +3,8 @@ import unittest
 import numpy as np
 from scipy.sparse import csr_array
 
-from graspologic.inference import density_test, group_connection_test
-from graspologic.simulations import er_np, sbm
+from customleiden.inference import density_test, group_connection_test
+from customleiden.simulations import er_np, sbm
 
 
 class TestGroupConnection(unittest.TestCase):

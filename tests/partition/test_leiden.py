@@ -5,8 +5,8 @@ import unittest
 from .debug_utils import print_node_structure
 from typing import Dict, List, Tuple
 from collections import defaultdict, Counter
-from graspologic.partition.leiden import compute_node2vec_embeddings
-from graspologic.partition.leiden import leiden_with_context
+from customleiden.partition.leiden import compute_node2vec_embeddings
+from customleiden.partition.leiden import leiden_with_context
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 import networkx as nx
@@ -15,13 +15,13 @@ import pytest
 import scipy
 from beartype.roar import BeartypeCallHintParamViolation
 
-from graspologic.partition import (
+from customleiden.partition import (
     HierarchicalCluster,
     HierarchicalClusters,
     hierarchical_leiden,
     leiden,
 )
-from graspologic.partition.leiden import (
+from customleiden.partition.leiden import (
     _adjacency_matrix_to_edge_list,
     _edge_list_to_edge_list,
     _from_native,
@@ -95,7 +95,7 @@ class TestLeidenSemantic(unittest.TestCase):
         cluster‑level graph reflects those bridges with positive weights.
         """
         graph = nx.karate_club_graph()
-        from graspologic.partition.leiden import leiden_with_context
+        from customleiden.partition.leiden import leiden_with_context
 
         print("\n=== Running leiden_with_context on Karate Club graph ===")
         result = leiden_with_context(graph, lambda_=2, random_seed=42)

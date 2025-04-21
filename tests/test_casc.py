@@ -8,8 +8,8 @@ import pytest
 from scipy.stats import beta
 from sklearn.mixture import GaussianMixture
 
-from graspologic.embed.case import CovariateAssistedEmbed as CASE
-from graspologic.simulations import sbm
+from customleiden.embed.case import CovariateAssistedEmbed as CASE
+from customleiden.simulations import sbm
 
 np.random.seed(5)
 

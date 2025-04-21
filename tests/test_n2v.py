@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 
 import networkx as nx
 
-import graspologic.embed.n2v as n2v
-from graspologic.embed.n2v import _Node2VecGraph
+import customleiden.embed.n2v as n2v
+from customleiden.embed.n2v import _Node2VecGraph
 
 if TYPE_CHECKING:
     import numpy as np

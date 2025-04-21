@@ -7,7 +7,7 @@ import numpy as np
 from numpy.testing import assert_equal
 from sklearn.exceptions import NotFittedError
 
-from graspologic.cluster.kclust import KMeansCluster
+from customleiden.cluster.kclust import KMeansCluster
 
 
 class TestKMeansCluster(unittest.TestCase):

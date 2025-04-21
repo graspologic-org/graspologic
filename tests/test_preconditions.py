@@ -3,7 +3,7 @@
 
 import unittest
 
-from graspologic import preconditions
+from customleiden import preconditions
 
 
 class TestPreconditions(unittest.TestCase):

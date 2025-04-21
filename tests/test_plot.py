@@ -10,7 +10,7 @@ import pandas as pd
 from scipy.sparse import csr_array
 from sklearn.mixture import GaussianMixture
 
-from graspologic.plot.plot import (
+from customleiden.plot.plot import (
     _sort_inds,
     gridplot,
     heatmap,
@@ -18,7 +18,7 @@ from graspologic.plot.plot import (
     pairplot,
     pairplot_with_gmm,
 )
-from graspologic.simulations.simulations import er_np, sbm
+from customleiden.simulations.simulations import er_np, sbm
 
 
 def _test_pairplot_with_gmm_inputs(caller: unittest.TestCase, **kws):

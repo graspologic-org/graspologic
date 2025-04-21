@@ -7,7 +7,7 @@ from typing import Dict
 import networkx as nx
 import numpy as np
 
-from graspologic.partition import modularity, modularity_components
+from customleiden.partition import modularity, modularity_components
 from tests.utils import data_file
 
 

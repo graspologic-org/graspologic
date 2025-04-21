@@ -11,7 +11,7 @@ import networkx as nx
 import numpy as np
 import pytest
 
-import graspologic as gs
+import customleiden as gs
 
 
 class TestImportGraph(unittest.TestCase):

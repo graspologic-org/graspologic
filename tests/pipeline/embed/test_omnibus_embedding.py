@@ -7,7 +7,7 @@ import networkx as nx
 import numpy as np
 from beartype.roar import BeartypeCallHintParamViolation
 
-from graspologic.pipeline.embed import omnibus_embedding_pairwise
+from customleiden.pipeline.embed import omnibus_embedding_pairwise
 
 
 class TestOmnibusEmbedding(unittest.TestCase):

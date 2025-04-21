@@ -9,9 +9,9 @@ import numpy as np
 import pytest
 from beartype.roar import BeartypeCallHintParamViolation
 
-import graspologic.utils
-from graspologic.embed import LaplacianSpectralEmbed
-from graspologic.pipeline.embed import laplacian_spectral_embedding
+import customleiden.utils
+from customleiden.embed import LaplacianSpectralEmbed
+from customleiden.pipeline.embed import laplacian_spectral_embedding
 from tests.utils import data_file
 
 
@@ -124,8 +124,8 @@ class TestLaplacianSpectralEmbedding(unittest.TestCase):
     def test_dimensions(self):
         graph = self.graph.copy()
         sparse = nx.to_scipy_sparse_array(graph)
-        loopless = graspologic.utils.remove_loops(sparse)
-        ranked = graspologic.utils.pass_to_ranks(loopless)
+        loopless = customleiden.utils.remove_loops(sparse)
+        ranked = customleiden.utils.pass_to_ranks(loopless)
         lse = LaplacianSpectralEmbed(
             n_components=100, n_elbows=None, svd_seed=1234, form="R-DAD"
         )

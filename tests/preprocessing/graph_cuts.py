@@ -7,7 +7,7 @@ import networkx as nx
 import numpy as np
 from testfixtures import LogCapture
 
-from graspologic.preprocessing import graph_cuts
+from customleiden.preprocessing import graph_cuts
 
 from ..utils import data_file
 

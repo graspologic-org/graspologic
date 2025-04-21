@@ -14,10 +14,10 @@ from sklearn.base import clone
 from sklearn.metrics import adjusted_rand_score, pairwise_distances
 from sklearn.mixture import GaussianMixture
 
-from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.embed.lse import LaplacianSpectralEmbed
-from graspologic.simulations.simulations import er_nm, er_np, sbm
-from graspologic.utils import remove_vertices
+from customleiden.embed.ase import AdjacencySpectralEmbed
+from customleiden.embed.lse import LaplacianSpectralEmbed
+from customleiden.simulations.simulations import er_nm, er_np, sbm
+from customleiden.utils import remove_vertices
 
 
 def _test_output_dim_directed(self, method):

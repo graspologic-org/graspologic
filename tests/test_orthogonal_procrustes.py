@@ -5,7 +5,7 @@ import unittest
 
 import numpy as np
 
-from graspologic.align import OrthogonalProcrustes
+from customleiden.align import OrthogonalProcrustes
 
 
 class TestOrthogonalProcrustes(unittest.TestCase):

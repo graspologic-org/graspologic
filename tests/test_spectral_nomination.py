@@ -6,9 +6,9 @@ import unittest
 
 import numpy as np
 
-from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.nominate import SpectralVertexNomination
-from graspologic.simulations.simulations import sbm
+from customleiden.embed.ase import AdjacencySpectralEmbed
+from customleiden.nominate import SpectralVertexNomination
+from customleiden.simulations.simulations import sbm
 
 # global constants for tests
 n_verts = 50

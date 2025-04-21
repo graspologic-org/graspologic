@@ -5,9 +5,9 @@ import unittest
 
 import numpy as np
 
-from graspologic.inference import latent_position_test
-from graspologic.inference.latent_position_test import _difference_norm
-from graspologic.simulations import er_np, sbm
+from customleiden.inference import latent_position_test
+from customleiden.inference.latent_position_test import _difference_norm
+from customleiden.simulations import er_np, sbm
 
 
 class TestLatentPositionTest(unittest.TestCase):

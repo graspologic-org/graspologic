@@ -5,7 +5,7 @@ import unittest
 
 import networkx as nx
 
-from graspologic.pipeline import GraphBuilder
+from customleiden.pipeline import GraphBuilder
 
 
 class TestGraphBuilder(unittest.TestCase):

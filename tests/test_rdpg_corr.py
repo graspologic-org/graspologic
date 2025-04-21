@@ -5,8 +5,8 @@ import unittest
 
 import numpy as np
 
-from graspologic.simulations.rdpg_corr import rdpg_corr
-from graspologic.simulations.simulations import p_from_latent, sample_edges
+from customleiden.simulations.rdpg_corr import rdpg_corr
+from customleiden.simulations.simulations import p_from_latent, sample_edges
 
 
 class TestRDPGCorr(unittest.TestCase):

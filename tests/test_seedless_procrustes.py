@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from scipy import stats
 
-from graspologic.align import SeedlessProcrustes, SignFlips
+from customleiden.align import SeedlessProcrustes, SignFlips
 
 
 class TestSeedlessProcrustes(unittest.TestCase):

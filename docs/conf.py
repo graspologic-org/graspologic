@@ -18,7 +18,7 @@ import sys
 # Use RTD Theme
 import sphinx_rtd_theme
 
-import graspologic
+import customleiden
 
 sys.path.append(os.path.abspath("./sphinx-ext/"))
 sys.path.insert(0, os.path.abspath(".."))
@@ -34,7 +34,7 @@ dir_realpath = os.path.dirname(realpath)
 sys.path.append(dir_realpath)
 
 
-version = graspologic.__version__
+version = customleiden.__version__
 # Append "dev" and the github run to the version when on the dev branch
 if os.environ.get("GITHUB_REF", "") == "refs/heads/dev":
     version = f"{version}dev{os.environ['GITHUB_RUN_ID']}"

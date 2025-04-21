@@ -6,8 +6,8 @@ import unittest
 import numpy as np
 from scipy.spatial import procrustes
 
-from graspologic.embed.svd import select_svd
-from graspologic.utils import symmetrize
+from customleiden.embed.svd import select_svd
+from customleiden.utils import symmetrize
 
 
 class TestSVD(unittest.TestCase):

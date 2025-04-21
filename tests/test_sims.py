@@ -6,8 +6,8 @@ import unittest
 import numpy as np
 import pytest
 
-from graspologic.simulations import *
-from graspologic.utils.utils import is_loopless, is_symmetric, symmetrize
+from customleiden.simulations import *
+from customleiden.utils.utils import is_loopless, is_symmetric, symmetrize
 
 
 def remove_diagonal(A):

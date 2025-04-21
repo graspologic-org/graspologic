@@ -3,8 +3,8 @@
 
 import unittest
 
-from graspologic.layouts.nooverlap._node import _Node
-from graspologic.layouts.nooverlap._quad_node import (
+from customleiden.layouts.nooverlap._node import _Node
+from customleiden.layouts.nooverlap._quad_node import (
     _QuadNode,
     is_overlap,
     is_overlapping_any_node_and_index,

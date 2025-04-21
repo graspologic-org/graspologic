@@ -8,7 +8,7 @@ from numpy.testing import assert_allclose, assert_array_less, assert_equal
 from sklearn.exceptions import NotFittedError
 from sklearn.metrics import adjusted_rand_score
 
-from graspologic.cluster import DivisiveCluster
+from customleiden.cluster import DivisiveCluster
 
 
 def _test_hierarchical_four_class(**kws):

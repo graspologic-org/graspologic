@@ -7,7 +7,7 @@ import unittest
 import networkx as nx
 import numpy as np
 
-from graspologic.layouts.auto import _get_bounds, layout_umap
+from customleiden.layouts.auto import _get_bounds, layout_umap
 
 
 class TestAuto(unittest.TestCase):

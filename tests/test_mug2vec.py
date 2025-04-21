@@ -5,9 +5,9 @@ import unittest
 
 import numpy as np
 
-from graspologic.cluster import GaussianCluster
-from graspologic.embed import mug2vec
-from graspologic.simulations import sbm
+from customleiden.cluster import GaussianCluster
+from customleiden.embed import mug2vec
+from customleiden.simulations import sbm
 
 
 def generate_data():

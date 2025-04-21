@@ -6,7 +6,7 @@ import unittest
 import numpy as np
 from beartype.roar import BeartypeCallHintParamViolation
 
-from graspologic.pipeline.embed import Embeddings
+from customleiden.pipeline.embed import Embeddings
 
 
 class TestEmbeddings(unittest.TestCase):

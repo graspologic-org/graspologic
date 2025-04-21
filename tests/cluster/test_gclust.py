@@ -7,9 +7,9 @@ import numpy as np
 from numpy.testing import assert_allclose, assert_equal
 from sklearn.exceptions import NotFittedError
 
-from graspologic.cluster.gclust import GaussianCluster
-from graspologic.embed.ase import AdjacencySpectralEmbed
-from graspologic.simulations.simulations import sbm
+from customleiden.cluster.gclust import GaussianCluster
+from customleiden.embed.ase import AdjacencySpectralEmbed
+from customleiden.simulations.simulations import sbm
 
 
 class TestGaussianCluster(unittest.TestCase):

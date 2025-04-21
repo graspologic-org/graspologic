@@ -5,9 +5,9 @@ import unittest
 
 import numpy as np
 
-import graspologic as gs
-from graspologic.embed.base import BaseSpectralEmbed
-from graspologic.simulations.simulations import er_nm, er_np
+import customleiden as gs
+from customleiden.embed.base import BaseSpectralEmbed
+from customleiden.simulations.simulations import er_nm, er_np
 
 
 class TestBaseEmbed(unittest.TestCase):
