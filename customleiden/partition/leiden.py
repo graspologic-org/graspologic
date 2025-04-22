@@ -1,10 +1,13 @@
 # Copyright (c) Microsoft Corporation.
 # Licensed under the MIT license.
 
+import math
 import warnings
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union, NamedTuple
 from collections import defaultdict
-
+from sentence_transformers import SentenceTransformer
+import math
+from collections import defaultdict
 import graspologic_native as gn
 import networkx as nx
 import numpy as np
@@ -176,46 +179,6 @@ def _validate_common_arguments(
         "random_seed must be a positive integer (the native PRNG implementation is"
         " an unsigned 64 bit integer)",
     )
-
-
-@beartype
-def compute_node2vec_embeddings(
-    graph: nx.Graph, dimensions: int = 64
-) -> Dict[str, np.ndarray]:
-    node2vec = Node2Vec(graph, dimensions=dimensions, walk_length=30, num_walks=200, workers=1)
-    model = node2vec.fit(window=10, min_count=1)
-    return {str(node): model.wv[str(node)] for node in graph.nodes()}
-
-
-@beartype
-def detect_misalignment(
-    partitions: Dict[Any, int],
-    embeddings: Dict[str, np.ndarray]
-) -> Dict[Any, int]:
-    community_to_nodes: Dict[int, List[Any]] = {}
-    for node, comm in partitions.items():
-        community_to_nodes.setdefault(comm, []).append(node)
-
-    misaligned = {}
-    for node, comm in partitions.items():
-        node_emb = embeddings[str(node)]
-        max_sim = -1
-        best_comm = comm
-        for other_comm, members in community_to_nodes.items():
-            if other_comm == comm:
-                continue
-            sims = [
-                cosine_similarity([node_emb], [embeddings[str(m)]])[0, 0]
-                for m in members if str(m) in embeddings
-            ]
-            if sims:
-                avg_sim = np.mean(sims)
-                if avg_sim > max_sim:
-                    max_sim = avg_sim
-                    best_comm = other_comm
-        if best_comm != comm:
-            misaligned[node] = best_comm
-    return misaligned
 
 @beartype
 def leiden(
@@ -671,84 +634,600 @@ class LeidenContextResult(NamedTuple):
     context_nodes: Dict[int, Set[Any]]
     cluster_graph: nx.Graph
 
-def _build_context(edges: List[Tuple[Any, Any, float]],
-                   partitions: Dict[Any, int],
-                   lambda_: Optional[int] = None) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
-    inter_edges = []
-    raw_context: Dict[int, Dict[Any, float]] = defaultdict(lambda: defaultdict(float))
-    cluster_pair_counts = defaultdict(int)
+@beartype
+def compute_node2vec_embeddings(
+    graph: nx.Graph, dimensions: int = 64
+) -> Dict[str, np.ndarray]:
+    """
+    Computes dense vector embeddings for each node in the graph using the node2vec algorithm.
 
-    for u, v, w in edges:
-        if u not in partitions or v not in partitions:
-            print(f"[WARN] Missing partition: {u=} {v=}")
-            continue
-        cu, cv = partitions[u], partitions[v]
-        if cu != cv:
-            inter_edges.append((cu, cv, w))
-            raw_context[cu][u] += w
-            raw_context[cv][v] += w
-            cluster_pair_counts[(cu, cv)] += 1
-            cluster_pair_counts[(cv, cu)] += 1  # Undirected
+    node2vec is a biased random walk–based embedding method that captures both homophily 
+    (similar nodes) and structural equivalence (similar roles).
 
-    # Dynamically determine lambda if not provided
-    if lambda_ is None:
-        total_links = sum(len(nodes) for nodes in raw_context.values())
-        cluster_count = len(raw_context)
-        lambda_ = max(1, round(total_links / cluster_count)) if cluster_count else 1
+    Parameters
+    ----------
+    graph : nx.Graph
+        An undirected NetworkX graph whose nodes will be embedded.
+    dimensions : int
+        Dimensionality of the embedding space. Defaults to 64.
+
+    Returns
+    -------
+    Dict[str, np.ndarray]
+        A dictionary mapping node ID (as string) to its vector embedding.
+        These embeddings can be used for downstream similarity-based analysis.
     
-    print(f"[INFO] Used lambda is: {lambda_}")
+    Notes
+    -----
+    node2vec simulates biased random walks over the graph and trains a 
+    Word2Vec model on the resulting walk sequences.
+    """
+    node2vec = Node2Vec(graph, dimensions=dimensions, walk_length=30, num_walks=200, workers=1)
+    model = node2vec.fit(window=10, min_count=1)
+    return {str(node): model.wv[str(node)] for node in graph.nodes()}
 
-    context_nodes = {
-        c: {n for n, _ in sorted(nw.items(), key=lambda x: -x[1])[:lambda_]}
-        for c, nw in raw_context.items()
-    }
+def _compute_embeddings(
+    graph: nx.Graph,
+    method: Union[str, Callable[[nx.Graph], Dict[str, np.ndarray]]] = "node2vec",
+    *,
+    dimensions: int = 64,
+    model_name: str = "all-MiniLM-L6-v2",
+) -> Dict[str, np.ndarray]:
+    """
+    Unified interface for computing node embeddings using different strategies.
 
+    Supports:
+    - "node2vec": structure-based embeddings
+    - "sbert" (via SentenceTransformer): content-based embeddings from node text
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        Input graph to embed. If using "sbert", it is assumed each node has a "text" attribute.
+    method : Union[str, Callable]
+        Embedding method: "node2vec", "sbert", or a custom callable that returns node embeddings.
+    dimensions : int
+        Embedding size for node2vec. Ignored for sbert.
+    model_name : str
+        SentenceTransformer model name (e.g., "all-MiniLM-L6-v2"). Only used if method == "sbert".
+
+    Returns
+    -------
+    Dict[str, np.ndarray]
+        Dictionary mapping node ID (as str) to vector embeddings.
+
+    Raises
+    ------
+    ValueError
+        If an unknown method string is provided.
+    """
+    if callable(method):
+        return method(graph)
+
+    if method == "node2vec":
+        n2v = Node2Vec(graph, dimensions=dimensions,
+                       walk_length=30, num_walks=200, workers=1)
+        wv = n2v.fit(window=10, min_count=1).wv
+        return {k: wv[k] for k in wv.key_to_index}
+
+    if method == "sbert":
+        mdl = SentenceTransformer(model_name)
+        # assumes node text stored in node attr "text"
+        texts = [graph.nodes[n].get("text", str(n)) for n in graph.nodes]
+        embs = mdl.encode(texts, convert_to_numpy=True, show_progress_bar=False)
+        return {str(n): e for n, e in zip(graph.nodes, embs)}
+
+    raise ValueError(f"Unknown embedding method: {method}")
+
+def detect_misalignment(
+    partitions: Dict[Any, int],
+    embeddings: Dict[str, np.ndarray],
+) -> Dict[Any, Tuple[int, float]]:
+    """
+    Detects semantic misalignment between assigned clusters and node similarity in embedding space.
+
+    For each node, this function checks whether its average similarity to another community
+    is higher than to its own assigned community. If so, the node is considered "misaligned".
+
+    Parameters
+    ----------
+    partitions : Dict[Any, int]
+        Mapping of node ID to its assigned cluster.
+    embeddings : Dict[str, np.ndarray]
+        Mapping of node ID (as str) to its embedding vector.
+
+    Returns
+    -------
+    Dict[Any, Tuple[int, float]]
+        Misaligned nodes mapped to:
+        - their most similar alternative community
+        - the corresponding average similarity score
+
+    Notes
+    -----
+    Misalignment is a useful signal for selecting context nodes or diagnosing
+    over-merged or weakly connected clusters.
+    """
+    community_to_nodes = defaultdict(list)
+    for n, c in partitions.items():
+        community_to_nodes[c].append(n)
+
+    mis = {}
+    for n, c in partitions.items():
+        n_emb = embeddings[str(n)]
+        best_c, best_sim = c, -1.0
+        for oc, members in community_to_nodes.items():
+            if oc == c:
+                continue
+            sims = [cosine_similarity([n_emb], [embeddings[str(m)]])[0, 0]
+                    for m in members if str(m) in embeddings]
+            if sims:
+                avg = float(np.mean(sims))
+                if avg > best_sim:
+                    best_sim, best_c = avg, oc
+        if best_c != c:
+            mis[n] = (best_c, best_sim)
+    return mis
+
+def _infer_defaults(
+    graph: nx.Graph,
+    lambda_max: int,
+    alpha: float,
+    beta: float,
+    partitions: dict[Any, int],
+) -> tuple[int, float, float]:
+    """
+    Automatically infers default values for lambda_max, alpha, and beta based on graph structure.
+
+    These parameters control the selection of context nodes:
+    - lambda_max : maximum number of context nodes per community
+    - alpha : controls the adaptive size of lambda_c based on log(#candidates)
+    - beta : penalty for redundancy when selecting context nodes (MMR-style)
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        The input graph.
+    lambda_max : Optional[int]
+        User-specified upper bound for lambda_c. If None, will be inferred from graph size.
+    alpha : Optional[float]
+        Scaling factor for adaptive lambda_c. If None, set to 1 + graph density.
+    beta : Optional[float]
+        Redundancy penalty for context selection. If None, inferred from modularity.
+
+    partitions : dict[Any, int]
+        Community assignments from Leiden. Used to estimate modularity for beta.
+
+    Returns
+    -------
+    tuple[int, float, float]
+        Finalized values for (lambda_max, alpha, beta)
+    """
+    if lambda_max is None:
+        lambda_max = max(2, math.ceil(math.log2(graph.number_of_nodes())))
+
+    if alpha is None:
+        dens = nx.density(graph)                       # 0 … 1
+        alpha = 1.0 + dens                             # 1 … 2
+
+    if beta is None:
+        try:
+            from networkx.algorithms.community.quality import modularity
+            comms = {}
+            for n, c in partitions.items():
+                comms.setdefault(c, []).append(n)
+            mod = modularity(graph, comms.values())    # –0.5 … 1
+        except Exception:                              # fallback
+            mod = 0.2
+        beta = min(0.7, max(0.3, 0.4 + mod))           # clamp to [0.3,0.7]
+
+    return lambda_max, alpha, beta
+
+def _build_context(
+    graph: nx.Graph,
+    partitions: Dict[Any, int],
+    embeddings: Dict[str, np.ndarray],
+    misaligned: Dict[Any, Tuple[int, float]],
+    *,
+    lambda_max: int,
+    alpha: float,
+    beta: float,
+    use_betweenness_penalty: bool = False,
+) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
+    """
+    Selects context nodes per community based on semantic misalignment and graph topology.
+
+    This internal function identifies a small set of representative "context nodes" for 
+    each community based on how semantically similar they are to nodes in other communities 
+    and how topologically close (in hop distance) they are to neighbors in different clusters.
+    
+    The function uses a hybrid scoring function and greedy MMR-style selection to balance 
+    relevance and diversity. The result is useful for summarization, interpretability, and 
+    building coarse cluster-level graphs.
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        Input undirected graph. Must contain edge weights if relevant. Nodes can optionally 
+        have a "text" attribute if using SBERT embeddings.
+
+    partitions : Dict[Any, int]
+        Mapping from node ID to cluster/community ID. Usually produced by the Leiden algorithm.
+
+    embeddings : Dict[str, np.ndarray]
+        Embedding vectors for each node. Keys must be `str(node_id)` and values are 
+        vector embeddings (e.g., node2vec, SBERT).
+
+    misaligned : Dict[Any, Tuple[int, float]]
+        Misaligned nodes with their suggested alternative cluster and similarity score.
+        Typically computed using `detect_misalignment(...)`.
+
+    lambda_max : int
+        Maximum number of context nodes to select per community.
+
+    alpha : float
+        Controls the number of selected context nodes per community based on:
+        `lambda_c = ceil(alpha * log2(candidate_pool + 1))`, clamped by `lambda_max`.
+
+    beta : float
+        Diversity penalty. If > 0, selected context nodes are chosen using a 
+        Maximum Marginal Relevance (MMR)-style formula to reduce redundancy.
+
+    use_betweenness_penalty : bool, default=False
+        If True, penalizes edges with high edge betweenness centrality during hop 
+        length computation. This helps avoid selecting overly-central nodes.
+
+    Returns
+    -------
+    Tuple[Dict[int, Set[Any]], nx.Graph]
+        - context_nodes : Dict[cluster_id, Set[node]]
+            Key context nodes selected for each community.
+        - cluster_graph : nx.Graph
+            Coarse cluster-level graph where nodes are communities and edges represent
+            inter-cluster interactions aggregated from the original graph.
+
+    Notes
+    -----
+    A node is a strong candidate for context selection if:
+    - It has a high semantic similarity to nodes in a different cluster
+    - It lies on short paths (small hop count) to external neighbors
+    - It helps represent community boundaries or bridge information between clusters
+
+    Each community’s candidate context nodes are scored using:
+        score = similarity / (hop + 1)
+
+    Final context selection is done greedily with MMR-style penalty:
+        score_i - beta * max(similarity_to_selected)
+    """
+
+    # Edge centrality for hop penalty
+    edge_betweenness = (
+        nx.edge_betweenness_centrality(graph, normalized=True)
+        if use_betweenness_penalty else {}
+    )
+
+    # Annotate nodes with cluster label for clarity
+    nx.set_node_attributes(graph, partitions, "cluster")
+
+    inter_edges = []
+    candidate_scores = defaultdict(list)
+    node_to_hop: Dict[Any, int] = {}
+
+    for u, v, data in graph.edges(data=True):
+        cu, cv = partitions[u], partitions[v]
+        if cu == cv:
+            continue  # skip intra-cluster edges
+
+        weight = float(data.get("weight", 1.0))
+        inter_edges.append((cu, cv, weight))
+
+        for node, src_comm, tgt_comm, neighbor in [(u, cu, cv, v), (v, cv, cu, u)]:
+            if node not in misaligned:
+                continue
+            _, sim = misaligned[node]
+
+            try:
+                hop = nx.shortest_path_length(graph, source=node, target=neighbor)
+            except nx.NetworkXNoPath:
+                hop = 1
+
+            if use_betweenness_penalty:
+                edge_key = (min(node, neighbor), max(node, neighbor))
+                hop *= 1 + edge_betweenness.get(edge_key, 0.0)
+
+            score = sim / (hop + 1)
+            candidate_scores[src_comm].append((node, score))
+            node_to_hop[node] = int(round(hop))
+
+    context_nodes: Dict[int, Set[Any]] = {}
+
+    for comm, candidates in candidate_scores.items():
+        lambda_c = min(lambda_max, max(1, math.ceil(alpha * math.log2(len(candidates) + 1))))
+        selected: List[Any] = []
+
+        candidates.sort(key=lambda x: -x[1])  # sort by score descending
+
+        while len(selected) < lambda_c and candidates:
+            best_idx, best_score = -1, -float("inf")
+            for i, (node, base_score) in enumerate(candidates):
+                if not selected or beta == 0:
+                    mmr_score = base_score
+                else:
+                    sim_to_sel = max(
+                        cosine_similarity(
+                            [embeddings[str(node)]],
+                            [embeddings[str(sel)]]  # each selected node
+                        )[0, 0]
+                        for sel in selected
+                    )
+                    mmr_score = base_score - beta * sim_to_sel
+
+                if mmr_score > best_score:
+                    best_idx, best_score = i, mmr_score
+
+            node, _ = candidates.pop(best_idx)
+            selected.append(node)
+
+        context_nodes[comm] = set(selected)
+
+        print(f"[CTX] Community {comm:<3} | lambda={lambda_c} | selected={len(selected)}")
+        for node in selected:
+            tgt_comm, sim = misaligned[node]
+            hop_len = node_to_hop.get(node, "?")
+            score_disp = f"{sim / (hop_len + 1):.3f}" if isinstance(hop_len, int) else "?"
+            print(f"   • Node {node} → {tgt_comm} | sim={sim:.3f} | hop={hop_len} | score={score_disp}")
+
+    # Cluster-level summary graph
     cluster_graph = nx.Graph()
     cluster_graph.add_weighted_edges_from(inter_edges)
+
     return context_nodes, cluster_graph
 
-def leiden_with_context(graph,
-                        *,
-                        lambda_: Optional[int] = None,
-                        **kwargs) -> LeidenContextResult:
-    partitions = leiden(graph, **kwargs)
+def leiden_with_context(
+    graph: nx.Graph,
+    *,
+    embedding_method: Union[str, Callable] = "node2vec",
+    lambda_max: int | None = None,
+    alpha: float | None = None,
+    beta: float | None = None,
+    use_betweenness_penalty: bool = False,
+    **leiden_kwargs,
+) -> LeidenContextResult:
+    
+    """
+    Run the Leiden community detection algorithm on a graph and select representative 
+    context nodes for each community using semantic similarity and hop distance.
 
-    if isinstance(graph, nx.Graph):
-        edges = [(u, v, graph[u][v].get("weight", 1.0)) for u, v in graph.edges()]
-    elif isinstance(graph, list):
-        edges = graph
-    else:
-        _, edges = _adjacency_matrix_to_edge_list(
-            graph, _IdentityMapper(), check_directed=False,
-            is_weighted=None, weight_default=1.0
-        )
+    This function extends the standard Leiden clustering by identifying a small number 
+    of informative "context nodes" for each detected community. These nodes are selected 
+    based on their semantic misalignment (using embedding similarity) and their topological 
+    position (hop distance from external neighbors), with optional MMR-style diversity control.
 
-    context_nodes, cluster_graph = _build_context(edges, partitions, lambda_)
-    return LeidenContextResult(partitions, context_nodes, cluster_graph)
+    The returned context nodes can be used for:
+    - Constructing coarse-grained "cluster graphs"
+    - Visual explanation or summarization of communities
+    - Downstream reasoning in graph-based retrieval or analysis
 
-def hierarchical_leiden_with_context(graph,
-                                     *,
-                                     lambda_: Optional[int] = None,
-                                     **kwargs) -> List[LeidenContextResult]:
-    h_clusters: HierarchicalClusters = hierarchical_leiden(graph, **kwargs)
-    levels = max(hc.level for hc in h_clusters)
+    Parameters
+    ----------
+    graph : nx.Graph
+        The input undirected graph, with nodes optionally containing a "text" attribute 
+        (used by SBERT embeddings). Must not be a multigraph or directed.
 
+    embedding_method : str or Callable, default="node2vec"
+        Embedding method used to compute semantic similarity. If a string, must be:
+        - "node2vec" : Learns embeddings from graph walks.
+        - "sbert" : Uses Sentence-BERT on node "text" attributes.
+        If a callable, it should accept the graph and return a dict of node → embedding.
+
+    lambda_max : int, optional
+        Maximum number of context nodes per community. If not provided, defaults to 
+        `ceil(log2(N))` where N is the number of nodes in the graph.
+
+    alpha : float, optional
+        Controls how many context nodes are selected relative to the size of each 
+        candidate pool. If not provided, inferred from graph density.
+
+    beta : float, optional
+        Controls the diversity penalty when selecting context nodes. Higher values 
+        encourage diversity (MMR-style). Automatically inferred from modularity 
+        if not specified.
+
+    use_betweenness_penalty : bool, default=False
+        If True, penalizes nodes with high edge betweenness during hop computation, 
+        to reduce over-selection of topologically central nodes.
+
+    **leiden_kwargs : additional keyword args
+        Additional arguments passed to the base `leiden(...)` function, such as:
+        - `random_seed`
+        - `resolution`
+        - `extra_forced_iterations`
+        - `use_modularity`
+
+    Returns
+    -------
+    LeidenContextResult
+        A named tuple containing:
+        - `partitions`: Dict[node, cluster_id] — final community assignments.
+        - `context_nodes`: Dict[cluster_id, Set[node]] — key context nodes per community.
+        - `cluster_graph`: A coarse graph where each node is a cluster and edges represent inter-cluster connections.
+
+    Raises
+    ------
+    ValueError
+        If input graph is directed or multigraph.
+    NotImplementedError
+        If embedding method is not recognized.
+    BeartypeCallHintParamViolation
+        If arguments violate runtime type checks.
+
+    See Also
+    --------
+    customleiden.partition.leiden
+    hierarchical_leiden_with_context
+    compute_node2vec_embeddings
+    detect_misalignment
+
+    Notes
+    -----
+    This function uses semantic embeddings to detect "misaligned" nodes — nodes that 
+    are more similar to a different community than the one assigned by the Leiden algorithm. 
+    Such nodes are used as candidates for context selection, ensuring they are informative 
+    bridges between clusters.
+
+    A coarse cluster-level graph is constructed by collapsing the original graph into 
+    communities, where edges represent inter-community connections.
+
+    Context selection uses:
+    - A hybrid scoring function: `similarity / (hop + 1)`
+    - MMR (Maximum Marginal Relevance) to encourage diversity
+    - Adaptive lambda per community based on candidate pool size
+    """
+
+    # base partitions
+    partitions = leiden(graph, **leiden_kwargs)
+
+    # concrete defaults
+    lambda_max, alpha, beta = _infer_defaults(
+        graph, lambda_max, alpha, beta, partitions
+    )
+    print(f"[INFO] lambda_max={lambda_max} | alpha={alpha:.2f} | beta={beta:.2f}")
+
+    # embeddings & misalignment
+    embeddings = _compute_embeddings(graph, embedding_method)
+    misaligned  = detect_misalignment(partitions, embeddings)
+
+    # context picking
+    context, c_graph = _build_context(
+        graph,
+        partitions,
+        embeddings,
+        misaligned,
+        lambda_max=lambda_max,
+        alpha=alpha,
+        beta=beta,
+        use_betweenness_penalty=use_betweenness_penalty,
+    )
+    return LeidenContextResult(partitions, context, c_graph)
+
+def hierarchical_leiden_with_context(
+    graph: nx.Graph,
+    *,
+    max_cluster_size: int = 1000,
+    embedding_method: Union[str, Callable] = "node2vec",
+    lambda_max: Optional[int] = None,
+    alpha: float,
+    beta: float,
+    use_betweenness_penalty: bool = False,
+    **leiden_kwargs,
+) -> List[LeidenContextResult]:
+    """
+    Runs hierarchical Leiden clustering and extracts semantically meaningful context nodes 
+    for each community at each hierarchy level using similarity and structural signals.
+
+    This function performs community detection using the hierarchical variant of the Leiden 
+    algorithm. For each level in the hierarchy, it identifies a set of context nodes that 
+    bridge across community boundaries. These context nodes are selected using a hybrid 
+    score based on node embeddings, hop distance to external neighbors, and a diversity 
+    penalty (MMR-style).
+
+    The function returns rich metadata per level, including:
+    - The partitions (community assignments)
+    - The selected context nodes
+    - A coarse cluster-level graph connecting communities
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        Input undirected graph. Can contain weights or text attributes per node.
+        Used as input to the Leiden clustering and similarity scoring.
+
+    max_cluster_size : int, default=1000
+        Threshold for recursive splitting in hierarchical Leiden. Communities with 
+        membership greater than this size are broken into smaller communities in 
+        deeper levels.
+
+    embedding_method : Union[str, Callable], default="node2vec"
+        Node embedding method to use for computing semantic similarity.
+        - "node2vec" : Uses random-walk-based embeddings
+        - "sbert" : Uses Sentence-BERT on node "text" attribute
+        - Callable : Custom embedding function with signature `fn(graph) -> Dict[str, np.ndarray]`
+
+    lambda_max : int, optional
+        Maximum number of context nodes per community. If None, inferred from graph size.
+
+    alpha : float, default=1.0
+        Controls adaptive selection of context nodes using:
+        `lambda_c = ceil(alpha * log2(#candidates + 1))`
+        Higher alpha → more context nodes (up to lambda_max)
+
+    beta : float, default=0.5
+        Controls diversity penalty in greedy selection (MMR).
+        - 0.0: Pure relevance-based selection
+        - >0.0: Penalizes redundant/overlapping context nodes
+
+    use_betweenness_penalty : bool, default=False
+        If True, adjusts hop-distance with edge betweenness penalty to avoid 
+        selecting overly-central nodes.
+
+    **leiden_kwargs : dict
+        Additional keyword arguments passed to `hierarchical_leiden(...)`, such as:
+        - resolution
+        - randomness
+        - random_seed
+        - starting_communities
+        - weight_attribute
+
+    Returns
+    -------
+    List[LeidenContextResult]
+        A list of results, one for each hierarchy level.
+        Each result includes:
+        - `.partitions`: node → cluster assignment
+        - `.context_nodes`: selected context nodes per cluster
+        - `.cluster_graph`: coarse graph of inter-cluster edges
+
+    Notes
+    -----
+    This function is useful in:
+    - Multi-resolution clustering (e.g., zoomable topic maps)
+    - Context-aware summarization or QA
+    - High-level structure over large, dense graphs
+    """
+    h_clusters = hierarchical_leiden(
+        graph,
+        max_cluster_size=max_cluster_size,
+        **leiden_kwargs,
+    )
+    levels = max(h.level for h in h_clusters)
     results: List[LeidenContextResult] = []
-    for L in range(levels + 1):
+
+    # Precompute embeddings once for all levels
+    embeddings = _compute_embeddings(graph, embedding_method)
+
+    for level in range(levels + 1):
         level_partitions = {
-            hc.node: hc.cluster for hc in h_clusters if hc.level == L
+            h.node: h.cluster
+            for h in h_clusters
+            if h.level == level
         }
 
-        if isinstance(graph, nx.Graph):
-            edges = [(u, v, graph[u][v].get("weight", 1.0)) for u, v in graph.edges()]
-        elif isinstance(graph, list):
-            edges = graph
-        else:
-            _, edges = _adjacency_matrix_to_edge_list(
-                graph, _IdentityMapper(), check_directed=False,
-                is_weighted=None, weight_default=1.0
-            )
+        misaligned = detect_misalignment(level_partitions, embeddings)
 
-        ctxt, c_graph = _build_context(edges, level_partitions, lambda_)
-        results.append(LeidenContextResult(level_partitions, ctxt, c_graph))
+        # Use edges from graph directly
+        context, cluster_graph = _build_context(
+            graph,
+            level_partitions,
+            embeddings,
+            misaligned,
+            lambda_max=lambda_max,
+            alpha=alpha,
+            beta=beta,
+            use_betweenness_penalty=use_betweenness_penalty,
+        )
+
+        results.append(
+            LeidenContextResult(level_partitions, context, cluster_graph)
+        )
+
     return results

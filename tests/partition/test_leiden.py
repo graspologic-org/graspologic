@@ -2,7 +2,6 @@
 # Licensed under the MIT license.
 
 import unittest
-from .debug_utils import print_node_structure
 from typing import Dict, List, Tuple
 from collections import defaultdict, Counter
 from customleiden.partition.leiden import compute_node2vec_embeddings
@@ -31,80 +30,61 @@ from customleiden.partition.leiden import (
 from tests.utils import data_file
 
 class TestLeidenSemantic(unittest.TestCase):
-    def test_misalignment_with_inspection(self):
-        graph = nx.karate_club_graph()
-        result = leiden(
-            graph,
-            track_misalignment=True,
-            embedding_method="node2vec",
-            random_seed=42,
-        )
-        partitions, misaligned = result
-        embeddings = compute_node2vec_embeddings(graph)
-
-        semantic_labels = {n: data["club"] for n, data in graph.nodes(data=True)}
-        from collections import defaultdict, Counter
-
-        def label_communities_tfidf(graph, partitions, attribute="description", fallback="Unknown"):
-            """
-            Infers a name for each community by extracting the most representative keyword
-            from node descriptions using TF-IDF.
-            """
-            community_to_nodes = defaultdict(list)
-            for node, comm in partitions.items():
-                community_to_nodes[comm].append(node)
-
-            community_labels = {}
-            for comm, nodes in community_to_nodes.items():
-                texts = [graph.nodes[n].get(attribute, "") for n in nodes if attribute in graph.nodes[n]]
-                if not texts:
-                    community_labels[comm] = fallback
-                    continue
-
-                vectorizer = TfidfVectorizer(stop_words="english", max_features=50)
-                X = vectorizer.fit_transform(texts)
-                if X.shape[1] == 0:
-                    community_labels[comm] = fallback
-                else:
-                    top_idx = X.mean(axis=0).argmax()
-                    community_labels[comm] = vectorizer.get_feature_names_out()[top_idx]
-
-            return community_labels
-
-        community_labels = label_communities_tfidf(graph, partitions, attribute="club")
-
-        print("\n--- Misalignment Report ---")
-        for node, better_comm in misaligned.items():
-            assigned = partitions[node]
-            node_sem = semantic_labels.get(node, "unknown")
-            assigned_sem = community_labels.get(assigned, "unknown")
-            better_sem = community_labels.get(better_comm, "unknown")
-            print(
-                f"Node {node} ('{node_sem}') → Assigned to {assigned} ('{assigned_sem}'), "
-                f"but is closer to {better_comm} ('{better_sem}')"
-            )
-
-        # Deep-dive into 3 example nodes
-        for node in list(misaligned.keys())[:3]:
-            print_node_structure(graph, node, partitions, misaligned, embeddings)
-
-        self.assertTrue(len(partitions) > 0)
     def test_context_semantics(self):
         """
-        Verifies that context nodes truly bridge communities, and that the
-        cluster‑level graph reflects those bridges with positive weights.
+        Unit test for verifying semantic and structural correctness of context-aware Leiden.
+
+        This test ensures that the context nodes identified by `leiden_with_context` meet
+        three key criteria:
+
+        1. **Context nodes truly bridge clusters**  
+        Every selected context node must connect to nodes from at least one other community
+        in the original graph.
+
+        2. **Cluster-level graph reflects these bridges**  
+        The high-level `cluster_graph` must contain weighted edges between all clusters
+        that are connected via context nodes.
+
+        3. **All inter-cluster connections are captured**  
+        Every real inter-cluster link observed via context nodes must correspond to
+        an edge in the `cluster_graph`.
+
+        Procedure
+        ---------
+        - Loads the standard Zachary Karate Club graph.
+        - Runs `leiden_with_context()` using the "sbert" embedding method for semantic scoring.
+        - Asserts the following:
+            a. Each context node has at least one external neighbor from a different community.
+            b. The cluster-level graph contains only positive edge weights.
+            c. No inter-community relationship is missing from the cluster-level graph.
+
+        Output
+        ------
+        Prints helpful diagnostics for debugging and educational purposes, including:
+        - Number of communities, context-node sets, and cluster edges
+        - Context nodes per community and their external neighbors
+        - All cluster-graph edges with weights
+        - Missing cluster-graph edges, if any (should be zero)
+
+        Raises
+        ------
+        AssertionError
+            If any of the above conditions are violated, the test fails with a clear message.
         """
         graph = nx.karate_club_graph()
 
         print("\n=== Running leiden_with_context on Karate Club graph ===")
-        result = leiden_with_context(graph, random_seed=42)
+        result = leiden_with_context(
+            graph,
+            random_seed=42,
+            embedding_method="sbert"
+        )
 
         communities = result.partitions
         context_nodes = result.context_nodes
         cluster_graph = result.cluster_graph
 
         # Group nodes by community
-        from collections import defaultdict
         community_to_nodes = defaultdict(list)
         for node, comm in communities.items():
             community_to_nodes[comm].append(node)
@@ -113,11 +93,10 @@ class TestLeidenSemantic(unittest.TestCase):
         print(f"#Context-node sets: {len(context_nodes)}")
         print(f"#Cluster-graph edges: {cluster_graph.number_of_edges()}")
 
-        # Print nodes in each community
         for comm_id, nodes in sorted(community_to_nodes.items()):
             print(f"\nCommunity {comm_id} → {sorted(nodes)}")
 
-        # 1) Ensure every context node bridges communities
+        # Every context node bridges communities
         for comm_id, nodes in context_nodes.items():
             print(f"\nCommunity {comm_id} context nodes → {sorted(nodes)}")
             for node in nodes:
@@ -127,21 +106,19 @@ class TestLeidenSemantic(unittest.TestCase):
                     if communities[nbr] != comm_id
                 ]
                 print(f"  Node {node} external neighbours → {sorted(ext_neigh)}")
-                self.assertTrue(
-                    len(ext_neigh) > 0,
-                    f"Context node '{node}' is not bridging communities."
+                self.assertGreater(
+                    len(ext_neigh), 0,
+                    f"Context node '{node}' has no bridging neighbors."
                 )
 
-        # 2) Validate cluster-graph edge weights
+        # Validate cluster-graph edge weights
         print("\nCluster‑level edges with weights:")
         for u, v, data in cluster_graph.edges(data=True):
             print(f"  {u} — {v}  (weight={data['weight']})")
             self.assertGreater(data["weight"], 0)
 
-        # 3) Ensure every bridging edge has a cluster-level equivalent
-        cluster_edges = {
-            (min(u, v), max(u, v)) for u, v in cluster_graph.edges()
-        }
+        # Check that all bridging edges are reflected
+        cluster_edges = {(min(u, v), max(u, v)) for u, v in cluster_graph.edges()}
         missing = []
         for comm_id, nodes in context_nodes.items():
             for node in nodes:
