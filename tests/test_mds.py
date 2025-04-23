@@ -36,13 +36,16 @@ class TestMDS(unittest.TestCase):
         # Invalid n_components
         with self.assertRaises(ValueError):
             mds = ClassicalMDS(n_components=-2)
+            mds.fit(X)
 
         with self.assertRaises(TypeError):
             mds = ClassicalMDS(n_components="1")
+            mds.fit(X)
 
         # Invalid dissimilarity
         with self.assertRaises(ValueError):
             mds = ClassicalMDS(dissimilarity="abc")
+            mds.fit(X)
 
         # Invalid input for fit function
         with self.assertRaises(ValueError):

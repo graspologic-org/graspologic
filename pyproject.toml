@@ -1,17 +1,15 @@
 [tool.poetry]
 name = "graspologic"
-version = "3.4.1"
+version = "3.4.2"
 description = "A set of Python modules for graph statistics"
 repository = "https://github.com/graspologic-org/graspologic"
 authors = [
-    "Eric Bridgeford", 
-    "Jaewon Chung <j1c@jhu.edu>", 
-    "Benjamin Pedigo", 
+    "Eric Bridgeford",
+    "Jaewon Chung <j1c@jhu.edu>",
+    "Benjamin Pedigo",
     "Bijan Varjavand",
 ]
-maintainers = [
-    "Dax Pryce <daxpryce@microsoft.com>"
-]
+maintainers = ["Dax Pryce <daxpryce@microsoft.com>"]
 license = "MIT"
 readme = "README.md"
 classifiers = [
@@ -24,14 +22,12 @@ include = [
     "graspologic/**/*.typed",
     "graspologic/datasets/**/*.edgelist",
     "graspologic/datasets/**/*.csv",
-    "graspologic/layouts/include/**/colors-100.json"
+    "graspologic/layouts/include/**/colors-100.json",
 ]
-exclude = [
-    "tests"
-]
+exclude = ["tests"]
 
 [tool.poetry.dependencies]
-python = "^3.9,<3.13"
+python = ">=3.10,<3.14"
 anytree = "^2.12.1"
 beartype = "^0.18.5"
 gensim = "^4.3.3"
@@ -48,6 +44,8 @@ scipy = "1.12.0"
 statsmodels = "^0.14.2"
 typing-extensions = "^4.4.0"
 umap-learn = "^0.5.6"
+future = "^1.0.0"
+llvmlite = "^0.44.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6"

@@ -987,7 +987,7 @@ def pairplot_with_gmm(
         # allows for the legend to not overlap with plots while also keeping
         # legend in frame
         fig.subplots_adjust(right=0.85)
-        return fig, axes
+        return fig, axes # type: ignore
 
 
 def _distplot(

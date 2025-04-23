@@ -99,25 +99,12 @@ class ClassicalMDS(BaseEstimator):
         dissimilarity: Literal["euclidean", "precomputed"] = "euclidean",
         svd_seed: Optional[int] = None,
     ) -> None:
-        # Check inputs
-        if n_components is not None:
-            if not isinstance(n_components, int):
-                msg = "n_components must be an integer, not {}.".format(
-                    type(n_components)
-                )
-                raise TypeError(msg)
-            elif n_components <= 0:
-                msg = "n_components must be >= 1 or None."
-                raise ValueError(msg)
-        self.n_components = n_components
-
-        if dissimilarity not in ["euclidean", "precomputed"]:
-            msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
-            raise ValueError(msg)
+        # Set properties before error checking
         self.dissimilarity = dissimilarity
 
         self.n_elbows = n_elbows
         self.svd_seed = svd_seed
+        self.n_components = n_components
 
     def _compute_euclidean_distances(self, X: np.ndarray) -> np.ndarray:
         """
@@ -174,6 +161,21 @@ class ClassicalMDS(BaseEstimator):
         self : object
             Returns an instance of self.
         """
+        # Check inputs
+        # ScikitLearn moved validations to fit(). See https://github.com/scikit-learn/scikit-learn/issues/30667
+        if self.n_components is not None:
+            if not isinstance(self.n_components, int):
+                msg = "n_components must be an integer, not {}.".format(
+                    type(self.n_components)
+                )
+                raise TypeError(msg)
+            elif self.n_components <= 0:
+                msg = "n_components must be >= 1 or None."
+                raise ValueError(msg)
+
+        if self.dissimilarity not in ["euclidean", "precomputed"]:
+            msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
+            raise ValueError(msg)
         # Check X type
         if not isinstance(X, np.ndarray):
             msg = "X must be a numpy array, not {}.".format(type(X))

@@ -13,4 +13,3 @@ from .adjacency_spectral_embedding import adjacency_spectral_embedding
 from .embeddings import Embeddings, EmbeddingsView
 from .laplacian_spectral_embedding import laplacian_spectral_embedding
 from .omnibus_embedding import omnibus_embedding_pairwise
-

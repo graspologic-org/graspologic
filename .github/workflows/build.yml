@@ -2,20 +2,20 @@ name: graspologic Build
 on:
   push:
     paths-ignore:
-      - '.all-contributorsrc'
-      - 'CONTRIBUTORS.md'
+      - ".all-contributorsrc"
+      - "CONTRIBUTORS.md"
     branches-ignore:
-      - 'dev'
-      - 'main'
+      - "dev"
+      - "main"
   pull_request:
     paths-ignore:
-      - '.all-contributorsrc'
-      - 'CONTRIBUTORS.md'
+      - ".all-contributorsrc"
+      - "CONTRIBUTORS.md"
   workflow_call:
 
 env:
-  PYTHON_VERSION: '3.10'
-  POETRY_VERSION: '1.8.3'
+  PYTHON_VERSION: "3.10"
+  POETRY_VERSION: "1.8.3"
 
 jobs:
   build-reference-documentation:
@@ -87,10 +87,24 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python_version: ["3.9", "3.10", "3.11", "3.12"]
+        python_version: ["3.10", "3.11", "3.12", "3.13"]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install OpenBLAS (Linux) # https://github.com/scipy/scipy/issues/16308
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+
+      - name: Install OpenBLAS (macOS)
+        if: runner.os == 'macOS'
+        run: brew install openblas
+
+      - name: Install OpenBLAS (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: choco install openblas -y
+
       - name: Set up Python ${{matrix.python_version}} ${{matrix.os}}
         uses: actions/setup-python@v2
         with:
@@ -100,7 +114,10 @@ jobs:
         with:
           poetry-version: $POETRY_VERSION
       - name: Install dependencies
-        run: poetry install
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install meson ninja
+          poetry install
       - name: Run Unit Tests and Doctests Python ${{matrix.python_version}} ${{matrix.os}}
         run: poetry run poe tests
       - name: Run mypy type check Python ${{matrix.python_version}} ${{matrix.os}}
