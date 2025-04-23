@@ -673,6 +673,39 @@ def _compute_embeddings(
     dimensions: int = 64,
     model_name: str = "all-mpnet-base-v2",
 ) -> Dict[str, np.ndarray]:
+    """
+    Compute node embeddings for a graph using either Node2Vec or SBERT.
+
+    This helper generates low-dimensional vector representations of nodes for
+    semantic similarity calculations in context selection and other analyses.
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        Input graph where nodes may have a "text" attribute (for SBERT).
+
+    method : str or Callable, default="node2vec"
+        - "node2vec": Learn embeddings from random walks on the graph.
+        - "sbert": Encode node text attributes using Sentence-BERT.
+        - Callable: A custom embedding function accepting the graph.
+
+    dimensions : int, optional
+        Embedding size when using Node2Vec (default: 64).
+
+    model_name : str, optional
+        Pretrained SBERT model name (default: "all-mpnet-base-v2"). Ignored if method is not "sbert".
+
+    Returns
+    -------
+    Dict[str, np.ndarray]
+        Mapping from node (as string) to embedding vector.
+
+    Raises
+    ------
+    ValueError
+        If an unrecognized string method is provided.
+    """
+
     if callable(method):
         return method(graph)
 
@@ -787,12 +820,57 @@ def _build_context(
     *,
     lambda_max: int,
     alpha: float,
-    use_betweenness_penalty: bool = False,
 ) -> Tuple[Dict[int, Set[Any]], nx.Graph]:
-    edge_betweenness = (
-        nx.edge_betweenness_centrality(graph, normalized=True)
-        if use_betweenness_penalty else {}
-    )
+    """
+    Run the Leiden community detection algorithm on a graph and select representative
+    context nodes for each community using semantic similarity and hop distance.
+
+    This function extends the standard Leiden clustering by identifying a small number
+    of informative "context nodes" for each detected community. These nodes are selected
+    based on their semantic misalignment (using embedding similarity) and their topological
+    position (hop distance from external neighbors).
+
+    The returned context nodes can be used for:
+    - Constructing coarse-grained "cluster graphs"
+    - Visual explanation or summarization of communities
+    - Downstream reasoning in graph-based retrieval or analysis
+
+    Parameters
+    ----------
+    graph : nx.Graph
+        The input undirected graph, with nodes optionally containing attributes used
+        for embeddings. Must not be a multigraph or directed.
+
+    partitions : Dict[Any, int]
+        Mapping from node to its assigned community ID.
+
+    embeddings : Dict[str, np.ndarray]
+        Precomputed node embeddings used for semantic similarity calculations.
+
+    misaligned : Dict[Any, Tuple[int, float]]
+        Mapping from node to (target_community, similarity_score) for nodes with
+        high semantic similarity to a different community.
+
+    lambda_max : int
+        Maximum number of context nodes to select per community.
+
+    alpha : float
+        Multiplier controlling context node count relative to candidate pool size.
+
+    Returns
+    -------
+    context_nodes : Dict[int, Set[Any]]
+        Selected context nodes keyed by community ID.
+
+    cluster_graph : nx.Graph
+        A weighted graph where nodes represent communities and edges aggregate
+        inter-community connection weights.
+
+    Raises
+    ------
+    ValueError
+        If the input graph is directed or a multigraph.
+    """
 
     nx.set_node_attributes(graph, partitions, "cluster")
     inter_edges = []
@@ -822,9 +900,9 @@ def _build_context(
             except nx.NetworkXNoPath:
                 hop = 1
 
-            if use_betweenness_penalty:
-                edge_key = (min(node, neighbor), max(node, neighbor))
-                hop *= 1 + edge_betweenness.get(edge_key, 0.0)
+            edge_betweenness = nx.edge_betweenness_centrality(graph, normalized=True)
+            edge_key = (min(node, neighbor), max(node, neighbor))
+            hop *= 1 + edge_betweenness.get(edge_key, 0.0)
 
             hop_penalty = 1 + hop
             if hop <= 2:
@@ -861,7 +939,6 @@ def leiden_with_context(
     embedding_method: Union[str, Callable] = "node2vec",
     lambda_max: int | None = None,
     alpha: float | None = None,
-    use_betweenness_penalty: bool = False,
     **leiden_kwargs,
 ) -> LeidenContextResult:
     
@@ -873,11 +950,6 @@ def leiden_with_context(
     of informative "context nodes" for each detected community. These nodes are selected 
     based on their semantic misalignment (using embedding similarity) and their topological 
     position (hop distance from external neighbors)
-
-    The returned context nodes can be used for:
-    - Constructing coarse-grained "cluster graphs"
-    - Visual explanation or summarization of communities
-    - Downstream reasoning in graph-based retrieval or analysis
 
     Parameters
     ----------
@@ -898,10 +970,6 @@ def leiden_with_context(
     alpha : float, optional
         Controls how many context nodes are selected relative to the size of each 
         candidate pool. If not provided, inferred from graph density.
-
-    use_betweenness_penalty : bool, default=False
-        If True, penalizes nodes with high edge betweenness during hop computation, 
-        to reduce over-selection of topologically central nodes.
 
     **leiden_kwargs : additional keyword args
         Additional arguments passed to the base `leiden(...)` function, such as:
@@ -927,13 +995,6 @@ def leiden_with_context(
     BeartypeCallHintParamViolation
         If arguments violate runtime type checks.
 
-    See Also
-    --------
-    customleiden.partition.leiden
-    hierarchical_leiden_with_context
-    compute_node2vec_embeddings
-    detect_misalignment
-
     Notes
     -----
     This function uses semantic embeddings to detect "misaligned" nodes — nodes that 
@@ -945,7 +1006,7 @@ def leiden_with_context(
     communities, where edges represent inter-community connections.
 
     Context selection uses:
-    - A hybrid scoring function: `similarity / (hop + 1)`
+    - A hybrid scoring function: `cosine similarity^2 / (hop + 1)` and edge betweenness penalty
     - Adaptive lambda per community based on candidate pool size
     """
 
@@ -970,7 +1031,6 @@ def leiden_with_context(
         misaligned,
         lambda_max=lambda_max,
         alpha=alpha,
-        use_betweenness_penalty=use_betweenness_penalty,
     )
     return LeidenContextResult(partitions, context, c_graph)
 
@@ -981,7 +1041,6 @@ def hierarchical_leiden_with_context(
     embedding_method: Union[str, Callable] = "node2vec",
     lambda_max: Optional[int] = None,
     alpha: float,
-    use_betweenness_penalty: bool = False,
     **leiden_kwargs,
 ) -> List[LeidenContextResult]:
     """
@@ -992,11 +1051,6 @@ def hierarchical_leiden_with_context(
     algorithm. For each level in the hierarchy, it identifies a set of context nodes that 
     bridge across community boundaries. These context nodes are selected using a hybrid 
     score based on node embeddings, hop distance to external neighbors
-
-    The function returns rich metadata per level, including:
-    - The partitions (community assignments)
-    - The selected context nodes
-    - A coarse cluster-level graph connecting communities
 
     Parameters
     ----------
@@ -1022,10 +1076,6 @@ def hierarchical_leiden_with_context(
         Controls adaptive selection of context nodes using:
         `lambda_c = ceil(alpha * log2(#candidates + 1))`
         Higher alpha → more context nodes (up to lambda_max)
-
-    use_betweenness_penalty : bool, default=False
-        If True, adjusts hop-distance with edge betweenness penalty to avoid 
-        selecting overly-central nodes.
 
     **leiden_kwargs : dict
         Additional keyword arguments passed to `hierarchical_leiden(...)`, such as:
@@ -1079,7 +1129,6 @@ def hierarchical_leiden_with_context(
             misaligned,
             lambda_max=lambda_max,
             alpha=alpha,
-            use_betweenness_penalty=use_betweenness_penalty,
         )
 
         results.append(

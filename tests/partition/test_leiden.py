@@ -143,7 +143,6 @@ class TestContextAwareLeiden(unittest.TestCase):
         plain_part = leiden(G, random_seed=42)
         ctx_res = leiden_with_context(
             G, embedding_method="node2vec",
-            use_betweenness_penalty=True,
             random_seed=42
         )
         ctx_part, ctx_nodes = ctx_res.partitions, ctx_res.context_nodes
