@@ -3,12 +3,12 @@
 
 import unittest
 from typing import Dict, List, Tuple
-from collections import defaultdict, Counter
-from customleiden.partition.leiden import compute_node2vec_embeddings
-from customleiden.partition.leiden import leiden_with_context
-from sklearn.feature_extraction.text import TfidfVectorizer
+from collections import defaultdict
+from customleiden.partition.leiden import leiden_with_context, _compute_embeddings, compute_node2vec_embeddings
+from sklearn.metrics.pairwise import cosine_similarity
 
 import networkx as nx
+import random
 import numpy as np
 import pytest
 import scipy
@@ -28,6 +28,151 @@ from customleiden.partition.leiden import (
     _nx_to_edge_list,
 )
 from tests.utils import data_file
+
+def precision_at_k(query_node, retrieved_nodes, ground_truth_labels, k=5):
+    if query_node not in ground_truth_labels:
+        return 0.0
+    query_label = ground_truth_labels[query_node]
+    correct = sum(1 for n in retrieved_nodes if ground_truth_labels.get(n) == query_label)
+    return correct / k
+
+
+class TestContextAwareLeiden(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Prepare Karate Club graph for precision@k evaluation
+        cls.graph = nx.karate_club_graph()
+        cls.orig_partitions = leiden(cls.graph)
+        cls.new_result = leiden_with_context(
+            cls.graph, embedding_method="node2vec", random_seed=42
+        )
+        cls.embeddings = compute_node2vec_embeddings(cls.graph)
+        cls.ground_truth = {
+            n: cls.graph.nodes[n]['club'] for n in cls.graph.nodes
+        }
+
+    def test_precision_at_k_vs_ground_truth(self):
+        """
+        This test ensures context-aware Leiden does not significantly degrade in-group precision@k.
+
+        We compute precision@k for each node's nearest neighbors within its original cluster vs.
+        its extended cluster plus context nodes. The context-aware version should maintain or improve precision.
+        """
+        k = 5
+        orig_scores, new_scores = [], []
+
+        for node in self.graph.nodes:
+            orig_cluster = self.orig_partitions[node]
+            new_cluster = self.new_result.partitions[node]
+
+            orig_cands = [n for n, c in self.orig_partitions.items() if c == orig_cluster]
+            new_cands = [
+                n for n, c in self.new_result.partitions.items() if c == new_cluster
+            ] + list(self.new_result.context_nodes.get(new_cluster, ()))
+
+            def top_k(n, cands):
+                vec = self.embeddings[str(n)]
+                sims = [
+                    (m, cosine_similarity([vec], [self.embeddings[str(m)]])[0,0])
+                    for m in cands if m != n
+                ]
+                return [m for m, _ in sorted(sims, key=lambda x: -x[1])[:k]]
+
+            orig_scores.append(precision_at_k(node, top_k(node, orig_cands), self.ground_truth, k))
+            new_scores.append(precision_at_k(node, top_k(node, new_cands), self.ground_truth, k))
+
+        avg_orig = np.mean(orig_scores)
+        avg_new = np.mean(new_scores)
+
+        print("\n--- Precision@k Evaluation ---")
+        print(f"k = {k}")
+        print(f"Original Leiden avg precision@{k}: {avg_orig:.3f}")
+        print(f"Context-Aware Leiden avg precision@{k}: {avg_new:.3f}")
+        print(f"Improvement: {avg_new - avg_orig:+.4f}")
+
+        self.assertTrue(
+            avg_new >= avg_orig - 0.01,
+            f"Precision degraded: original={avg_orig:.3f}, new={avg_new:.3f}"
+        )
+
+    def test_context_nodes_have_higher_cross_cluster_similarity(self):
+        """
+        This test evaluates how well context nodes capture cross-cluster semantic relationships.
+
+        We compare:
+        - Plain cluster nodes (randomly sampled from each community)
+        - Context nodes (selected by the context-aware Leiden)
+
+        Metric:
+        For each node, we compute average cosine similarity to nodes in **other** clusters.
+        The better the context selection, the higher this "semantic bridging" score should be.
+        """
+        random.seed(42)
+        np.random.seed(42)
+
+        # Build a synthetic graph with 4 semantic groups
+        G = nx.Graph()
+        N = 40
+        sem = {
+            0: "apple red sweet fruit juice",
+            1: "banana yellow tropical smoothie ripe",
+            2: "grape purple fresh wine vineyard",
+            3: "orange citrus tangy vitamin c"
+        }
+        for i in range(N):
+            main = i % 4
+            mix = (main + random.choice([1,2])) % 4
+            text = (
+                f"{sem[main]} {sem[mix]}"
+                if random.random() < 0.3 else sem[main]
+            )
+            G.add_node(i, text=text)
+
+        # Add intra- and inter-group edges
+        for i in range(N):
+            for j in range(i+1, N):
+                if i%4 == j%4 and random.random() < 0.6:
+                    G.add_edge(i, j)
+        for _ in range(80):
+            u, v = random.sample(range(N), 2)
+            if u%4 != v%4 and random.random() < 0.3:
+                G.add_edge(u, v)
+
+        emb = _compute_embeddings(G, method="node2vec")
+        plain_part = leiden(G, random_seed=42)
+        ctx_res = leiden_with_context(
+            G, embedding_method="node2vec",
+            use_betweenness_penalty=True,
+            random_seed=42
+        )
+        ctx_part, ctx_nodes = ctx_res.partitions, ctx_res.context_nodes
+
+        def avg_other_sim(n, part, embedding):
+            own = part[n]
+            others = [m for m in G.nodes if part[m] != own]
+            if not others:
+                return 0
+            sims = [
+                cosine_similarity([embedding[str(n)]], [embedding[str(m)]])[0,0]
+                for m in others
+            ]
+            return float(np.mean(sims))
+
+        ctx_scores, plain_scores = [], []
+        for cluster, nodes in ctx_nodes.items():
+            members = [n for n in G.nodes if ctx_part[n] == cluster]
+            if len(members) < 2 or not nodes:
+                continue
+            sample_plain = np.random.choice(members, size=min(len(nodes), len(members)), replace=False)
+            ctx_scores.extend(avg_other_sim(n, ctx_part, emb) for n in nodes)
+            plain_scores.extend(avg_other_sim(n, plain_part, emb) for n in sample_plain)
+
+        self.assertGreater(
+            np.mean(ctx_scores),
+            np.mean(plain_scores),
+            "Context nodes do not outperform plain nodes in cross-cluster similarity."
+        )
 
 class TestLeidenSemantic(unittest.TestCase):
     def test_context_semantics(self):
