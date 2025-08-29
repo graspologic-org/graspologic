@@ -99,23 +99,10 @@ class ClassicalMDS(BaseEstimator):
         dissimilarity: Literal["euclidean", "precomputed"] = "euclidean",
         svd_seed: Optional[int] = None,
     ) -> None:
-        # Check inputs
-        if n_components is not None:
-            if not isinstance(n_components, int):
-                msg = "n_components must be an integer, not {}.".format(
-                    type(n_components)
-                )
-                raise TypeError(msg)
-            elif n_components <= 0:
-                msg = "n_components must be >= 1 or None."
-                raise ValueError(msg)
+        # Store parameters without validation (sklearn convention)
+        # Validation will be done in fit() method
         self.n_components = n_components
-
-        if dissimilarity not in ["euclidean", "precomputed"]:
-            msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
-            raise ValueError(msg)
         self.dissimilarity = dissimilarity
-
         self.n_elbows = n_elbows
         self.svd_seed = svd_seed
 
@@ -174,6 +161,29 @@ class ClassicalMDS(BaseEstimator):
         self : object
             Returns an instance of self.
         """
+        # Validate parameters (sklearn convention: validate in fit, not __init__)
+        if self.n_components is not None:
+            if not isinstance(self.n_components, int):
+                msg = "n_components must be an integer, not {}.".format(
+                    type(self.n_components)
+                )
+                raise TypeError(msg)
+            elif self.n_components < 0:
+                msg = "n_components must be >= 0 or None."
+                raise ValueError(msg)
+        
+        if self.dissimilarity not in ["euclidean", "precomputed"]:
+            msg = "Dissimilarity measure must be either 'euclidean' or 'precomputed'."
+            raise ValueError(msg)
+        
+        if not isinstance(self.n_elbows, int) or self.n_elbows < 0:
+            msg = "n_elbows must be a non-negative integer."
+            raise ValueError(msg)
+        
+        if self.svd_seed is not None and (not isinstance(self.svd_seed, int) or self.svd_seed < 0):
+            msg = "svd_seed must be a non-negative integer or None."
+            raise ValueError(msg)
+
         # Check X type
         if not isinstance(X, np.ndarray):
             msg = "X must be a numpy array, not {}.".format(type(X))
@@ -184,6 +194,16 @@ class ClassicalMDS(BaseEstimator):
             if self.n_components > n_samples:
                 msg = "n_components must be <= n_samples."
                 raise ValueError(msg)
+            # Handle special case of n_components=0
+            if self.n_components == 0:
+                self.n_components_ = 0
+                self.components_ = np.empty(
+                    (0, X.shape[1] if X.ndim == 2 else X.shape[0])
+                )
+                self.singular_values_ = np.empty(0)
+                self.dissimilarity_matrix_ = np.empty((n_samples, n_samples))
+                self.n_features_in_ = X.shape[1] if X.ndim == 2 else X.shape[0]
+                return self
 
         # Handle dissimilarity
         if self.dissimilarity == "precomputed":
@@ -243,6 +263,10 @@ class ClassicalMDS(BaseEstimator):
             Embedded input.
         """
         self.fit(X)
+
+        # Handle special case of n_components=0
+        if self.n_components_ == 0:
+            return np.empty((X.shape[0], 0))
 
         X_new = self.components_ @ np.diag(self.singular_values_)
 
