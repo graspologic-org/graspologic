@@ -788,7 +788,7 @@ def pairplot_with_gmm(
     alpha: float = 0.7,
     figsize: Tuple[int, int] = (12, 12),
     histplot_kws: Optional[Dict[str, Any]] = None,
-) -> Tuple[matplotlib.pyplot.Figure, matplotlib.pyplot.Axes]:
+) -> Tuple[matplotlib.pyplot.Figure, np.ndarray[Any, Any]]:
     r"""
     Plot pairwise relationships in a dataset, also showing a clustering predicted by
     a Gaussian mixture model.
