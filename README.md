@@ -63,7 +63,7 @@ git clone https://github.com/graspologic-org/graspologic
 cd graspologic
 python3 -m venv venv
 source venv/bin/activate
-python3 setup.py install
+pip install .
 ```
 
 # Contributing
