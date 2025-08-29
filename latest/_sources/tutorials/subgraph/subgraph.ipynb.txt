@@ -1,0 +1,231 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Signal Subgraph Estimators"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### This tutorial will introduce the following signal-subgraph estimators:\n",
+    "- Incoherent subgraph estimator\n",
+    "- Coherent subgraph estimator"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import graspologic.subgraph as sg\n",
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Preliminaries\n",
+    "\n",
+    "The general graph model is characterized by $M_V(m,s;\\pi,p,q)$, where: \n",
+    "\n",
+    "$V$ - the number of vertices in the graph\n",
+    "\n",
+    "$n$ - the number of graph samples\n",
+    "\n",
+    "$s$ - the number of edges that must be present in the subgraph\n",
+    "\n",
+    "$m$ - the number of vertices that each edge in the subgraph must be incident to\n",
+    "\n",
+    "$\\pi$ - the probability of a graph sample being of class 1\n",
+    "\n",
+    "$p$ - the probability of edges in the signal-subgraph, conditioned on Class 0\n",
+    "\n",
+    "$q$ - the probability of edges in the signal-subgraph, conditioned on Class 1\n",
+    "\n",
+    "The signal-subgraph is a subset of edges with distinct class-conditional likelihood parameters. The signal-subgraph estimator evaluates a test statistic for each edge in the graph and selects $s$ edges with the lowest test statistic, where $s$ is the desired size of the signal-subgraph. \n",
+    "\n",
+    "The estimator that is used to find the signal-subgraph determines certain properties of the resulting subgraph. Both estimators use $s$ to determine the size of the resulting subgraph. $m$ is only used for the coherent estimator, which constrains the subgraph to $m$ vertices. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Incoherent Signal-Subgraph Estimator\n",
+    "\n",
+    "For this example we will randomly select 20 edges from a graph with 70 vertices. These edges will have distinct class-conditional edge probabilities, and the graphs will be sampled from the model $M_{70}(20; 0.5, 0.8, 0.1)$, with $n = 100$."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "verts = 70\n",
+    "sedges = 20\n",
+    "pi = 0.5\n",
+    "p = 0.8\n",
+    "q = 0.1\n",
+    "nsamples = 100\n",
+    "\n",
+    "np.random.seed(8888)\n",
+    "classlabels = np.zeros(nsamples, dtype=int)\n",
+    "classlabels[1::2] = 1\n",
+    "\n",
+    "sigsubindex = np.random.choice(verts ** 2, sedges, replace=False)\n",
+    "vect = p * np.ones(verts ** 2)\n",
+    "vect[sigsubindex] = q\n",
+    "vect = np.reshape(vect, (verts, verts))\n",
+    "expected = np.where(vect == q, 1, 0)\n",
+    "\n",
+    "blank = vect[:, :, None] + np.zeros(int(nsamples / 2))\n",
+    "A = p * np.ones((verts, verts, nsamples))\n",
+    "A[:, :, 1::2] = blank\n",
+    "A = np.random.binomial(1, A)\n",
+    "\n",
+    "sigsub = sg.SignalSubgraph()\n",
+    "sigsub.fit_transform(graphs=A, labels=classlabels, constraints=sedges)\n",
+    "\n",
+    "estimatesigsub = np.zeros((verts, verts))\n",
+    "estimatesigsub[sigsub.sigsub_] = 1\n",
+    "\n",
+    "fig, ax = plt.subplots(ncols=2, figsize=(10, 5), constrained_layout=True)\n",
+    "heatmap(expected, ax=ax[0], cbar=False, title=\"Expected Signal-Subgraph\")\n",
+    "_ = heatmap(estimatesigsub, ax=ax[1], cbar=False, title=\"Estimated Signal-Subgraph\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Note that because $p$ and $q$ are sufficiently distinct and $n$ is sufficiently large, the Expected and Estimated signal-subgraphs should match exactly. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Incoherent Signal-Subgraph Estimator\n",
+    "\n",
+    "Once again, we will randomly select 20 edges from a graph with 70 vertices. These edges will have distinct class-conditional edge probabilities, but the graphs will be sampled from the model $M_{70}(1, 20; 0.5, 0.8, 0.1)$, with $n = 100$.\n",
+    "\n",
+    "The estimated signal-subgraph will have 20 edges, constrained so that each edge must be incident to the same vertex. First, we will use the same expected signal-subgraph as the previous example."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "np.random.seed(8888)\n",
+    "classlabels = np.zeros(nsamples, dtype=int)\n",
+    "classlabels[1::2] = 1\n",
+    "\n",
+    "sigsubindex = np.random.choice(verts ** 2, sedges, replace=False)\n",
+    "vect = p * np.ones(verts ** 2)\n",
+    "vect[sigsubindex] = q\n",
+    "vect = np.reshape(vect, (verts, verts))\n",
+    "expected = np.where(vect == q, 1, 0)\n",
+    "\n",
+    "blank = vect[:, :, None] + np.zeros(int(nsamples / 2))\n",
+    "A = p * np.ones((verts, verts, nsamples))\n",
+    "A[:, :, 1::2] = blank\n",
+    "A = np.random.binomial(1, A)\n",
+    "\n",
+    "sigsub = sg.SignalSubgraph()\n",
+    "sigsub.fit_transform(A, classlabels, [20, 1])\n",
+    "\n",
+    "estimatesigsub = np.zeros((verts, verts))\n",
+    "estimatesigsub[sigsub.sigsub_] = 1\n",
+    "\n",
+    "fig, ax = plt.subplots(ncols=2, figsize=(10, 5), constrained_layout=True)\n",
+    "heatmap(expected, ax=ax[0], cbar=False, title=\"Expected Signal-Subgraph\")\n",
+    "_ = heatmap(estimatesigsub, ax=ax[1], cbar=False, title=\"Estimated Signal-Subgraph\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Notice how the coherent estimator constrains the estimated signal-subgraph to 20 edges that are incident to 1 vertex with the best total significance values. Now, we will try an expected signal-subgraph that is also limited to one vertex."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mverts = 1\n",
+    "\n",
+    "np.random.seed(7777)\n",
+    "classlabels = np.zeros(nsamples, dtype=int)\n",
+    "classlabels[1::2] = 1\n",
+    "\n",
+    "m = np.random.choice(verts, mverts)\n",
+    "vect = p * np.ones(2 * verts * mverts - (mverts ** 2))\n",
+    "vect[np.random.choice(len(vect), sedges, replace=False)] = q\n",
+    "\n",
+    "blank = p * np.ones((verts, verts))\n",
+    "blank[m, :] = np.nan\n",
+    "blank[:, m] = np.nan\n",
+    "blank[np.isnan(blank)] = vect\n",
+    "expected = np.where(blank == q, 1, 0)\n",
+    "\n",
+    "blank = blank[:, :, None] + np.zeros(int(nsamples / 2))\n",
+    "A = p * np.ones((verts, verts, nsamples))\n",
+    "A[:, :, 1::2] = blank\n",
+    "A = np.random.binomial(1, A)\n",
+    "\n",
+    "sigsub = sg.SignalSubgraph()\n",
+    "sigsub.fit_transform(graphs=A, labels=classlabels, constraints=sedges)\n",
+    "\n",
+    "estimatesigsub = np.zeros((verts, verts))\n",
+    "estimatesigsub[sigsub.sigsub_] = 1\n",
+    "\n",
+    "fig, ax = plt.subplots(ncols=2, figsize=(10, 5), constrained_layout=True)\n",
+    "heatmap(expected, ax=ax[0], cbar=False, title=\"Expected Signal-Subgraph\")\n",
+    "_ = heatmap(estimatesigsub, ax=ax[1], cbar=False, title=\"Estimated Signal-Subgraph\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now that the expected signal-subgraph is constrained to the coherent signal-subgraph model, the Expected and Estimated signal-subgraphs are exactly equal. "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.0"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
