@@ -1,0 +1,163 @@
+{
+ "metadata": {
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.9-final"
+  },
+  "orig_nbformat": 2,
+  "kernelspec": {
+   "name": "python3",
+   "display_name": "Python 3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2,
+ "cells": [
+  {
+   "source": [
+    "# K-Means Clustering"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "%matplotlib inline\n",
+    "import seaborn as sns\n",
+    "sns.set(font_scale=1.75)\n",
+    "sns.set_style(\"white\")\n",
+    "\n",
+    "import random\n",
+    "np.random.seed(10)"
+   ]
+  },
+  {
+   "source": [
+    "K-Means Clustering in graspologic is a wrapper of [Sklearn's KMeans class](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html). Our algorithm finds the optimal kmeans clustering model by iterating over a range of values and creating a model with the lowest possible silhouette score, as defined in Sklearn [here](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html).\n",
+    "\n",
+    "Let's use K-Means Clustering on synthetic data and compare it to the existing Sklearn implementation."
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "source": [
+    "## Using K Means on Synthetic Data"
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Synthetic data\n",
+    "\n",
+    "# Dim 1\n",
+    "class_1 = np.random.randn(150, 1)\n",
+    "class_2 = 2 + np.random.randn(150, 1)\n",
+    "dim_1 = np.vstack((class_1, class_2))\n",
+    "\n",
+    "# Dim 2\n",
+    "class_1 = np.random.randn(150, 1)\n",
+    "class_2 = 2 + np.random.randn(150, 1)\n",
+    "dim_2 = np.vstack((class_1, class_2))\n",
+    "\n",
+    "X = np.hstack((dim_1, dim_2))\n",
+    "\n",
+    "# Labels\n",
+    "label_1 = np.zeros((150, 1))\n",
+    "label_2 = 1 + label_1\n",
+    "\n",
+    "c = np.vstack((label_1, label_2)).reshape(300,)\n",
+    "\n",
+    "# Plotting Function for Clustering\n",
+    "def plot(title, c_hat, X):\n",
+    "    plt.figure(figsize=(10, 10))\n",
+    "    n_components = int(np.max(c_hat) + 1)\n",
+    "    palette = sns.color_palette(\"deep\")[:n_components]\n",
+    "    fig = sns.scatterplot(x=X[:,0], y=X[:,1], hue=c_hat, legend=None, palette=palette)\n",
+    "    fig.set(xticks=[], yticks=[], title=title)\n",
+    "    plt.show()\n",
+    "\n",
+    "plot('True Clustering', c, X)"
+   ]
+  },
+  {
+   "source": [
+    "In the existing implementation of KMeans clustering in Sklearn, one has to choose parameters of the model, including number of components, apriori. If parameters are input that don't match the data well, clustering performance can suffer. Performance can be measured by ARI, a metric ranging from 0 to 1. An ARI score of 1 indicates the estimated clusters are identical to the true clusters."
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.cluster import KMeans\n",
+    "from sklearn.metrics import confusion_matrix\n",
+    "from scipy.optimize import linear_sum_assignment\n",
+    "from sklearn.metrics import adjusted_rand_score\n",
+    "\n",
+    "from graspologic.utils import remap_labels\n",
+    "\n",
+    "# Say user provides inaccurate estimate of number of components\n",
+    "kmeans_ = KMeans(3)\n",
+    "c_hat_kmeans = kmeans_.fit_predict(X)\n",
+    "\n",
+    "# Remap Predicted labels\n",
+    "c_hat_kmeans = remap_labels(c, c_hat_kmeans)\n",
+    "\n",
+    "plot('Sklearn Clustering', c_hat_kmeans, X)\n",
+    "\n",
+    "# ARI Score\n",
+    "print(\"ARI Score for Model: %.2f\" % adjusted_rand_score(c, c_hat_kmeans))"
+   ]
+  },
+  {
+   "source": [
+    "Our method expands upon the existing Sklearn framework by allowing the user to automatically estimate the best hyperparameters for a k-means clustering model. The ideal `n_clusters_`, less than the max value provided by the user, is found."
+   ],
+   "cell_type": "markdown",
+   "metadata": {}
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from graspologic.cluster.kclust import KMeansCluster\n",
+    "\n",
+    "# Fit model\n",
+    "kclust_ = KMeansCluster(max_clusters=10)\n",
+    "c_hat_kclust = kclust_.fit_predict(X)\n",
+    "\n",
+    "c_hat_kclust = remap_labels(c, c_hat_kclust)\n",
+    "\n",
+    "plot('KClust Clustering', c_hat_kclust, X)\n",
+    "\n",
+    "print(\"ARI Score for Model: %.2f\" % adjusted_rand_score(c, c_hat_kclust))"
+   ]
+  }
+ ]
+}

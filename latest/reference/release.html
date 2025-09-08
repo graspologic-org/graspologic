@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Log &mdash; graspologic 0.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GraSPy Release Log" href="release/graspy_releases.html" />
+    <link rel="prev" title="graspologic in the wild" href="in-the-wild.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            graspologic
+          </a>
+              <div class="version">
+                0.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#install-the-released-version">Install the released version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#python-package-dependencies">Python package dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#hardware-requirements">Hardware requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#os-requirements">OS Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#testing">Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to graspologic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="in-the-wild.html">graspologic in the wild</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="in-the-wild.html#papers">Papers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in-the-wild.html#educational-materials">Educational materials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in-the-wild.html#blog-posts">Blog posts</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release Log</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-3-3-0">graspologic 3.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-3-2-0">graspologic 3.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-3-1-0">graspologic 3.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-3-0-0">graspologic 3.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-2-0-1">graspologic 2.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-2-0-0">graspologic 2.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-1-0-0">graspologic 1.0.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-0-3-0">graspologic 0.3.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-0-2-0">graspologic 0.2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graspologic-0-1-0">graspologic 0.1.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#previous-graspy-releases">Previous GraSPy Releases</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/align.html">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/align.html#sign-flips">Sign flips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/align.html#orthogonal-procrustes">Orthogonal Procrustes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/align.html#seedless-procrustes">Seedless Procrustes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/cluster.html">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/cluster.html#k-means-clustering">K-Means Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/cluster.html#gaussian-mixture-models-clustering">Gaussian Mixture Models Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/cluster.html#hierarchical-clustering">Hierarchical Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/datasets.html">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/datasets.html#drosophila-larval-mushroom-body">Drosophila larval mushroom body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/datasets.html#duke-mouse-whole-brain-connectomes">Duke mouse whole-brain connectomes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/embed.html">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/embed.html#decomposition">Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/embed.html#single-graph-embedding">Single graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/embed.html#multiple-graph-embedding">Multiple graph embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/embed.html#dissimilarity-graph-embedding">Dissimilarity graph embedding</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/inference.html">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/inference.html#two-graph-hypothesis-testing">Two-graph hypothesis testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/layouts.html">Layouts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/layouts.html#nodeposition">NodePosition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/layouts.html#automatic-graph-layout">Automatic Graph Layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/layouts.html#colors">Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/layouts.html#rendering">Rendering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/match.html">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/match.html#graph-matching">Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/models.html">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#erdos-reyni-models">Erdos-Reyni models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#stochastic-block-models">Stochastic block models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#latent-position-models">Latent position models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/models.html#edge-swapping-configuration-models">Edge swapping (configuration models)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/nominate.html">Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/nominate.html#spectral-vertex-nomination">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/nominate.html#vertex-nomination-via-sgm">Vertex Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/partition.html">Partition</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/partition.html#modularity-and-component-modularity">Modularity and Component Modularity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/partition.html#leiden-and-hierarchical-leiden">Leiden and Hierarchical Leiden</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/preconditions.html">Preconditions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/preconditions.html#graspologic.preconditions.check_argument_types"><code class="docutils literal notranslate"><span class="pre">check_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/preconditions.html#graspologic.preconditions.check_optional_argument_types"><code class="docutils literal notranslate"><span class="pre">check_optional_argument_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/preconditions.html#graspologic.preconditions.check_argument"><code class="docutils literal notranslate"><span class="pre">check_argument()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/preconditions.html#graspologic.preconditions.is_real_weighted"><code class="docutils literal notranslate"><span class="pre">is_real_weighted()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/pipeline.html">Pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/pipeline.html#graphbuilder">GraphBuilder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/pipeline.html#module-graspologic.pipeline.embed">Embed</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/plotting.html">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#heatmap">Heatmap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#gridplot">Gridplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#pairplot">Pairplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#degreeplot">Degreeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#edgeplot">Edgeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#screeplot">Screeplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#adjplot">Adjplot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/plotting.html#matrixplot">Matrixplot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/preprocessing.html">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/preprocessing.html#graph-cuts">Graph Cuts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/simulations.html">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.er_np"><code class="docutils literal notranslate"><span class="pre">er_np()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.er_nm"><code class="docutils literal notranslate"><span class="pre">er_nm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.sbm"><code class="docutils literal notranslate"><span class="pre">sbm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.rdpg"><code class="docutils literal notranslate"><span class="pre">rdpg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.er_corr"><code class="docutils literal notranslate"><span class="pre">er_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.sbm_corr"><code class="docutils literal notranslate"><span class="pre">sbm_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.rdpg_corr"><code class="docutils literal notranslate"><span class="pre">rdpg_corr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/simulations.html#graspologic.simulations.mmsbm"><code class="docutils literal notranslate"><span class="pre">mmsbm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/subgraph.html">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/subgraph.html#signal-subgraph-estimators">Signal-Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/utils.html">Utility</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/utils.html#transformations">Transformations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/utils.html#connected-components">Connected Components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/utils.html#io">IO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/utils.html#other">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/models/models.html">Random Graph Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/models/edge_swaps.html">Degree Preserving Edge Swaps</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#simulations">Simulations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/erdos_renyi.html">Erdos-Renyi (ER) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/sbm.html">Stochastic Block Model (SBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/mmsbm.html">Mixed Membership Stochastic Blockmodel (MMSBM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/rdpg.html">Random Dot Product Graph (RDPG) Model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/corr.html">Correlated Graph Pairs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/simulations/rdpg_corr.html">Correlated Random Dot Product Graph (RDPG) Graph Pair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#clustering">Clustering</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/clustering/autogmm.html">Automatic Gaussian Mixture Modeling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/clustering/kclust.html">K-Means Clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#embedding">Embedding</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/embedding/AdjacencySpectralEmbed.html">Adjacency Spectral Embed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/embedding/OutOfSampleEmbed.html">Out-of-Sample (OOS) Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/embedding/CovariateAssistedEmbed.html">Covariate-Assisted Embedding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/embedding/MASE.html">Multiple Adjacency Spectral Embedding (MASE)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/embedding/Omnibus.html">Omnibus Embedding for Multiple Graphs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#inference">Inference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/inference/density_test.html">Testing Symmetry of Two Networks with the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/inference/density_test.html#Performing-the-Density-Test">Performing the Density Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/inference/group_connection_test.html">Group connection test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/inference/latent_position_test.html">Latent Position Two-Graph Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/inference/latent_distribution_test.html">Latent Distribution Two-Graph Testing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/heatmaps.html">Heatmap: Visualizing a Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/gridplot.html">Gridplot: Visualize Multiple Graphs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/pairplot.html">Pairplot: Visualizing High Dimensional Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/matrixplot.html">Matrixplot and Adjplot: Visualize and sort matrices with metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/pairplot_with_gmm.html">Pairplot with GMM: Visualizing High Dimensional Data and Clustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/plotting/networkplot.html">Networkplot: Visualizing 2D Layouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#matching">Matching</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/matching/faq.html">Introduction to Graph Matching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/matching/sgm.html">Seeded Graph Matching (SGM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/matching/padded_gm.html">Padded Graph Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#subgraph">Subgraph</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/subgraph/subgraph.html">Signal Subgraph Estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#vertex-nomination">Vertex Nomination</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/vertex_nomination/SpectralVertexNomination.html">Spectral Vertex Nomination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/nominate/vertex_nomination_via_SGM.html">Nomination via SGM</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#aligning">Aligning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/aligning/aligning.html">Aligning</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/index.html#connectomics">Connectomics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../tutorials/connectomics/mcc.html">Methods for Multiscale Comparative Connectomics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="http://www.github.com/graspologic-org/graspologic/">graspologic &#64; GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/graspologic/">graspologic &#64; PyPI</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/graspologic-org/graspologic/issues">Issue Tracker</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">graspologic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">&lt;no title&gt;</a></li>
+      <li class="breadcrumb-item active">Release Log</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/reference/release.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="release-log">
+<h1>Release Log<a class="headerlink" href="#release-log" title="Link to this heading">¶</a></h1>
+<section id="graspologic-3-3-0">
+<h2>graspologic 3.3.0<a class="headerlink" href="#graspologic-3-3-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Added features and bugfixes to <code class="docutils literal notranslate"><span class="pre">heatmap</span></code>
+<cite>#750 &lt;https://github.com/graspologic-org/graspologic/pull/750&gt;</cite></p></li>
+<li><p>Fixed type specification bugs related to Numpy 1.25 release
+<cite>#1047 &lt;https://github.com/graspologic-org/graspologic/pull/1047&gt;</cite></p></li>
+<li><p>Added option for more efficient graph matching matrix operations
+<cite>#1046 &lt;https://github.com/graspologic-org/graspologic/pull/1046&gt;</cite></p></li>
+<li><p>Added an axis argument to <code class="docutils literal notranslate"><span class="pre">screeplot</span></code>
+<cite>#1048 &lt;https://github.com/graspologic-org/graspologic/pull/1048&gt;</cite></p></li>
+<li><p>Fixed compatibility issues related to matplotlib 3.8 release
+<cite>#1049 &lt;https://github.com/graspologic-org/graspologic/pull/1049&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-3-2-0">
+<h2>graspologic 3.2.0<a class="headerlink" href="#graspologic-3-2-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Added Python 3.11 support
+<cite>#1039 &lt;https://github.com/graspologic-org/graspologic/pull/1039&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-3-1-0">
+<h2>graspologic 3.1.0<a class="headerlink" href="#graspologic-3-1-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Added density and group connection tests
+<cite>#1032 &lt;https://github.com/graspologic-org/graspologic/pull/1032&gt;</cite></p></li>
+<li><p>Fixed NetworkX 3 compatibility and switched to sparse arrays
+<cite>#1018 &lt;https://github.com/graspologic-org/graspologic/commit/13d0d466fd1f28c6504b83ae63c16e53c4445997&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-3-0-0">
+<h2>graspologic 3.0.0<a class="headerlink" href="#graspologic-3-0-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Corrected contributing guidelines
+<cite>#1014 &lt;https://github.com/graspologic-org/graspologic/pull/1014&gt;</cite></p></li>
+<li><p>Corrected deprecation warnings
+<cite>#1019 &lt;https://github.com/graspologic-org/graspologic/pull/1019&gt;</cite></p></li>
+<li><p>Limited NetworkX version due to incompatibility
+<cite>#1016 &lt;https://github.com/graspologic-org/graspologic/pull/1016&gt;</cite></p></li>
+<li><p>Added Python 3.10 and removed Python 3.7 support
+<cite>#1010 &lt;https://github.com/graspologic-org/graspologic/pull/1010&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-2-0-1">
+<h2>graspologic 2.0.1<a class="headerlink" href="#graspologic-2-0-1" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed bug with a matplotlib version incompatibility
+<cite>#996 &lt;https://github.com/graspologic-org/graspologic/pull/996&gt;</cite></p></li>
+<li><p>Fixed graph matching with similarity matrix of unequal dimensions
+<cite>#1002 &lt;https://github.com/graspologic-org/graspologic/pull/1002&gt;</cite></p></li>
+<li><p>Fixed bug with missing typing-extensions dependency
+<cite>#999 &lt;https://github.com/graspologic-org/graspologic/pull/999&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-2-0-0">
+<h2>graspologic 2.0.0<a class="headerlink" href="#graspologic-2-0-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Refactored graph matching code and added many new features
+<cite>#960 &lt;https://github.com/graspologic-org/graspologic/pull/960&gt;</cite></p></li>
+<li><p>Added elbow marker to screeplot in plot module
+<cite>#979 &lt;https://github.com/graspologic-org/graspologic/pull/979&gt;</cite></p></li>
+<li><p>Fixed mug2vec behavior for directed graphs
+<cite>#968 &lt;https://github.com/graspologic-org/graspologic/pull/968&gt;</cite></p></li>
+<li><p>Fixed typo in aligning tutorial
+<cite>#974 &lt;https://github.com/graspologic-org/graspologic/pull/974&gt;</cite></p></li>
+<li><p>Added sex labels to mice dataset
+<cite>#967 &lt;https://github.com/graspologic-org/graspologic/pull/967&gt;</cite></p></li>
+<li><p>Made improvements to contributing guidelines
+<cite>#973 &lt;https://github.com/graspologic-org/graspologic/pull/973&gt;</cite></p></li>
+<li><p>Corrected notation in documentation of to_laplacians
+<cite>#969 &lt;https://github.com/graspologic-org/graspologic/pull/969&gt;</cite></p></li>
+<li><p>Fixed isolated nodes handling in node2vec
+<cite>#953 &lt;https://github.com/graspologic-org/graspologic/pull/953&gt;</cite></p></li>
+<li><p>Fixed repeated numba compilation in EdgeSwapper
+<cite>#965 &lt;https://github.com/graspologic-org/graspologic/pull/965&gt;</cite></p></li>
+<li><p>Fixed intersphinx bug
+<cite>#963 &lt;https://github.com/graspologic-org/graspologic/pull/963&gt;</cite></p></li>
+<li><p>Removed default axis labels in networkplot
+<cite>#954 &lt;https://github.com/graspologic-org/graspologic/pull/954&gt;</cite></p></li>
+<li><p>Fixed reproducibility in EdgeSwapper and added to docs
+<cite>#945 &lt;https://github.com/graspologic-org/graspologic/pull/945&gt;</cite></p></li>
+<li><p>Added Degree Preserving Edge Swaps
+<cite>#935 &lt;https://github.com/graspologic-org/graspologic/pull/935&gt;</cite></p></li>
+<li><p>Fixed mypy issue
+<cite>#943 &lt;https://github.com/graspologic-org/graspologic/pull/943&gt;</cite></p></li>
+<li><p>Fixed loops bug in SBM and DCSBM model fitting
+<cite>#930 &lt;https://github.com/graspologic-org/graspologic/pull/930&gt;</cite></p></li>
+<li><p>Added error message in Leiden when given a multigraph was incorrect
+<cite>#926 &lt;https://github.com/graspologic-org/graspologic/pull/926&gt;</cite></p></li>
+<li><p>Fixed typos in ER and SBM models
+<cite>#920 &lt;https://github.com/graspologic-org/graspologic/pull/920&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-1-0-0">
+<h2>graspologic 1.0.0<a class="headerlink" href="#graspologic-1-0-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Removed Python 3.6 support</p></li>
+<li><p>Officially added Python 3.9 support</p></li>
+<li><p>Fixed a type in an error message
+<cite>#904 &lt;https://github.com/graspologic-org/graspologic/pull/904&gt;</cite></p></li>
+<li><p>Added support for arbitrarily indexed node data for networkplot
+<cite>#906 &lt;https://github.com/graspologic-org/graspologic/pull/906&gt;</cite></p></li>
+<li><p>Fixed compatibility issues with gensim, black, mypy, and
+setup-python <cite>#913 &lt;https://github.com/graspologic-org/graspologic/pull/913&gt;</cite></p></li>
+<li><p>Fixed a bug in leiden/hierarchical_leiden
+<cite>#902 &lt;https://github.com/graspologic-org/graspologic/pull/902&gt;</cite></p></li>
+<li><p>Ensured reproducibility in latent_distribution_test
+<cite>#892 &lt;https://github.com/graspologic-org/graspologic/pull/892&gt;</cite></p></li>
+<li><p>Fixed documentation in KMeansCluster
+<cite>#892 &lt;https://github.com/graspologic-org/graspologic/pull/829&gt;</cite></p></li>
+<li><p>Fixed bug in automatic layouts
+<cite>#894 &lt;https://github.com/graspologic-org/graspologic/pull/894&gt;</cite></p></li>
+<li><p>Added Python 3.9 support
+<cite>#889 &lt;https://github.com/graspologic-org/graspologic/pull/889&gt;</cite></p></li>
+<li><p>Added type hinting
+<cite>#543 &lt;https://github.com/graspologic-org/graspologic/pull/543&gt;</cite></p></li>
+<li><p>Modified order of returns in inference module
+<cite>#859 &lt;https://github.com/graspologic-org/graspologic/pull/859&gt;</cite></p></li>
+<li><p>Changes to documentation publish pipeline
+<cite>#874 &lt;https://github.com/graspologic-org/graspologic/pull/874&gt;</cite></p></li>
+<li><p>Added function networkplot for drawing 2D networks
+<cite>#860 &lt;https://github.com/graspologic-org/graspologic/pull/860&gt;</cite></p></li>
+<li><p>Removed dtype requirement in vertex nomination
+<cite>#865 &lt;https://github.com/graspologic-org/graspologic/pull/865&gt;</cite></p></li>
+</ul>
+</section>
+<section id="graspologic-0-3-0">
+<h2>graspologic 0.3.0<a class="headerlink" href="#graspologic-0-3-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fixed imports for hyppo &gt;= 0.2.0
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/785">#785</a></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">trials</span></code> parameter to leiden and set a new requirement of
+<code class="docutils literal notranslate"><span class="pre">graspologic-native&gt;=1.0.0</span></code>
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/790">#790</a></p></li>
+<li><p>Updated lcc check in utils to use <code class="docutils literal notranslate"><span class="pre">scipy's</span></code> connected_components in
+<code class="docutils literal notranslate"><span class="pre">is_fully_connected</span></code>
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/708">#708</a></p></li>
+<li><p>Added Out of Sample Laplacian Spectral Embedding
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/722">#722</a></p></li>
+<li><p>Added parallelization of sampling process in Latent Distribution Test
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/744">#744</a></p></li>
+<li><p>Added Covariate Assisted Spectral Embedding
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/599">#599</a></p></li>
+<li><p>Added sparse matrix support for some matrix plotting functions
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/794">#794</a></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">scipy's</span></code> connected component finder for sparse support in
+<code class="docutils literal notranslate"><span class="pre">largest_connected_component</span></code>
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/795">#795</a></p></li>
+<li><p>Default weight to 1 for all edges in unweighted graph for node2vec
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/789">#789</a></p></li>
+<li><p>Fixed a bug with 0's in sparse matrix for largest connected component calculation
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/805">#805</a></p></li>
+<li><p>Usage of the 'un-bearably' awesome <a class="reference external" href="https://github.com/beartype/beartype">beartype</a>
+library for type checking <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/819">#819</a></p></li>
+<li><p>Added directed graph support to automated layouts
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/807">#807</a></p></li>
+<li><p>Fixed bug in mug2vec around <code class="docutils literal notranslate"><span class="pre">pass_to_ranks</span></code>
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/821">#821</a></p></li>
+<li><p>Pipeline module released, which includes a <code class="docutils literal notranslate"><span class="pre">networkx</span></code> based API for using
+Adjacency or Laplacian Spectral Embeddings and the Omnibus Spectral Embedding.
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/814">#814</a>,
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/817">#817</a>,
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/823">#823</a>,
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/824">#824</a></p></li>
+<li><p>Add option for more than one kmeans init to autogmm
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/662">#662</a></p></li>
+<li><p>Added sparse support for Omnibus embeddings
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/834">#834</a></p></li>
+<li><p>Added LSE as an embedding for use within the Omnibus embeddings
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/835">#835</a></p></li>
+<li><p>Clarified behavior of Leiden for graphs with isolates
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/830">#830</a></p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">utils.is_unweighted</span></code> to use more efficient scipy count and filter methods
+for CSR matrices <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/836">#836</a></p></li>
+<li><p>Updated default values for node2vec parameters to be more in line with most common
+production settings <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/838">#838</a></p></li>
+</ul>
+</section>
+<section id="graspologic-0-2-0">
+<h2>graspologic 0.2.0<a class="headerlink" href="#graspologic-0-2-0" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Documentation fixes and updates
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/729">#729</a> and
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/743">#743</a></p></li>
+<li><p>Fixed <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/737">custom initialization handling for GraphMatch
+#737</a></p></li>
+<li><p>Fixed <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/745">incorrect use of optimal transport params in seedless procrustes
+#745</a></p></li>
+<li><p>Added <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/560">Similarity Augmented Graph Matching #560</a></p></li>
+<li><p>Added <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/710">parallelized boostrapping to the latent position test #710</a></p></li>
+<li><p>Fixed <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/754">outlier handling in quadratic assignment #754</a></p></li>
+<li><p>Fixed GraphMatch random_state behavior when parallelizing in <a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/770">#770</a></p></li>
+<li><p>Modified autolayout to allow you to opt out of the slow no overlap / occlusion
+removal algorithm</p></li>
+<li><p>Fixed bug in leiden where graphs with non-string node IDs were being returned as their
+<code class="docutils literal notranslate"><span class="pre">str()</span></code> representations instead of their original values.</p></li>
+<li><p>Fixed a number of bugs in autolayout</p></li>
+<li><p>Fixed multiple bugs in MASE,
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/766">#766</a> and
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/pull/768">#768</a></p></li>
+<li><p>Fixed bug in node2vec where non-string node IDs were always being returned as their
+<code class="docutils literal notranslate"><span class="pre">str()</span></code> representation in the labels array</p></li>
+<li><p>Fixed bug in autolayout where non-string node IDs broke (see: leiden fix and node2vec
+fix)</p></li>
+</ul>
+</section>
+<section id="graspologic-0-1-0">
+<h2>graspologic 0.1.0<a class="headerlink" href="#graspologic-0-1-0" title="Link to this heading">¶</a></h2>
+<p>This release represents the first release of the <code class="docutils literal notranslate"><span class="pre">GraSPy</span></code> and <a class="reference external" href="https://github.com/microsoft/topologic">topologic</a> libraries
+merger!</p>
+<p>In addition to all of the features that <code class="docutils literal notranslate"><span class="pre">GraSPy</span></code> had in <a class="reference internal" href="release/release_0.3.html#last-graspy-label"><span class="std std-ref">Release Notes: GraSPy 0.3</span></a>,
+this release includes a number of feature enhancements and bug fixes - frankly, too
+many to go into.</p>
+<p>Please treat this as a brand new first release, informed heavily by the prior
+<code class="docutils literal notranslate"><span class="pre">GraSPy</span></code>, and extra special thanks to <strong>all</strong> of our
+<a class="reference external" href="https://github.com/graspologic-org/graspologic/blob/dev/CONTRIBUTORS.md">contributors</a>!</p>
+</section>
+<section id="previous-graspy-releases">
+<h2>Previous GraSPy Releases<a class="headerlink" href="#previous-graspy-releases" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release/graspy_releases.html">GraSPy Release Log</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="in-the-wild.html" class="btn btn-neutral float-left" title="graspologic in the wild" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="release/graspy_releases.html" class="btn btn-neutral float-right" title="GraSPy Release Log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
