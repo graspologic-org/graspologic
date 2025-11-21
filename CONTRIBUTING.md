@@ -64,7 +64,7 @@ follow these guidelines! This will make it a lot faster for us to respond to you
 
 ## Prerequisites
 * [Python 3.9+](https://www.python.org/)
-* [Poetry 1.8.2+](https://python-poetry.org/docs/)
+* [uv 0.4+](https://docs.astral.sh/uv/) (handles dependency installation and locking)
 
 ## Setting up for development
 
@@ -91,7 +91,7 @@ branch using a virtual environment. Steps:
    Always use a `feature` branch. Pull requests directly to either `dev` or `main` will be rejected
    until you create a feature branch based on `dev`.
 
-4. From the project root, run `poetry install`, which will create a virtual environment and install necessary dependencies.
+4. From the project root, run `uv sync`, which will create the project virtual environment (in `.venv/`) and install all required dependencies.
 
 ## Code Changes
 
@@ -122,25 +122,25 @@ tools to help make sure your changes meet the standards for our repository.
 #### Code formatting
 Please use `black` and `isort` so that the format of your code is compatible with our project. Format your code prior to committing using one of the following methods:
 ```bash
-poetry run poe format
+uv run poe format
 ```
 
 #### Type checking
 Validate your typehinting by running:
 ```bash
-poetry run poe type_check
+uv run poe type_check
 ```
 
 #### Unit testing 
 To check if your code runs correctly, we recommend using unit testing that locally tests your code by implementing test cases. Execute these unit tests by running:
 ```bash
-poetry run poe tests
+uv run poe tests
 ```
 
 #### Creating documentation
 Build the documentation with the use of [sphinx](https://www.sphinx-doc.org/en/master/usage/index.html) by running:
 ```bash
-poetry run poe docs
+uv run poe docs
 ```
 Please verify that the built documentation looks appropriate. You can view the `html`
 from the `docs/_build/html` folder; click on `index.html` to see what the homepage would
@@ -150,7 +150,7 @@ If you have made any changes that could affect the tutorials, please also build 
 This can take a bit longer because the code in each notebook actually needs to execute.
 You can build the documentation and tutorials by running:
 ```bash
-poetry run poe docsWithTutorials
+uv run poe docsWithTutorials
 ```
 
 ## Publishing Changes

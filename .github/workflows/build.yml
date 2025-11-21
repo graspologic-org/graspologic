@@ -15,7 +15,6 @@ on:
 
 env:
   PYTHON_VERSION: '3.10'
-  POETRY_VERSION: '1.8.3'
 
 jobs:
   build-reference-documentation:
@@ -27,17 +26,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-        with:
-          poetry-version: $POETRY_VERSION
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: "Run Reference Documentation Generation"
         run: |
           echo "documentation" > dependencies_documentation.txt
-          poetry run pipdeptree >> dependencies_documentation.txt
-          poetry run poe docsWithTutorials
+          uv run pipdeptree >> dependencies_documentation.txt
+          uv run poe docsWithTutorials
       - name: Archive documentation version artifact
         uses: actions/upload-artifact@v4
         with:
@@ -58,14 +55,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-        with:
-          poetry-version: $POETRY_VERSION
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Run Format Check
-        run: poetry run poe static_checks
+        run: uv run poe static_checks
   test-coverage:
     runs-on: ubuntu-latest
     steps:
@@ -74,14 +69,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-        with:
-          poetry-version: $POETRY_VERSION
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Run Test Coverage
-        run: poetry run poe coverage
+        run: uv run poe coverage
   unit-and-doc-test:
     runs-on: ${{matrix.os}}
     strategy:
@@ -95,21 +88,19 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{matrix.python_version}}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-        with:
-          poetry-version: $POETRY_VERSION
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --python ${{ matrix.python_version }}
       - name: Run Unit Tests and Doctests Python ${{matrix.python_version}} ${{matrix.os}}
-        run: poetry run poe tests
+        run: uv run poe tests
       - name: Run mypy type check Python ${{matrix.python_version}} ${{matrix.os}}
-        run: poetry run poe type_check
+        run: uv run poe type_check
       - name: Generate dependency tree
         run: |
           export DEPS='dependencies_${{matrix.python_version}}_${{matrix.os}}.txt'
           echo "${{matrix.python_version}} ${{matrix.os}}" > $DEPS
-          poetry run pipdeptree >> $DEPS
+          uv run pipdeptree >> $DEPS
         shell: bash
       - name: Archive dependency tree
         uses: actions/upload-artifact@v4

@@ -1,7 +1,7 @@
 name: graspologic Publish
 on:
   #
-  # When a release tag is created (e.g. v1.0.0), this workflow will be triggered. The `poetry dynamic-version` plugin will use the correct version tag.
+  # When a release tag is created (e.g. v1.0.0), this workflow will be triggered. Hatch's VCS versioning will use the correct version tag.
   #
   release:
     types: [created]
@@ -17,7 +17,6 @@ on:
       - 'dev'
 env:
   PYTHON_VERSION: '3.10'
-  POETRY_VERSION: '1.8.3'
 jobs:
   build:
     uses: ./.github/workflows/build.yml
@@ -26,6 +25,8 @@ jobs:
     needs: build
     permissions:
       id-token: write
+    outputs:
+      version: ${{ steps.export-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,18 +36,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3.0.0
-        with:
-          poetry-version: $POETRY_VERSION
-      - name: Add poetry-dynamic-versioning plugin
-        run: poetry self add "poetry-dynamic-versioning[plugin]"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v2
       - name: Install dependencies
-        run: poetry install
+        run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Export Publication Version
-        run: echo "version=`poetry version --short`" >> $GITHUB_OUTPUT
+        id: export-version
+        run: echo "version=$(uvx hatch version)" >> "$GITHUB_OUTPUT"
       - name: Build Artifacts
-        run: poetry build
+        run: uv build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:

@@ -524,7 +524,7 @@ class TestValidEdgeList(unittest.TestCase):
                 weight_default=1.0,
             )
 
-        sparse = scipy.sparse.csr_array([])
+        sparse = scipy.sparse.csr_array((0, 0))
         with self.assertRaises(ValueError):
             _adjacency_matrix_to_edge_list(
                 matrix=sparse,
