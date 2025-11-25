@@ -40,11 +40,15 @@ jobs:
         uses: astral-sh/setup-uv@v2
       - name: Install dependencies
         run: uv sync --python ${{ env.PYTHON_VERSION }}
-      - name: Export Publication Version
-        id: export-version
-        run: echo "version=$(uvx hatch version)" >> "$GITHUB_OUTPUT"
       - name: Build Artifacts
-        run: uv build
+        run: |
+          RAW_VERSION=$(uvx hatch version)
+          # Strip any local version metadata (everything after '+') to satisfy PyPI rules
+          CLEAN_VERSION=${RAW_VERSION%%+*}
+          echo "Raw version: $RAW_VERSION"
+          echo "Clean version (for PyPI): $CLEAN_VERSION"
+          # Force hatch to use the sanitized version for the build
+          SETUPTOOLS_SCM_PRETEND_VERSION=$CLEAN_VERSION uv build
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
