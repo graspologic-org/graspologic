@@ -1,0 +1,194 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "9b546925",
+   "metadata": {},
+   "source": [
+    "# Testing Symmetry of Two Networks with the Density Test\n",
+    "The \"inference\" module of graspologic contains functions that enable quantitative comparison of two networks to assess whether they are statistically similar. This \"similarity\" can be assessed in a few different ways, depending on the details of the networks to be compared and the preferences of the user. \n",
+    "\n",
+    "The simplest test that can be performed is the density test, which is based upon the Erdos-Renyi model. Under this model, it is assumed that the probability of an edge between any two nodes of the network is some constant, p. To compare two networks, then, the question is whether the edge probability for the first network is different from the edge probability for the second network. This test can be performed easily with the inference module, and the procedure is described in greater detail below. "
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "75c9ea1b",
+   "metadata": {},
+   "source": [
+    "## The Erdos-Renyi (ER) model\n",
+    "The [**Erdos-Renyi (ER) model**\n",
+    "](https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model)\n",
+    "is one of the simplest network models. This model treats\n",
+    "the probability of each potential edge in the network occuring to be the same. In\n",
+    "other words, all edges between any two nodes are equally likely.\n",
+    "\n",
+    "```{admonition} Math\n",
+    "Let $n$ be the number of nodes. We say that for all $(i, j), i \\neq j$, with $i$ and\n",
+    "$j$ both running\n",
+    "from $1 ... n$, the probability of the edge $(i, j)$ occuring is:\n",
+    "\n",
+    "$$ P[A_{ij} = 1] = p_{ij} = p $$\n",
+    "\n",
+    "Where $p$ is the the global connection probability.\n",
+    "\n",
+    "Each element of the adjacency matrix $A$ is then sampled independently according to a\n",
+    "[Bernoulli distribution](https://en.wikipedia.org/wiki/Bernoulli_distribution):\n",
+    "\n",
+    "$$ A_{ij} \\sim Bernoulli(p) $$\n",
+    "\n",
+    "For a network modeled as described above, we say it is distributed\n",
+    "\n",
+    "$$ A \\sim ER(n, p) $$\n",
+    "\n",
+    "```\n",
+    "\n",
+    "Thus, for this model, the only parameter of interest is the global connection\n",
+    "probability, $p$. This is sometimes also referred to as the **network density**."
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "27daff33",
+   "metadata": {},
+   "source": [
+    "## Testing under the ER model\n",
+    "In order to compare two networks $A^{(L)}$ and $A^{(R)}$ under this model, we\n",
+    "simply need to compute these network densities ($p^{(L)}$ and $p^{(R)}$), and then\n",
+    "run a statistical test to see if these densities are significantly different.\n",
+    "\n",
+    "```{admonition} Math\n",
+    "Under this\n",
+    "model, the total number of edges $m$ comes from a $Binomial(n(n-1), p)$ distribution,\n",
+    "where $n$ is the number of nodes. This is because the number of edges is the sum of\n",
+    "independent Bernoulli trials with the same probability. If $m^{(L)}$ is the number of\n",
+    "edges on the left\n",
+    "hemisphere, and $m^{(R)}$ is the number of edges on the right, then we have:\n",
+    "\n",
+    "$$m^{(L)} \\sim Binomial(n^{(L)}(n^{(L)} - 1), p^{(L)})$$\n",
+    "\n",
+    "and independently,\n",
+    "\n",
+    "$$m^{(R)} \\sim Binomial(n^{(R)}(n^{(R)} - 1), p^{(R)})$$\n",
+    "\n",
+    "To compare the two networks, we are just interested in a comparison of $p^{(L)}$ vs.\n",
+    "$p^{(R)}$. Formally, we are testing:\n",
+    "\n",
+    "$$H_0: p^{(L)} = p^{(R)}, \\quad H_a: p^{(L)} \\neq p^{(R)}$$\n",
+    "\n",
+    "Fortunately, the problem of testing for equal proportions is well studied.\n",
+    "Using graspologic.inference, we can conduct this comparison using either\n",
+    "Fisher's exact test or the chi-squared test by using method=\"fisher\" or \n",
+    "method = \"chi2\", respectively. In this example, we use Fisher's exact test.\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e9a74b29",
+   "metadata": {
+    "execution": {
+     "iopub.execute_input": "2022-04-19T19:39:17.453921Z",
+     "iopub.status.busy": "2022-04-19T19:39:17.453693Z",
+     "iopub.status.idle": "2022-04-19T19:39:24.698064Z",
+     "shell.execute_reply": "2022-04-19T19:39:24.697216Z"
+    },
+    "tags": [
+     "hide-input"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "\n",
+    "from graspologic.inference.density_test import density_test\n",
+    "from graspologic.simulations import er_np\n",
+    "from graspologic.plot import heatmap\n",
+    "\n",
+    "np.random.seed(8888)\n",
+    "\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "6895aedd",
+   "metadata": {},
+   "source": [
+    "# Performing the Density Test \n",
+    "\n",
+    "To illustrate the density test, we will first randomly generate two networks of known density to compare using the test. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a682bc4a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "A1 = er_np(500, 0.6)\n",
+    "A2 = er_np(400, 0.8)\n",
+    "heatmap(A1, title='Adjacency Matrix for Network 1')\n",
+    "heatmap(A2, title='Adjacency Matrix for Network 2')"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "id": "18611379",
+   "metadata": {},
+   "source": [
+    "Visibly, these networks have very different densities. We can statistically confirm this difference by conducting a density test."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "44d3204c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stat, pvalue, er_misc = density_test(A1,A2)\n",
+    "print(pvalue)\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "cell_metadata_filter": "-all",
+   "main_language": "python",
+   "notebook_metadata_filter": "-all"
+  },
+  "kernelspec": {
+   "display_name": "Python 3.9.5 ('venv')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.5"
+  },
+  "vscode": {
+   "interpreter": {
+    "hash": "7b0fa2133086a4b245bc2fc6826174141053e0208e756a5fae09980b942619c9"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
