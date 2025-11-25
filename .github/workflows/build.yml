@@ -74,6 +74,8 @@ jobs:
       - name: Install dependencies
         run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Run Test Coverage
+        env:
+          MPLBACKEND: Agg
         run: uv run poe coverage
   unit-and-doc-test:
     runs-on: ${{matrix.os}}
@@ -93,6 +95,8 @@ jobs:
       - name: Install dependencies
         run: uv sync --python ${{ matrix.python_version }}
       - name: Run Unit Tests and Doctests Python ${{matrix.python_version}} ${{matrix.os}}
+        env:
+          MPLBACKEND: Agg
         run: uv run poe tests
       - name: Run mypy type check Python ${{matrix.python_version}} ${{matrix.os}}
         run: uv run poe type_check
