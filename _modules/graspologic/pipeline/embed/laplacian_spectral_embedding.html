@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.pipeline.embed.laplacian_spectral_embedding &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.pipeline.embed.laplacian_spectral_embedding &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
@@ -293,24 +293,24 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
 <span class="c1"># Licensed under the MIT license.</span>
 
-<span class="kn">import</span> <span class="nn">numbers</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numbers</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">beartype</span><span class="w"> </span><span class="kn">import</span> <span class="n">beartype</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">LaplacianSpectralEmbed</span>
-<span class="kn">from</span> <span class="nn">graspologic.embed.base</span> <span class="kn">import</span> <span class="n">SvdAlgorithmType</span>
-<span class="kn">from</span> <span class="nn">graspologic.preconditions</span> <span class="kn">import</span> <span class="n">check_argument</span><span class="p">,</span> <span class="n">is_real_weighted</span>
-<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">pass_to_ranks</span><span class="p">,</span> <span class="n">remove_loops</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.embed</span><span class="w"> </span><span class="kn">import</span> <span class="n">LaplacianSpectralEmbed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.embed.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">SvdAlgorithmType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.preconditions</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_argument</span><span class="p">,</span> <span class="n">is_real_weighted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_fully_connected</span><span class="p">,</span> <span class="n">pass_to_ranks</span><span class="p">,</span> <span class="n">remove_loops</span>
 
-<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">LaplacianFormType</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">__SVD_SOLVER_TYPES</span>  <span class="c1"># from the module init</span>
-<span class="kn">from</span> <span class="nn">._elbow</span> <span class="kn">import</span> <span class="n">_index_of_elbow</span>
-<span class="kn">from</span> <span class="nn">._types</span> <span class="kn">import</span> <span class="n">NxGraphType</span>
-<span class="kn">from</span> <span class="nn">.embeddings</span> <span class="kn">import</span> <span class="n">Embeddings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">LaplacianFormType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">__SVD_SOLVER_TYPES</span>  <span class="c1"># from the module init</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._elbow</span><span class="w"> </span><span class="kn">import</span> <span class="n">_index_of_elbow</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._types</span><span class="w"> </span><span class="kn">import</span> <span class="n">NxGraphType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.embeddings</span><span class="w"> </span><span class="kn">import</span> <span class="n">Embeddings</span>
 
 <span class="n">__FORMS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DAD&quot;</span><span class="p">,</span> <span class="s2">&quot;I-DAD&quot;</span><span class="p">,</span> <span class="s2">&quot;R-DAD&quot;</span><span class="p">]</span>
 
@@ -318,7 +318,7 @@
 <div class="viewcode-block" id="laplacian_spectral_embedding">
 <a class="viewcode-back" href="../../../../reference/reference/pipeline.html#graspologic.pipeline.embed.laplacian_spectral_embedding">[docs]</a>
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">laplacian_spectral_embedding</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">laplacian_spectral_embedding</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">NxGraphType</span><span class="p">,</span>
     <span class="n">form</span><span class="p">:</span> <span class="n">LaplacianFormType</span> <span class="o">=</span> <span class="s2">&quot;R-DAD&quot;</span><span class="p">,</span>
     <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>

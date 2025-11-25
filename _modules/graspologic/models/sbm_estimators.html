@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.models.sbm_estimators &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.models.sbm_estimators &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,17 +293,17 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">check_X_y</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_X_y</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">..cluster</span> <span class="kn">import</span> <span class="n">GaussianCluster</span>
-<span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">LaplacianSpectralEmbed</span>
-<span class="kn">from</span> <span class="nn">..types</span> <span class="kn">import</span> <span class="n">GraphRepresentation</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">GaussianCluster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..embed</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdjacencySpectralEmbed</span><span class="p">,</span> <span class="n">LaplacianSpectralEmbed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..types</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphRepresentation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">augment_diagonal</span><span class="p">,</span>
     <span class="n">cartesian_product</span><span class="p">,</span>
     <span class="n">import_graph</span><span class="p">,</span>
@@ -311,10 +311,10 @@
     <span class="n">remove_loops</span><span class="p">,</span>
     <span class="n">symmetrize</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">BaseGraphEstimator</span><span class="p">,</span> <span class="n">_calculate_p</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseGraphEstimator</span><span class="p">,</span> <span class="n">_calculate_p</span>
 
 
-<span class="k">def</span> <span class="nf">_check_common_inputs</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_common_inputs</span><span class="p">(</span>
     <span class="n">n_components</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
     <span class="n">min_comm</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">max_comm</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -347,7 +347,7 @@
 
 <div class="viewcode-block" id="SBMEstimator">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.SBMEstimator">[docs]</a>
-<span class="k">class</span> <span class="nc">SBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stochastic Block Model</span>
 
@@ -427,7 +427,7 @@
 
 <div class="viewcode-block" id="SBMEstimator.__init__">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.SBMEstimator.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">loops</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -448,7 +448,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span> <span class="o">=</span> <span class="n">embed_kws</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Do some kind of clustering algorithm to estimate communities</span>
 
@@ -470,7 +470,7 @@
 
 <div class="viewcode-block" id="SBMEstimator.fit">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.SBMEstimator.fit">[docs]</a>
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SBMEstimator&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -524,7 +524,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="n">n_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n_parameters</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
@@ -539,7 +539,7 @@
 
 <div class="viewcode-block" id="DCSBMEstimator">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.DCSBMEstimator">[docs]</a>
-<span class="k">class</span> <span class="nc">DCSBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DCSBMEstimator</span><span class="p">(</span><span class="n">BaseGraphEstimator</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Degree-corrected Stochastic Block Model</span>
 
@@ -646,7 +646,7 @@
 
 <div class="viewcode-block" id="DCSBMEstimator.__init__">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.DCSBMEstimator.__init__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">degree_directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">directed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
@@ -671,7 +671,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span> <span class="o">=</span> <span class="n">embed_kws</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_estimate_assignments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">graph</span> <span class="o">=</span> <span class="n">symmetrize</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;avg&quot;</span><span class="p">)</span>  <span class="c1"># TODO use directed LSE</span>
         <span class="n">lse</span> <span class="o">=</span> <span class="n">LaplacianSpectralEmbed</span><span class="p">(</span>
             <span class="n">form</span><span class="o">=</span><span class="s2">&quot;R-DAD&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_components</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_kws</span>
@@ -686,7 +686,7 @@
 
 <div class="viewcode-block" id="DCSBMEstimator.fit">
 <a class="viewcode-back" href="../../../reference/reference/models.html#graspologic.models.DCSBMEstimator.fit">[docs]</a>
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DCSBMEstimator&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -755,7 +755,7 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_n_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="n">n_blocks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_p_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">n_parameters</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directed</span><span class="p">:</span>
@@ -769,7 +769,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">range</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_block_indices</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="nb">range</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    y is a length n_verts vector of labels</span>
 
@@ -794,7 +794,7 @@
     <span class="k">return</span> <span class="n">block_vert_inds</span><span class="p">,</span> <span class="n">block_inds</span><span class="p">,</span> <span class="n">block_inv</span>
 
 
-<span class="k">def</span> <span class="nf">_calculate_block_p</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_block_p</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="n">block_inds</span><span class="p">:</span> <span class="nb">range</span><span class="p">,</span>
     <span class="n">block_vert_inds</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
@@ -831,7 +831,7 @@
     <span class="k">return</span> <span class="n">block_p</span>
 
 
-<span class="k">def</span> <span class="nf">_block_to_full</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_block_to_full</span><span class="p">(</span>
     <span class="n">block_mat</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">inverse</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

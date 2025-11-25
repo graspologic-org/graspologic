@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.embed.n2v &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.embed.n2v &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,24 +293,24 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation and contributors.</span>
 <span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">gensim.models</span> <span class="kn">import</span> <span class="n">Word2Vec</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gensim.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Word2Vec</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">remap_node_ids</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">remap_node_ids</span>
 
 
 <div class="viewcode-block" id="node2vec_embed">
 <a class="viewcode-back" href="../../../reference/reference/embed.html#graspologic.embed.node2vec_embed">[docs]</a>
-<span class="k">def</span> <span class="nf">node2vec_embed</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">node2vec_embed</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
     <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span>
@@ -449,21 +449,21 @@
 
 
 
-<span class="k">def</span> <span class="nf">_assert_is_positive_int</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_assert_is_positive_int</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be an int&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be &gt; 0&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_assert_is_nonnegative_float</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_assert_is_nonnegative_float</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be a float&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> must be &gt;= 0.0&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_preconditions</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_preconditions</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">],</span>
     <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -496,7 +496,7 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;interpolate_walk_lengths_by_node_degree must be a bool&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_learn_embeddings</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_learn_embeddings</span><span class="p">(</span>
     <span class="n">walks</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="n">dimensions</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">window_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -524,7 +524,7 @@
     <span class="k">return</span> <span class="n">model</span>
 
 
-<span class="k">class</span> <span class="nc">_Node2VecGraph</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Node2VecGraph</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Temporary inner state object for constructing the random walks</span>
 
@@ -542,7 +542,7 @@
 <span class="sd">        results</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
         <span class="n">return_hyperparameter</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -563,7 +563,7 @@
             <span class="n">random_state</span> <span class="k">if</span> <span class="n">random_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">node2vec_walk</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">node2vec_walk</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">start_node</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
@@ -622,7 +622,7 @@
         <span class="k">return</span> <span class="n">walk</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_get_walk_length_interpolated</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_walk_length_interpolated</span><span class="p">(</span>
         <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">percentiles</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">max_walk_length</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -654,7 +654,7 @@
 
         <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">new_walk_length</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_simulate_walks</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_simulate_walks</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">num_walks</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">walk_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -690,7 +690,7 @@
 
         <span class="k">return</span> <span class="n">walks</span>
 
-    <span class="k">def</span> <span class="nf">_get_alias_edge</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_alias_edge</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">destination</span><span class="p">:</span> <span class="n">Any</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -719,7 +719,7 @@
 
         <span class="k">return</span> <span class="n">_alias_setup</span><span class="p">(</span><span class="n">normalized_probs</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_preprocess_transition_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_preprocess_transition_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Preprocessing of transition probabilities for guiding the random walks.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -790,7 +790,7 @@
         <span class="k">return</span>
 
 
-<span class="k">def</span> <span class="nf">_alias_setup</span><span class="p">(</span><span class="n">probabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_alias_setup</span><span class="p">(</span><span class="n">probabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute utility lists for non-uniform sampling from discrete distributions.</span>
 <span class="sd">    Refer to</span>
@@ -824,7 +824,7 @@
     <span class="k">return</span> <span class="n">sampled_probabilities</span><span class="p">,</span> <span class="n">alias</span>
 
 
-<span class="k">def</span> <span class="nf">_alias_draw</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_alias_draw</span><span class="p">(</span>
     <span class="n">probabilities</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
     <span class="n">alias</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
     <span class="n">random_state</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">,</span>

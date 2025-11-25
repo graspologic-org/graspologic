@@ -4,8 +4,8 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random Graph Models &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+  <title>Random Graph Models &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
 
@@ -14,7 +14,7 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -39,7 +39,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -314,10 +314,10 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">graspologic.datasets</span> <span class="kn">import</span> <span class="n">load_drosophila_right</span>
-<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
-<span class="kn">from</span> <span class="nn">graspologic.utils</span> <span class="kn">import</span> <span class="n">binarize</span><span class="p">,</span> <span class="n">symmetrize</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_drosophila_right</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">heatmap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">binarize</span><span class="p">,</span> <span class="n">symmetrize</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 
 <span class="n">adj</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">load_drosophila_right</span><span class="p">(</span><span class="n">return_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -335,7 +335,7 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/runner/.cache/pypoetry/virtualenvs/graspologic-pkHfzCJ8-py3.10/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+/home/runner/work/graspologic/graspologic/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div></div>
 </div>
@@ -380,7 +380,7 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.models</span> <span class="kn">import</span> <span class="n">EREstimator</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">EREstimator</span>
 <span class="n">er</span> <span class="o">=</span> <span class="n">EREstimator</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">er</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ER </span><span class="se">\&quot;</span><span class="s2">p</span><span class="se">\&quot;</span><span class="s2"> parameter: </span><span class="si">{</span><span class="n">er</span><span class="o">.</span><span class="n">p_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -431,7 +431,7 @@ ER &#34;p&#34; parameter: 0.16688812117990964
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.models</span> <span class="kn">import</span> <span class="n">DCEREstimator</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DCEREstimator</span>
 <span class="n">dcer</span> <span class="o">=</span> <span class="n">DCEREstimator</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">dcer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DCER </span><span class="se">\&quot;</span><span class="s2">p</span><span class="se">\&quot;</span><span class="s2"> parameter: </span><span class="si">{</span><span class="n">dcer</span><span class="o">.</span><span class="n">p_</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -483,7 +483,7 @@ of block-block connection probabilities.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.models</span> <span class="kn">import</span> <span class="n">SBMEstimator</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SBMEstimator</span>
 <span class="n">sbme</span> <span class="o">=</span> <span class="n">SBMEstimator</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">sbme</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SBM </span><span class="se">\&quot;</span><span class="s2">B</span><span class="se">\&quot;</span><span class="s2"> matrix:&quot;</span><span class="p">)</span>
@@ -540,7 +540,7 @@ SBM &#34;B&#34; matrix:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.models</span> <span class="kn">import</span> <span class="n">DCSBMEstimator</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">DCSBMEstimator</span>
 <span class="n">dcsbme</span> <span class="o">=</span> <span class="n">DCSBMEstimator</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">dcsbme</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DCSBM </span><span class="se">\&quot;</span><span class="s2">B</span><span class="se">\&quot;</span><span class="s2"> matrix:&quot;</span><span class="p">)</span>
@@ -596,7 +596,7 @@ DCSBM &#34;B&#34; matrix:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.models</span> <span class="kn">import</span> <span class="n">RDPGEstimator</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">RDPGEstimator</span>
 <span class="n">rdpge</span> <span class="o">=</span> <span class="n">RDPGEstimator</span><span class="p">(</span><span class="n">loops</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">rdpge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">adj</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
 <span class="n">heatmap</span><span class="p">(</span><span class="n">rdpge</span><span class="o">.</span><span class="n">p_mat_</span><span class="p">,</span>
@@ -636,11 +636,11 @@ DCSBM &#34;B&#34; matrix:
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">get_cmap</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_cmap</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
 

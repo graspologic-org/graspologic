@@ -4,8 +4,8 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+  <title>Methods for Multiscale Comparative Connectomics &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
 
@@ -14,7 +14,7 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -38,7 +38,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -302,11 +302,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">chained_assignment</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
@@ -320,7 +320,7 @@ distributed across the left and right hemispheres. Within a given hemisphere, th
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.datasets</span> <span class="kn">import</span> <span class="n">load_mice</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_mice</span>
 </pre></div>
 </div>
 </div>
@@ -329,7 +329,7 @@ distributed across the left and right hemispheres. Within a given hemisphere, th
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/runner/.cache/pypoetry/virtualenvs/graspologic-pkHfzCJ8-py3.10/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+/home/runner/work/graspologic/graspologic/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
   from .autonotebook import tqdm as notebook_tqdm
 </pre></div></div>
 </div>
@@ -376,7 +376,7 @@ H_A:\ &\exists \ j \neq j' \text{ s.t. } F_j \neq F_{j'}
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">hyppo.ksample</span> <span class="kn">import</span> <span class="n">KSample</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">hyppo.ksample</span><span class="w"> </span><span class="kn">import</span> <span class="n">KSample</span>
 </pre></div>
 </div>
 </div>
@@ -415,7 +415,13 @@ H_A:\ &\exists \ j \neq j' \text{ s.t. } F_j \neq F_{j'}
 </div>
 </div>
 <p>Connectomes are a high-dimensional dataype. Thus, statistical tests on components of the connectome (e.g. edge and vertices) results in multiple comparisons. We recommend correcting for multiple comparisons using the Holm-Bonferroni (HB) corection.</p>
-<p>The algorithm is described below: 1. Sort the p-values from lowest-to-highest <span class="math notranslate nohighlight">\(P_1, P_2, \dots, P_n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of tests 2. Correct the p-value as <span class="math notranslate nohighlight">\(P_1(n), P_2(n-1), \dots, P_n(1)\)</span> 3. If any corrected p-value is <span class="math notranslate nohighlight">\(&gt;1\)</span>, replace with <span class="math notranslate nohighlight">\(1\)</span> 4. If the corrected p-value is less than a significance level <span class="math notranslate nohighlight">\(\alpha\)</span>, reject</p>
+<p>The algorithm is described below:</p>
+<ol class="arabic simple">
+<li><p>Sort the p-values from lowest-to-highest <span class="math notranslate nohighlight">\(P_1, P_2, \dots, P_n\)</span>, where <span class="math notranslate nohighlight">\(n\)</span> is the number of tests</p></li>
+<li><p>Correct the p-value as <span class="math notranslate nohighlight">\(P_1(n), P_2(n-1), \dots, P_n(1)\)</span></p></li>
+<li><p>If any corrected p-value is <span class="math notranslate nohighlight">\(&gt;1\)</span>, replace with <span class="math notranslate nohighlight">\(1\)</span></p></li>
+<li><p>If the corrected p-value is less than a significance level <span class="math notranslate nohighlight">\(\alpha\)</span>, reject</p></li>
+</ol>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -439,7 +445,7 @@ H_A:\ &\exists \ j \neq j' \text{ s.t. } F_j \neq F_{j'}
 <span class="n">edge_pvals_top</span> <span class="o">=</span> <span class="n">edge_pvals</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># Replace ROI indices with actual names</span>
-<span class="k">def</span> <span class="nf">lookup_roi_name</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lookup_roi_name</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
     <span class="n">hemisphere</span> <span class="o">=</span> <span class="s2">&quot;R&quot;</span> <span class="k">if</span> <span class="n">index</span> <span class="o">//</span> <span class="mi">166</span> <span class="k">else</span> <span class="s2">&quot;L&quot;</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">index</span> <span class="o">%</span> <span class="mi">166</span>
     <span class="n">roi_name</span> <span class="o">=</span> <span class="n">mice</span><span class="o">.</span><span class="n">atlas</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ROI == </span><span class="si">{</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)[</span><span class="s2">&quot;Structure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
@@ -543,8 +549,8 @@ positions are universally consistent and asymptotically normal.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">OmnibusEmbed</span>
-<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">pairplot</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.embed</span><span class="w"> </span><span class="kn">import</span> <span class="n">OmnibusEmbed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairplot</span>
 </pre></div>
 </div>
 </div>
@@ -665,14 +671,6 @@ number of permutations would be around <span class="math notranslate nohighlight
     </tr>
     <tr>
       <th>1</th>
-      <td>Hypothalamus (R)</td>
-      <td>0.664767</td>
-      <td>0.003984</td>
-      <td>1.0</td>
-      <td>False</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>Amygdalopiriform_Transition_Area (R)</td>
       <td>0.526762</td>
       <td>0.003984</td>
@@ -680,7 +678,7 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>3</th>
+      <th>2</th>
       <td>Piriform_Cortex (R)</td>
       <td>0.603432</td>
       <td>0.003984</td>
@@ -688,9 +686,17 @@ number of permutations would be around <span class="math notranslate nohighlight
       <td>False</td>
     </tr>
     <tr>
-      <th>4</th>
+      <th>3</th>
       <td>Presubiculum (R)</td>
       <td>0.292116</td>
+      <td>0.003984</td>
+      <td>1.0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Perirhinal_Cortex (R)</td>
+      <td>0.806250</td>
       <td>0.003984</td>
       <td>1.0</td>
       <td>False</td>
@@ -748,8 +754,8 @@ number of permutations would be around <span class="math notranslate nohighlight
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graspologic.embed</span> <span class="kn">import</span> <span class="n">ClassicalMDS</span>
-<span class="kn">from</span> <span class="nn">graspologic.plot</span> <span class="kn">import</span> <span class="n">heatmap</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.embed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassicalMDS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.plot</span><span class="w"> </span><span class="kn">import</span> <span class="n">heatmap</span>
 </pre></div>
 </div>
 </div>

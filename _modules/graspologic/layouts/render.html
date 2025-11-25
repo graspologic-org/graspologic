@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.render &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.layouts.render &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,16 +293,16 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
 <span class="c1"># Licensed under the MIT license.</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.layouts.classes</span> <span class="kn">import</span> <span class="n">NodePosition</span>
-<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.layouts.classes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodePosition</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
 
-<span class="k">def</span> <span class="nf">_calculate_x_y_domain</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_calculate_x_y_domain</span><span class="p">(</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePosition</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the overall x/y domain, converting to a square</span>
@@ -332,7 +332,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">),</span> <span class="p">(</span><span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_scale_value</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_scale_value</span><span class="p">(</span>
     <span class="n">domain</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">data_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">data_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">data_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_range</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span>
@@ -340,7 +340,7 @@
     <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_scale_node_sizes_for_rendering</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_scale_node_sizes_for_rendering</span><span class="p">(</span>
     <span class="n">sizes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
     <span class="n">spatial_domain</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
     <span class="n">spatial_range</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
@@ -360,7 +360,7 @@
     <span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_draw_graph</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_draw_graph</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePosition</span><span class="p">],</span>
     <span class="n">node_colors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
@@ -449,7 +449,7 @@
 
 <div class="viewcode-block" id="show_graph">
 <a class="viewcode-back" href="../../../reference/reference/layouts.html#graspologic.layouts.show_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">show_graph</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">show_graph</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePosition</span><span class="p">],</span>
     <span class="n">node_colors</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
@@ -532,7 +532,7 @@
 
 <div class="viewcode-block" id="save_graph">
 <a class="viewcode-back" href="../../../reference/reference/layouts.html#graspologic.layouts.save_graph">[docs]</a>
-<span class="k">def</span> <span class="nf">save_graph</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">save_graph</span><span class="p">(</span>
     <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">positions</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">NodePosition</span><span class="p">],</span>

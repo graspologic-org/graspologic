@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.partition.leiden &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.partition.leiden &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,26 +293,26 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
 <span class="c1"># Licensed under the MIT license.</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">NamedTuple</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">graspologic_native</span> <span class="k">as</span> <span class="nn">gn</span>
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">from</span> <span class="nn">beartype</span> <span class="kn">import</span> <span class="n">beartype</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">graspologic_native</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">beartype</span><span class="w"> </span><span class="kn">import</span> <span class="n">beartype</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">GraphRepresentation</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="n">check_argument</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..preconditions</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_argument</span>
 
 
-<span class="k">class</span> <span class="nc">_IdentityMapper</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_IdentityMapper</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">as_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="n">mapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">as_str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mapped</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
@@ -324,15 +324,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">[</span><span class="n">as_str</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped</span>
         <span class="k">return</span> <span class="n">as_str</span>
 
-    <span class="k">def</span> <span class="nf">original</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">original</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">[</span><span class="n">as_str</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_inner_mapping</span><span class="p">)</span>
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_nx_to_edge_list</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_nx_to_edge_list</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
     <span class="n">is_weighted</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
@@ -358,7 +358,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_adjacency_matrix_to_edge_list</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_adjacency_matrix_to_edge_list</span><span class="p">(</span>
     <span class="n">matrix</span><span class="p">:</span> <span class="n">AdjacencyMatrix</span><span class="p">,</span>
     <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
     <span class="n">check_directed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span>
@@ -406,7 +406,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_edge_list_to_edge_list</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_edge_list_to_edge_list</span><span class="p">(</span>
     <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span> <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
     <span class="n">native_safe</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -424,7 +424,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_community_python_to_native</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_community_python_to_native</span><span class="p">(</span>
     <span class="n">starting_communities</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">identity</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
     <span class="k">if</span> <span class="n">starting_communities</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -437,7 +437,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_community_native_to_python</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_community_native_to_python</span><span class="p">(</span>
     <span class="n">communities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">identity</span><span class="p">:</span> <span class="n">_IdentityMapper</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
     <span class="k">return</span> <span class="p">{</span>
@@ -447,7 +447,7 @@
 
 
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">_validate_common_arguments</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_validate_common_arguments</span><span class="p">(</span>
     <span class="n">extra_forced_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">resolution</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
     <span class="n">randomness</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">,</span>
@@ -469,7 +469,7 @@
 <div class="viewcode-block" id="leiden">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.leiden">[docs]</a>
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">leiden</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">leiden</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
         <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
         <span class="n">GraphRepresentation</span><span class="p">,</span>
@@ -640,7 +640,7 @@
 
 <div class="viewcode-block" id="HierarchicalCluster">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalCluster">[docs]</a>
-<span class="k">class</span> <span class="nc">HierarchicalCluster</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HierarchicalCluster</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="n">node</span><span class="p">:</span> <span class="n">Any</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Node id&quot;&quot;&quot;</span>
     <span class="n">cluster</span><span class="p">:</span> <span class="nb">int</span>
@@ -662,7 +662,7 @@
 
 <div class="viewcode-block" id="HierarchicalClusters">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters">[docs]</a>
-<span class="k">class</span> <span class="nc">HierarchicalClusters</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">HierarchicalCluster</span><span class="p">]):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HierarchicalClusters</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">HierarchicalCluster</span><span class="p">]):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    HierarchicalClusters is a subclass of Python&#39;s :class:`list` class with two</span>
 <span class="sd">    helper methods for retrieving dictionary views of the first and final</span>
@@ -676,7 +676,7 @@
 
 <div class="viewcode-block" id="HierarchicalClusters.first_level_hierarchical_clustering">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.first_level_hierarchical_clustering">[docs]</a>
-    <span class="k">def</span> <span class="nf">first_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">first_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -689,7 +689,7 @@
 
 <div class="viewcode-block" id="HierarchicalClusters.final_level_hierarchical_clustering">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.HierarchicalClusters.final_level_hierarchical_clustering">[docs]</a>
-    <span class="k">def</span> <span class="nf">final_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">final_level_hierarchical_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -702,7 +702,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_from_native</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_from_native</span><span class="p">(</span>
     <span class="n">native_cluster</span><span class="p">:</span> <span class="n">gn</span><span class="o">.</span><span class="n">HierarchicalCluster</span><span class="p">,</span>
     <span class="n">identifier</span><span class="p">:</span> <span class="n">_IdentityMapper</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HierarchicalCluster</span><span class="p">:</span>
@@ -723,7 +723,7 @@
 <div class="viewcode-block" id="hierarchical_leiden">
 <a class="viewcode-back" href="../../../reference/reference/partition.html#graspologic.partition.hierarchical_leiden">[docs]</a>
 <span class="nd">@beartype</span>
-<span class="k">def</span> <span class="nf">hierarchical_leiden</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">hierarchical_leiden</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
         <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]],</span>
         <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>

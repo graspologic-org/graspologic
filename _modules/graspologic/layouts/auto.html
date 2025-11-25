@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>graspologic.layouts.auto &mdash; graspologic 0.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+  <title>graspologic.layouts.auto &mdash; graspologic 0.1.dev1+gabc7fe0f5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
 
   
@@ -12,7 +12,7 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../../../_static/documentation_options.js?v=7026087e"></script>
+        <script src="../../../_static/documentation_options.js?v=bfcde6c5"></script>
         <script src="../../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -33,7 +33,7 @@
             graspologic
           </a>
               <div class="version">
-                0.0.0
+                0.1.dev1+gabc7fe0f5
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -293,25 +293,25 @@
 <span></span><span class="c1"># Copyright (c) Microsoft Corporation.</span>
 <span class="c1"># Licensed under the MIT license.</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">umap</span>
-<span class="kn">from</span> <span class="nn">sklearn.manifold</span> <span class="kn">import</span> <span class="n">TSNE</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">umap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.manifold</span><span class="w"> </span><span class="kn">import</span> <span class="n">TSNE</span>
 
-<span class="kn">from</span> <span class="nn">graspologic.types</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">graspologic.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 
-<span class="kn">from</span> <span class="nn">..embed</span> <span class="kn">import</span> <span class="n">node2vec_embed</span>
-<span class="kn">from</span> <span class="nn">..partition</span> <span class="kn">import</span> <span class="n">leiden</span>
-<span class="kn">from</span> <span class="nn">..preconditions</span> <span class="kn">import</span> <span class="n">is_real_weighted</span>
-<span class="kn">from</span> <span class="nn">..preprocessing</span> <span class="kn">import</span> <span class="n">cut_edges_by_weight</span><span class="p">,</span> <span class="n">histogram_edge_weight</span>
-<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">largest_connected_component</span>
-<span class="kn">from</span> <span class="nn">.classes</span> <span class="kn">import</span> <span class="n">NodePosition</span>
-<span class="kn">from</span> <span class="nn">.nooverlap</span> <span class="kn">import</span> <span class="n">remove_overlaps</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..embed</span><span class="w"> </span><span class="kn">import</span> <span class="n">node2vec_embed</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..partition</span><span class="w"> </span><span class="kn">import</span> <span class="n">leiden</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..preconditions</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_real_weighted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">cut_edges_by_weight</span><span class="p">,</span> <span class="n">histogram_edge_weight</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">largest_connected_component</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.classes</span><span class="w"> </span><span class="kn">import</span> <span class="n">NodePosition</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.nooverlap</span><span class="w"> </span><span class="kn">import</span> <span class="n">remove_overlaps</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -320,7 +320,7 @@
 <span class="c1"># projecting the embedding into 2d space via umap or tsne</span>
 <div class="viewcode-block" id="layout_tsne">
 <a class="viewcode-back" href="../../../reference/reference/layouts.html#graspologic.layouts.layout_tsne">[docs]</a>
-<span class="k">def</span> <span class="nf">layout_tsne</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">layout_tsne</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">perplexity</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -415,7 +415,7 @@
 
 <div class="viewcode-block" id="layout_umap">
 <a class="viewcode-back" href="../../../reference/reference/layouts.html#graspologic.layouts.layout_umap">[docs]</a>
-<span class="k">def</span> <span class="nf">layout_umap</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">layout_umap</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">min_dist</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.75</span><span class="p">,</span>
     <span class="n">n_neighbors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
@@ -512,7 +512,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">_approximate_prune</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">max_edges_to_keep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_approximate_prune</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">max_edges_to_keep</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
     <span class="n">num_edges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num edges: </span><span class="si">{</span><span class="n">num_edges</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -534,7 +534,7 @@
     <span class="k">return</span> <span class="n">graph</span>
 
 
-<span class="k">def</span> <span class="nf">_node2vec_for_layout</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_node2vec_for_layout</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">max_edges</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">,</span>
     <span class="n">random_seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -558,7 +558,7 @@
     <span class="k">return</span> <span class="n">lcc</span><span class="p">,</span> <span class="n">tensors</span><span class="p">,</span> <span class="n">labels</span>
 
 
-<span class="k">def</span> <span class="nf">_to_undirected</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_undirected</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;weight&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">:</span>
     <span class="n">sym_g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="n">weighted</span> <span class="o">=</span> <span class="n">is_real_weighted</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">weight_attribute</span><span class="o">=</span><span class="n">weight_attribute</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">weight_attribute</span><span class="p">):</span>
@@ -580,7 +580,7 @@
     <span class="k">return</span> <span class="n">sym_g</span>
 
 
-<span class="k">def</span> <span class="nf">_node_positions_from</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_node_positions_from</span><span class="p">(</span>
     <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span>
     <span class="n">labels</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span>
     <span class="n">down_projection_2d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -615,7 +615,7 @@
     <span class="k">return</span> <span class="n">positions</span>
 
 
-<span class="k">def</span> <span class="nf">_find_min_max_degree</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_min_max_degree</span><span class="p">(</span>
     <span class="n">degrees</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">reportviews</span><span class="o">.</span><span class="n">DegreeView</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="n">min_degree</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
@@ -626,7 +626,7 @@
     <span class="k">return</span> <span class="n">min_degree</span><span class="p">,</span> <span class="n">max_degree</span>
 
 
-<span class="k">def</span> <span class="nf">_compute_sizes</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_sizes</span><span class="p">(</span>
     <span class="n">degrees</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">reportviews</span><span class="o">.</span><span class="n">DegreeView</span><span class="p">,</span>
     <span class="n">min_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span>
     <span class="n">max_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">150.0</span><span class="p">,</span>
@@ -643,18 +643,18 @@
     <span class="k">return</span> <span class="n">sizes</span>
 
 
-<span class="k">def</span> <span class="nf">_covered_size</span><span class="p">(</span><span class="n">sizes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_covered_size</span><span class="p">(</span><span class="n">sizes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">sizes</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">total</span>
 
 
-<span class="k">def</span> <span class="nf">_get_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
     <span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span>
 
 
-<span class="k">def</span> <span class="nf">_center_points_on_origin</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_center_points_on_origin</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="n">min_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">_get_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
     <span class="n">x_range</span> <span class="o">=</span> <span class="n">max_x</span> <span class="o">-</span> <span class="n">min_x</span>
     <span class="n">y_range</span> <span class="o">=</span> <span class="n">max_y</span> <span class="o">-</span> <span class="n">min_y</span>
@@ -665,20 +665,20 @@
     <span class="k">return</span> <span class="n">points</span>
 
 
-<span class="k">def</span> <span class="nf">_scale_to_unit_square</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_scale_to_unit_square</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="n">_get_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="n">max_x</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="n">max_y</span>
     <span class="k">return</span> <span class="n">points</span>
 
 
-<span class="k">def</span> <span class="nf">_scale_to_new_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_scale_to_new_bounds</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">max_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="n">max_x</span>
     <span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="n">max_y</span>
     <span class="k">return</span> <span class="n">points</span>
 
 
-<span class="k">def</span> <span class="nf">_new_bounds</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_new_bounds</span><span class="p">(</span>
     <span class="n">min_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">min_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">max_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -705,7 +705,7 @@
     <span class="k">return</span> <span class="n">new_min_x</span><span class="p">,</span> <span class="n">new_min_y</span><span class="p">,</span> <span class="n">new_max_x</span><span class="p">,</span> <span class="n">new_max_y</span>
 
 
-<span class="k">def</span> <span class="nf">_scale_points</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_scale_points</span><span class="p">(</span>
     <span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">covered_area</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">target_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.14</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="c1"># through lots of experiments we have found 14% to be a good ratio</span>
