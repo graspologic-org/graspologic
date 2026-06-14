@@ -24,13 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install -y pandoc
-      - uses: actions/checkout@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install uv
-        uses: astral-sh/setup-uv@6dfebec6ddbcd197e02256fbdf54deb334fb7f06 # v2
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       - name: Install dependencies
         run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: "Run Reference Documentation Generation"
@@ -39,13 +39,13 @@ jobs:
           uv run pipdeptree >> dependencies_documentation.txt
           uv run poe docsWithTutorials
       - name: Archive documentation version artifact
-        uses: actions/upload-artifact@4a2e02b36f31d8974a0d09d3bb9f3172aa2d0d0d # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dependencies
           path: |
             dependencies_documentation.txt
       - name: Archive documentation artifacts
-        uses: actions/upload-artifact@4a2e02b36f31d8974a0d09d3bb9f3172aa2d0d0d # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: documentation-site
           path: |
@@ -53,13 +53,13 @@ jobs:
   code-format-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install uv
-        uses: astral-sh/setup-uv@6dfebec6ddbcd197e02256fbdf54deb334fb7f06 # v2
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       - name: Install dependencies
         run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Run Format Check
@@ -67,13 +67,13 @@ jobs:
   test-coverage:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Set up Python
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install uv
-        uses: astral-sh/setup-uv@6dfebec6ddbcd197e02256fbdf54deb334fb7f06 # v2
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       - name: Install dependencies
         run: uv sync --python ${{ env.PYTHON_VERSION }}
       - name: Run Test Coverage
@@ -88,13 +88,13 @@ jobs:
         python_version: ["3.9", "3.10", "3.11", "3.12"]
       fail-fast: false
     steps:
-      - uses: actions/checkout@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
       - name: Set up Python ${{matrix.python_version}} ${{matrix.os}}
-        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: ${{matrix.python_version}}
       - name: Install uv
-        uses: astral-sh/setup-uv@6dfebec6ddbcd197e02256fbdf54deb334fb7f06 # v2
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       - name: Install dependencies
         run: uv sync --python ${{ matrix.python_version }}
       - name: Run Unit Tests and Doctests Python ${{matrix.python_version}} ${{matrix.os}}
@@ -110,7 +110,7 @@ jobs:
           uv run pipdeptree >> $DEPS
         shell: bash
       - name: Archive dependency tree
-        uses: actions/upload-artifact@4a2e02b36f31d8974a0d09d3bb9f3172aa2d0d0d # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dependencies-${{matrix.python_version}}-${{matrix.os}}
           path: |
