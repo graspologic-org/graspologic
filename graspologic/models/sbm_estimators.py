@@ -516,6 +516,8 @@ def _calculate_block_p(
         if return_counts:
             p = np.count_nonzero(block)
         else:
+            if block.size == 0:
+                continue
             p = _calculate_p(block)
         block_p[from_block, to_block] = p
     return block_p
